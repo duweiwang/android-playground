@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/notification_container"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/notification_basic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Basic" />
+
+
+    <Button
+        android:id="@+id/style_big_text"
+        android:text="BigText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/style_big_picture"
+        android:text="BigText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:id="@+id/style_full_screen"
+        android:text="FullScreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/style_progress"
+        android:text="Progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/style_message"
+        android:text="Message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/style_message_action"
+        android:text="MessageAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/style_inbox"
+        android:text="InBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

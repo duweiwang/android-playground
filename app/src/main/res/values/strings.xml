@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Demos</string>
+
+    <string name="refresh_state_normal">Pull to refresh</string>
+    <string name="refresh_state_ready">Release to refresh</string>
+    <string name="refresh_state_loading">Loading</string>
+
+    <string name="loadmore_state_normal">Load more</string>
+    <string name="loadmore_state_loading">Loading</string>
+    <string name="loadmore_state_ready">Pull to load more</string>
+    <string name="loadmore_state_no_more">Load Finish</string>
+    <string name="loadmore_state_fail">Click to reload</string>
+    <string name="loadmore_state_empty_reload">No data, click to reload</string>
+
+    <string name="info_over_scroll">拖动(Drag)或者滑动(Fling)越界有平滑的回弹</string>
+
+    <string name="hint_word">Word...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Word not saved because it is empty.</string>
+
+
+    <string name="fa_song_pay_dialog_msg"><![CDATA[《%1$s》通过HTML部分文案<font color="#ff0000">%2$d</font>，改变颜色<b>%3$d</b>字体样式]]></string>
+
+
+    <string name="emoji_text_view">Emoji TextView %s</string>
+    <string name="emoji_edit_text">Emoji EditText %s</string>
+    <string name="emoji_button">Emoji Button %s</string>
+    <string name="regular_text_view">Regular TextView %s</string>
+    <string name="custom_text_view">Custom TextView %s</string>
+    <string name="add_cheese">add cheese</string>
+    <string name="add">add</string>
+</resources>

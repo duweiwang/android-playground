@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/ball"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="50dp"
+        android:background="@drawable/bg_round" />
+
+    <RadioGroup
+        android:id="@+id/interpolator_radio_group"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/anticipate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AnticipateInterpolator" />
+
+        <RadioButton
+            android:id="@+id/bounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BounceInterpolator" />
+
+        <RadioButton
+            android:id="@+id/overshoot"
+            android:text="OvershootInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/spring"
+            android:text="SpringInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_sine"
+            android:text="EaseOutSineInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_quint"
+            android:text="EaseOutQuintInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+<!--        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+        <RadioButton
+            android:id="@+id/ease_out_quart"
+            android:text="EaseOutQuartInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_quad"
+            android:text="EaseOutQuadInterpalator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_elastic"
+            android:text="EaseOutElasticInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_cubic"
+            android:text="EaseOutCubicInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_out_back"
+            android:text="EaseOutBackInterpolation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+        <RadioButton
+            android:id="@+id/ease_in_quart"
+            android:text="EaseInQuartInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_in_OutQuint"
+            android:text="EaseInOutQuintInterporator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_in_OutQuart"
+            android:text="EaseInOutQuartInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_in_OutExpo"
+            android:text="EaseInOutExpoInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/ease_in_OutCubic"
+            android:text="EaseInOutCubicInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+        <RadioButton
+            android:id="@+id/ease_in_OutBack"
+            android:text="EaseInOutBackInterpolation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/ease_in_Cubic"
+            android:text="EaseInCubicInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioButton
+            android:id="@+id/ease_CubicBezier"
+            android:text="EaseCubicBezierInterpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </RadioGroup>
+
+</LinearLayout>

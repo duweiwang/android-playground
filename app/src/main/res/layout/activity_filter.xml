@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/filter_surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/filter_style1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="style1" />
+
+        <Button
+            android:id="@+id/filter_style2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="style2" />
+
+        <Button
+            android:id="@+id/filter_style3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="style3" />
+    </LinearLayout>
+
+</FrameLayout>

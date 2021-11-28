@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FireflySurfaceView">
+        <attr name="firefly_max_radius" format="integer" />
+        <attr name="firefly_num" format="integer" />
+        <attr name="firefly_move_rate" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="EditTextLayout">
+        <attr name="maxLength" format="integer"/>
+        <attr name="hint" format="reference|string"/>
+    </declare-styleable>
+
+    <declare-styleable name="XCommonLoadingLayout">
+
+        <attr name="loading_type" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="x_mode" value="1"/>
+        </attr>
+
+        <attr name="loadingBgDrawable" format="reference"/>
+        <attr name="defaultSrcDrawable" format="reference"/>
+        <attr name="iconNormalColor" format="reference" />
+        <attr name="arcNormalColor" format="reference" />
+        <attr name="changeColor" format="reference" />
+        <attr name="textMode" format="enum" >
+            <enum name="none" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="right" value="2"/>
+            <enum name="bottom" value="3"/>
+            <enum name="top" value="4"/>
+        </attr>
+        <attr name="viewSize" format="enum" >
+            <enum name="normal" value="0"/>
+            <enum name="small" value="1"/>
+        </attr>
+        <attr name="colorTheme" format="enum" >
+            <enum name="normal" value="0"/>
+            <enum name="white" value="1"/>
+        </attr>
+        <attr name="dragStr" format="reference|string"/>
+        <attr name="releaseStr" format="reference|string"/>
+        <attr name="loadingStr" format="reference|string"/>
+        <attr name="loadingSecondStr" format="reference|string"/>
+    </declare-styleable>
+</resources>

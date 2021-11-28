@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fa_c_00D2BB">#00D2BB</color>
+    <color name="fa_c_999999">#999999</color>
+
+    <color name="x_common_loadiing_icon_normal_color">#00baff</color>
+    <color name="x_common_loadiing_change_color">#FF6C00</color>
+</resources>

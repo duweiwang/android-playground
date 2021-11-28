@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_add_frag1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD  Fragment1" />
+
+    <Button
+        android:id="@+id/btn_add_frag2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD  Fragment2" />
+
+    <Button
+        android:id="@+id/btn_remove_frag2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove  Fragment2" />
+
+    <Button
+        android:id="@+id/btn_repalce_frag1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="replace  Fragment1 with 2" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

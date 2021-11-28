@@ -1,0 +1,68 @@
+/**
+ * 一些可能有用的gradle片段
+ */
+//==========================将打包后的产物apk移动到指定目录====================================
+assemble.doLast {
+    android.applicationVariants.all { variant ->
+        println "onAssemble==="
+        if (variant.name.contains("release") || variant.name.contains("debug")) {
+            variant.outputs.each { output ->
+                File originFile = output.outputFile
+                println originFile.absolutePath
+                copy {
+                    from originFile
+                    into "$rootDir/app/src/main/assets"
+                    rename(originFile.name, "plugin1.apk")
+                }
+            }
+        }
+    }
+}
+
+//=======================重命名APK==========================
+applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def outputFile = output.outputFile
+        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            output.outputFileName = "GOLauncherZ-${variant.buildType.name}-v${variant.versionName}-vc${variant.versionCode}_${channel}_svn${revision}.apk"
+        }
+    }
+}
+
+
+//===================所有的support指定一样的版本===================
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '27.0.2'
+            }
+        }
+    }
+}
+
+//=====================将插件产物移到宿主打包过程中===================
+//插件build.gradle
+project.afterEvaluate {
+    project.tasks.each {
+        if (it.name == "assembleDebug") {
+            it.doLast {
+                copy {
+                    from new File(project.getBuildDir(), 'outputs/apk/debug/plugin-debug.apk').absolutePath
+                    into new File(project.getRootProject().getProjectDir(), 'app/src/main/assets')
+                    rename 'plugin-debug.apk', 'plugin.apk'
+                }
+            }
+        }
+    }
+}
+
+//宿主build.gradle
+project.afterEvaluate {
+    project.tasks.each {
+        if (it.name == 'mergeDebugAssets') {
+            it.dependsOn ':plugin:assembleDebug'
+        }
+    }
+}

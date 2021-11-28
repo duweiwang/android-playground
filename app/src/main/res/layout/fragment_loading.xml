@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.customview.loading.XCommonLoadingLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/xloading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/loading_bg_small"
+        android:scaleType="centerInside"
+        app:loading_type="x_mode"
+        app:loadingBgDrawable="@drawable/common_loading_view_bg_gray"
+        app:iconNormalColor="@color/x_common_loadiing_icon_normal_color"
+        app:arcNormalColor="@color/x_common_loadiing_icon_normal_color"
+        app:changeColor="@color/x_common_loadiing_change_color"
+        app:defaultSrcDrawable="@drawable/x_refresh_loading_pic31"
+        app:textMode="none"/>
+
+</LinearLayout>

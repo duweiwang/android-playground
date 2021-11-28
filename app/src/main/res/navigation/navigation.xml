@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/menu_main">
+    <fragment
+        android:id="@+id/menu_main"
+        android:name="com.example.wangduwei.demos.main.MainFragment"
+        android:label="MainFragment" />
+    <fragment
+        android:id="@+id/menu_second"
+        android:name="com.example.wangduwei.demos.main.SecondFragment"
+        android:label="SecondFragment" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/menu_third"
+        android:name="com.example.wangduwei.demos.main.ThirdFragment"
+        android:label="ThirdFragment" />
+    <fragment
+        android:id="@+id/menu_me"
+        android:name="com.example.wangduwei.demos.main.appinfo.MainInformationFragment"
+        android:label="MySelfFragment" />
+
+    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+    <fragment
+        android:id="@+id/fragment_manager_stack"
+        android:name="com.example.wangduwei.demos.fragment.stack.FragmentStackTest"
+        android:label="FragmentStackTest" />
+
+    <fragment
+        android:id="@+id/fragment_recyclerview_demo"
+        android:name="com.example.wangduwei.demos.recyclerview.pullrefreshloadrecyclerview.RecyclerDemoFragment"
+        android:label="RecyclerDemoFragment" />
+
+    <fragment
+        android:id="@+id/dragment_bitmap_demo"
+        android:name="com.example.wangduwei.demos.fragment.BitmapFragment"
+        android:label="BitmapFragment" />
+
+    <fragment
+        android:id="@+id/fragment_move_child_view_api"
+        android:name="com.example.wangduwei.demos.fragment.FollowFingerFragment"
+        android:label="FollowFingerFragment" />
+
+    <fragment
+        android:id="@+id/fragment_scroller_demo"
+        android:name="com.example.wangduwei.demos.fragment.ScrollerDemoFragment"
+        android:label="ScrollerDemoFragment" />
+
+    <fragment
+        android:id="@+id/fragment_event_nested_scroll_demo"
+        android:name="com.example.wangduwei.demos.fragment.NestedScrollFragment"
+        android:label="NestedScrollDemo" />
+
+    <fragment
+        android:id="@+id/fragment_view_bezier_demo"
+        android:name="com.example.wangduwei.demos.fragment.BezierTestFragment"
+        android:label="BezierTestFragment" />
+
+    <fragment
+        android:id="@+id/fragment_info_app_detail"
+        android:name="com.example.wangduwei.demos.fragment.AppInfoFragment"
+        android:label="AppInfoFragment" />
+
+    <fragment
+        android:id="@+id/fragment_use_textureview"
+        android:name="com.example.wangduwei.demos.fragment.TextureViewFragment"
+        android:label="TextureViewFragment" />
+
+    <fragment
+        android:id="@+id/fragment_use_aidl"
+        android:name="com.example.wangduwei.demos.fragment.AidlFragment"
+        android:label="AidlFragment" />
+
+    <fragment
+        android:id="@+id/fragment_view_bitmap_mesh"
+        android:name="com.example.wangduwei.demos.fragment.BitmapMeshFragment"
+        android:label="BitmapMeshFragment" />
+
+    <fragment
+        android:id="@+id/fragment_view_scroll_number"
+        android:name="com.example.wangduwei.demos.fragment.ScrollNumFragment"
+        android:label="ScrollNumFragment" />
+
+    <fragment
+        android:id="@+id/fragment_binder_pool"
+        android:name="com.example.wangduwei.demos.ipc.pool.BinderPoolDemoFragment"
+        android:label="BinderPoolDemoFragment" />
+
+    <fragment
+        android:id="@+id/fragment_ipc_test"
+        android:name="com.example.wangduwei.demos.ipc.callback.IPCFragment"
+        android:label="IPCFragment" />
+    <fragment
+        android:id="@+id/fragment_view_round_corner"
+        android:name="com.example.wangduwei.demos.fragment.RoundCornerFragment"
+        android:label="RoundCornerFragment" />
+
+    <fragment
+        android:id="@+id/fragment_recyclerview_cache"
+        android:name="com.example.wangduwei.demos.recyclerview.my.RecyFragment"
+        android:label="RecyFragment" />
+
+    <fragment
+        android:id="@+id/fragment_notification"
+        android:name="com.example.wangduwei.demos.notification.NotificationDemoFragment"
+        android:label="NotificationDemoFragment" />
+    <fragment
+        android:id="@+id/fragment_view_inflater"
+        android:name="com.example.wangduwei.demos.inflater.InflaterFactoryDemo"
+        android:label="InflaterFactoryDemo" />
+
+    <fragment
+        android:id="@+id/fragment_gl_basic"
+        android:name="com.example.wangduwei.demos.gles.main.OpenGLFragment"
+        android:label="OpenGLFragment" />
+
+    <fragment
+        android:id="@+id/fragment_permission"
+        android:name="com.example.wangduwei.demos.permission.test.PermissionFragment"
+        android:label="PermissionFragment" />
+
+    <fragment
+        android:id="@+id/fragment_life_circle"
+        android:name="com.example.wangduwei.demos.lifecircle.demo1.view.LifeCycleFragment"
+        android:label="LifeCircleFragment" />
+
+    <fragment
+        android:id="@+id/fragment_view_float_window"
+        android:name="com.example.wangduwei.demos.floatwindow.FloatWindowFragment"
+        android:label="FloatWindowFragment" />
+
+    <fragment
+        android:id="@+id/fragment_camera_two_basic"
+        android:name="com.example.wangduwei.demos.media.camera.camera2.Camera2DemoFragment"
+        android:label="Camera2DemoFragment" />
+
+    <fragment
+        android:id="@+id/fragment_performance_fps"
+        android:name="com.example.wangduwei.demos.fragment.FpsTestFragment"
+        android:label="FpsTestFragment" />
+
+    <fragment
+        android:id="@+id/fragment_animation_photo_view"
+        android:name="com.example.wangduwei.demos.view.photoviewdemo.UsePhotoViewDemo"
+        android:label="UsePhotoViewDemo" />
+
+    <fragment
+        android:id="@+id/fragment_surface_particle"
+        android:name="com.example.wangduwei.demos.fragment.ParticleSurfaceFragment"
+        android:label="ParticleSurfaceFragment" />
+    <fragment
+        android:id="@+id/fragment_jni"
+        android:name="com.example.wangduwei.demos.jni.JniDemoFragment"
+        android:label="JniDemoFragment" />
+
+
+    <fragment
+        android:id="@+id/fragment_gl_texture_use"
+        android:name="com.example.wangduwei.demos.gles.texture2.Texture2Fragment"
+        android:label="Texture2Fragment" />
+
+    <fragment
+        android:id="@+id/fragment_camera_one_glpreview"
+        android:name="com.example.wangduwei.demos.media.camera.camera1.Camera1GLPreview"
+        android:label="Camera1GLPreview" />
+
+    <fragment
+        android:id="@+id/fragment_event_image_scale"
+        android:name="com.example.wangduwei.demos.view.scale.ScaleTestFragment"
+        android:label="ScaleTestFragment" />
+
+    <fragment
+        android:id="@+id/fragment_view_xfermode"
+        android:name="com.example.wangduwei.demos.fragment.XfermodeFragment"
+        android:label="XfermodeFragment" />
+
+    <fragment
+        android:id="@+id/fragment_event_inner_intercept"
+        android:name="com.example.wangduwei.demos.fragment.InnerInterceptFragment"
+        android:label="InnerInterceptFragment" />
+
+    <fragment
+        android:id="@+id/fragment_event_log_out"
+        android:name="com.example.wangduwei.demos.fragment.LogEventFragment"
+        android:label="LogEventFragment" />
+
+    <fragment
+        android:id="@+id/fragment_manager_add_replace_remove"
+        android:name="com.example.wangduwei.demos.fragment.dynamic_manager.AddReplaceRemove"
+        android:label="AddReplaceRemove" />
+
+    <fragment
+        android:id="@+id/fragment_event_out_intercept"
+        android:name="com.example.wangduwei.demos.fragment.OutterIntercepteFragment"
+        android:label="OutterIntercepteFragment" />
+
+    <fragment
+        android:id="@+id/fragment_camera1_texture_preview"
+        android:name="com.example.wangduwei.demos.media.camera.camera1.Camera1TexturePreviewFragment"
+        android:label="Camera1TexturePreviewFragment" />
+
+    <fragment
+        android:id="@+id/fragment_pop"
+        android:name="com.example.wangduwei.demos.fragment.PopFragment"
+        android:label="PopFragment" />
+
+    <fragment
+        android:id="@+id/fragment_spannable"
+        android:name="com.example.wangduwei.demos.fragment.SpannableFragment"
+        android:label="SpannableFragment" />
+
+    <fragment
+        android:id="@+id/fragment_floatball"
+        android:name="com.example.wangduwei.demos.fragment.FloatBallFragment"
+        tools:layout="@layout/fragment_floatball" />
+
+    <fragment
+        android:id="@+id/fragment_flow_label"
+        android:name="com.example.wangduwei.demos.fragment.FlowLabelFragment"
+        android:label="FlowLabelFragment"
+        tools:layout="@layout/fragment_flowlabel" />
+
+    <fragment
+        android:id="@+id/fragment_performance"
+        android:name="com.example.wangduwei.demos.performance.memory.LeakTestFragment"
+        android:label="LeakTestFragment" />
+
+    <fragment android:id="@+id/fragment_interpolator"
+        android:name="com.example.wangduwei.demos.fragment.InterpolatorDemoFragment"
+        android:label="InterpolatorDemoFragment"/>
+
+    <fragment android:id="@+id/fragment_animation"
+        android:name="com.example.wangduwei.demos.fragment.AnimationDemoFragment"
+        android:label="AnimationDemoFragment"/>
+
+    <fragment android:id="@+id/fragment_matrix"
+        android:name="com.example.wangduwei.demos.fragment.MatrixFragment"
+        android:label="MatrixFragment"/>
+
+    <fragment android:id="@+id/fragment_nested_scroll"
+        android:name="com.example.wangduwei.demos.view.nestedscroll.androidinterface.NestedScrollDemo"
+        android:label="NestedScrollDemo"/>
+
+    <fragment android:id="@+id/fragment_recycler_pull"
+        android:name="com.example.wangduwei.demos.recyclerview.pullrefreshloadrecyclerview.RecyclerDemoFragment"
+        android:label="RecyclerDemoFragment"/>
+
+    <fragment android:id="@+id/fragment_loading"
+        android:name="com.example.wangduwei.demos.fragment.LoadingFragment"
+        android:label="LoadingFragment"/>
+
+    <fragment android:id="@+id/fragment_emoji"
+        android:name="com.example.wangduwei.demos.view.spannable.emoji.EmojiFragment"
+        android:label="EmojiFragment"/>
+
+    <fragment android:id="@+id/fragment_coroutine"
+        android:name="com.example.wangduwei.demos.lifecircle.demo2.CoroutineFragment"
+        android:label="CoroutineFragment"
+        />
+</navigation>

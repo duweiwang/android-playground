@@ -1,0 +1,18 @@
+{
+  "buildFiles": [
+    "/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Android.mk",
+    "/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Application.mk"
+  ],
+  "cleanCommands": [
+    "/Users/wangduwei/Library/Android/sdk/ndk/21.3.6528147/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/lib clean"
+  ],
+  "buildTargetsCommand": "/Users/wangduwei/Library/Android/sdk/ndk/21.3.6528147/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/lib {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "jni_demo-debug-armeabi-v7a": {
+      "artifactName": "jni_demo",
+      "buildCommand": "/Users/wangduwei/Library/Android/sdk/ndk/21.3.6528147/ndk-build NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Android.mk NDK_APPLICATION_MK\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/src/main/jni/Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-21 NDK_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003d/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/lib /Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libjni_demo.so",
+      "abi": "armeabi-v7a",
+      "output": "/Users/wangduwei/AndroidStudioProjects/android-playground/app/build/intermediates/ndkBuild/debug/obj/local/armeabi-v7a/libjni_demo.so"
+    }
+  }
+}

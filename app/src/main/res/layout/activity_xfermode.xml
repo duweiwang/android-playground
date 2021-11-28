@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+
+    <com.example.customview.basic_api.XFermodeView
+        android:id="@+id/xfermode_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/xfermode_btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SRC_IN" />
+
+        <Button
+            android:id="@+id/xfermode_btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SRC_OVER" />
+
+        <Button
+            android:id="@+id/xfermode_btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SRC_OUT" />
+
+        <Button
+            android:id="@+id/xfermode_btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SRC_ATOP" />
+
+        <Button
+            android:id="@+id/xfermode_btn5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DST_IN" />
+
+        <Button
+            android:id="@+id/xfermode_btn6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DST_OVER" />
+
+        <Button
+            android:id="@+id/xfermode_btn7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DST_OUT" />
+
+        <Button
+            android:id="@+id/xfermode_btn8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DST_ATOP" />
+
+        <Button
+            android:id="@+id/xfermode_btn9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XOR" />
+    </LinearLayout>
+</FrameLayout>

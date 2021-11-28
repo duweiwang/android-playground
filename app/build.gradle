@@ -1,0 +1,130 @@
+import com.duwei.buildsrc.Libs
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+//apply plugin: 'com.wangduwei.plugin'
+android {
+    compileSdkVersion versions.compileSdk
+    defaultConfig {
+        applicationId "com.example.wangduwei.demos"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 18
+        renderscriptSupportModeEnabled true
+
+        ndk {
+            moduleName "jni_demo" //so文件名
+            abiFilters /*"armeabi",*/ "armeabi-v7a"//, "x86"//CPU类型
+        }
+
+        viewBinding {
+            enabled = true
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDirs = ['src/main/jniLibs']
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+//    sourceSets{
+//        main{
+//            java{
+//                srcDir "src" exclude "**/aosp"
+//            }
+//        }
+//    }
+//    packagingOptions {
+//        exclude "**/aosp"
+//    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(path: ':customview')
+    implementation project(':lib-processor')
+    annotationProcessor project(':lib-processor')
+    kapt project(':lib-processor')
+
+    implementation Libs.X_AppCompat
+    implementation Libs.X_ConstraintLayout
+    implementation Libs.X_Fragment// Java language implementation
+    implementation Libs.X_Fragment_Ktx// Kotlin
+    implementation Libs.X_Fragment_Test// Testing Fragments in Isolation
+
+    implementation Libs.X_Lifecycle_Extensions
+    implementation Libs.X_Lifecycle_ViewModel// alternatively - just ViewModel
+    implementation Libs.X_Lifecycle_LiveData// alternatively - just LiveData
+    implementation Libs.X_Lifecycle_Runtime
+    annotationProcessor Libs.X_Lifecycle_Compiler
+    //room
+    implementation Libs.X_Room_Runtime
+    annotationProcessor Libs.X_Room_Compiler
+    implementation Libs.X_Paging
+
+    configurations.all {
+        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core'
+    }
+
+    def work_version = "1.0.1"
+    implementation "android.arch.work:work-runtime:$work_version"
+
+    // use -ktx for Kotlin
+    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+
+    //JPEG图方向获取
+    implementation 'androidx.exifinterface:exifinterface:1.0.0-beta01'
+    implementation libraries.kotlinStdlibJdk8
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.markzhai:blockcanary-android:1.5.0'
+
+    // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
+    debugImplementation libraries.blockCanaryDebug
+    releaseImplementation libraries.blockCanaryRelease
+
+    implementation Libs.X_Annotation
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
+
+    implementation Libs.X_Navigation_Fragment_Ktx
+    implementation Libs.X_Navigation_Ui_Ktx
+
+    implementation 'androidx.emoji:emoji:1.1.0-alpha01'
+    implementation 'androidx.emoji:emoji-bundled:1.1.0-alpha01'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+}
+repositories {
+    mavenCentral()
+}

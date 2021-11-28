@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RippleImageView1">
+        <attr name="imageViewWidth" format="dimension"></attr>
+        <attr name="imageViewHeight" format="dimension"></attr>
+        <attr name="imageViewResId" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="CameraView">
+        <!--
+          Set this to true if you want the CameraView to adjust its bounds to preserve the aspect
+          ratio of its camera preview.
+        -->
+        <attr name="android:adjustViewBounds"/>
+        <!-- Direction the camera faces relative to device screen. -->
+        <attr name="facing" format="enum">
+            <enum name="back" value="0"/>
+            <enum name="front" value="1"/>
+        </attr>
+        <!-- Aspect ratio of camera preview and pictures. -->
+        <attr name="aspectRatio" format="string"/>
+        <attr name="autoFocus" format="boolean"/>
+        <attr name="flash" format="enum">
+            <enum name="off" value="0"/>
+            <enum name="on" value="1"/>
+            <!--
+              Constant emission of light during preview, auto-focus and snapshot.
+              This can also be used for video recording.
+            -->
+            <enum name="torch" value="2"/>
+            <enum name="auto" value="3"/>
+            <enum name="redEye" value="4"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="NoPaddingTextView">
+        <attr name="removeDefaultPadding" format="boolean"/>
+    </declare-styleable>
+</resources>
