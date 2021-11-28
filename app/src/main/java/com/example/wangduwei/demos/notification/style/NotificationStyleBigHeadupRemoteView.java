@@ -13,7 +13,6 @@ import java.util.Random;
 
 /**
  * 这里的代码实际无效果，原因需要进一步研究
- * Created by zhouchaohong on 16-12-20.
  */
 
 public class NotificationStyleBigHeadupRemoteView extends NotificationStyle {

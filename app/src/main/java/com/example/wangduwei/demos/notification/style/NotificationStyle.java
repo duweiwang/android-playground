@@ -23,10 +23,6 @@ import com.example.wangduwei.demos.notification.basic.BasicNotificationUsage;
 
 import java.util.Random;
 
-/**
- * Created by zhouchaohong on 16-12-20.
- */
-
 public abstract class NotificationStyle {
 
     private static final String DELETE_ACTION = "NOTIFICATION_DELETE_ACTION";

@@ -13,10 +13,6 @@ import com.example.wangduwei.demos.notification.NotificationJumpActivity;
 
 import java.util.Random;
 
-/**
- * Created by zhouchaohong on 16-12-20.
- */
-
 public class NotificationStyleFullScreen extends NotificationStyle {
 
     public NotificationStyleFullScreen(Context context) {

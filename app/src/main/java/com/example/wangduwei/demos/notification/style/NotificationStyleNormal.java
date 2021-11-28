@@ -11,10 +11,6 @@ import com.example.wangduwei.demos.notification.DeleteReceiver;
 
 import java.util.Random;
 
-/**
- * Created by zhouchaohong on 16-12-20.
- */
-
 public class NotificationStyleNormal extends NotificationStyle {
 
     private static final String DELETE_ACTION = "NOTIFICATION_DELETE_ACTION";

@@ -11,10 +11,6 @@ import com.example.wangduwei.demos.R;
 
 import java.util.Random;
 
-/**
- * Created by zhouchaohong on 16-12-20.
- */
-
 public class NotificationStyleProgress extends NotificationStyle {
 
     private int mMax = 0;

@@ -9,10 +9,6 @@ import androidx.core.app.NotificationCompat;
 import com.example.wangduwei.demos.R;
 
 
-/**
- * Created by zhouchaohong on 16-12-20.
- */
-
 public class NotificationStyleRemoteView extends NotificationStyle {
 
     public NotificationStyleRemoteView(Context context) {
