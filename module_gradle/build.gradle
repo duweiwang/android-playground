@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'maven'
+//apply plugin: 'maven'
 
 dependencies{
     implementation gradleApi()
@@ -18,10 +18,10 @@ repositories{
 group = 'com.wangduwei.gradle'
 version = '1.0.0'
 
-uploadArchives{
-    repositories{
-        mavenDeployer{
-            repository(url:uri('D:/repo'))
-        }
-    }
-}
+//uploadArchives{
+//    repositories{
+//        mavenDeployer{
+//            repository(url:uri('D:/repo'))
+//        }
+//    }
+//}

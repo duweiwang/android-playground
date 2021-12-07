@@ -89,10 +89,12 @@ dependencies {
     implementation Libs.X_Room_Runtime
     annotationProcessor Libs.X_Room_Compiler
     implementation Libs.X_Paging
+    implementation Libs.Kotlin_Coroutine_Android
+    implementation Libs.Kotlin_Coroutine_Core
 
-    configurations.all {
-        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core'
-    }
+//    configurations.all {
+//        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-coroutines-core'
+//    }
 
     def work_version = "1.0.1"
     implementation "android.arch.work:work-runtime:$work_version"
