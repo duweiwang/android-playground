@@ -126,6 +126,9 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+
+    //此处以集成 5.1.2 版本为例
+    api 'cn.rongcloud.sdk:im_lib:5.1.8'
 }
 repositories {
     mavenCentral()

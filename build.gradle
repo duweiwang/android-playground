@@ -16,7 +16,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
         classpath Libs.Kotlin_Gradle_Plugin
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,6 +30,9 @@ allprojects {
         maven{ url'https://maven.aliyun.com/nexus/content/groups/public/' }
         maven{ url'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
         maven { url "https://jitpack.io" }
+
+        //融云 maven 仓库地址
+        maven {url "https://maven.rongcloud.cn/repository/maven-releases/"}
     }
 
     //support library 强制使用指定的版本，防止被第三方库中的高版本替代

@@ -3,6 +3,7 @@ package com.example.wangduwei.demos.app
 import android.app.Application
 import android.content.Context
 import com.example.wangduwei.demos.router.RouterManager
+import io.rong.imlib.RongIMClient
 
 /**
  * @author 杜伟
@@ -18,4 +19,9 @@ class MainApp(application: Application):AbsApp(application) {
         RouterManager.getInstance().init();
     }
 
+
+    override fun onCreate() {
+        super.onCreate()
+        RongIMClient.init(application.applicationContext, "c9kqb3rdcq1nj",false);
+    }
 }
