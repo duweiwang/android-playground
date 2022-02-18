@@ -16,7 +16,7 @@ import com.example.wangduwei.demos.utils.SystemUtil
  * @since : 2020/4/7  13:11
  */
 class MyApplication : Application() {
-    private lateinit var app: IApplication
+    private var app: IApplication? = null
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -30,11 +30,12 @@ class MyApplication : Application() {
         } else if (processName == AppEnv.MAIN_PROCESS_NAME) {
             app = MainApp(this)
         }
-        app.attachBaseContext(base)
+        app?.attachBaseContext(base)
     }
 
     override fun onCreate() {
         super.onCreate()
+        app?.onCreate()
         CustomViewAppState.init(provider)
     }
 
