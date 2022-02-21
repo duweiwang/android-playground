@@ -1,7 +1,6 @@
-package com.example.wangduwei.demos.rongcloud
+package com.example.wangduwei.demos.rongcloud.rtm.pojo
 
 import android.util.Log
-import com.example.wangduwei.demos.fragment.RongCloudFragment
 import io.rong.imlib.MessageTag
 import io.rong.imlib.model.MessageContent
 import kotlinx.android.parcel.Parcelize
@@ -25,10 +24,10 @@ import java.io.UnsupportedEncodingException
 )
 class OneMessage() : MessageContent() {
 
-    companion object{
-        
+    companion object {
+
         private const val TAG = ""
-        
+
         fun obtain(): OneMessage = OneMessage()
     }
 
@@ -90,6 +89,7 @@ class OneMessage() : MessageContent() {
         } catch (e: JSONException) {
             Log.e(TAG, "JSONException " + e.message)
         }
+        mutableListOf<>()
 
         try {
             return jsonObj.toString().toByteArray(Charsets.UTF_8)

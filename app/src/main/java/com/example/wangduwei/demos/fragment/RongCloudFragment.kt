@@ -1,18 +1,14 @@
 package com.example.wangduwei.demos.fragment
 
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
-import com.example.wangduwei.demos.rongcloud.OneMessage
-import com.google.gson.Gson
+import com.example.wangduwei.demos.rongcloud.rtm.pojo.OneMessage
 import io.rong.imlib.*
 import kotlinx.android.synthetic.main.fragment_rongcloud.*
 import io.rong.imlib.model.Conversation
@@ -22,10 +18,6 @@ import io.rong.imlib.chatroom.base.RongChatRoomClient
 import io.rong.imlib.listener.OnReceiveMessageWrapperListener
 import io.rong.imlib.model.MessageContent
 import io.rong.imlib.model.ReceivedProfile
-import kotlinx.android.parcel.Parcelize
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.UnsupportedEncodingException
 
 
 /**
@@ -66,6 +58,22 @@ class RongCloudFragment : BaseSupportFragment() {
         }
         join_room.setOnClickListener {
             joinChatRoom("123456789", 0)
+        }
+
+        init_u1.setOnClickListener {
+
+        }
+
+        init_u2.setOnClickListener {
+
+        }
+
+        send_u1.setOnClickListener {
+
+        }
+
+        send_u2.setOnClickListener {
+
         }
     }
 

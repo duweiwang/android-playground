@@ -1,46 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
+
         <Button
             android:id="@+id/connect"
-            android:text="链接"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:text="链接" />
 
         <Button
             android:id="@+id/receive"
-            android:text="接收消息"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:text="接收消息" />
 
 
         <Button
             android:id="@+id/send"
-            android:text="发送消息"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:text="发送消息" />
 
         <Button
             android:id="@+id/register"
-            android:text="注册自定义消息"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:text="注册自定义消息" />
 
 
         <Button
             android:id="@+id/join_room"
-            android:text="加入聊天室"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:text="加入聊天室" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/init_u1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="user1" />
+
+        <Button
+            android:id="@+id/init_u2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="user2" />
+
+        <Button
+            android:id="@+id/send_u1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="u1 send" />
+
+        <Button
+            android:id="@+id/send_u2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="u2 send" />
     </LinearLayout>
 
     <LinearLayout
