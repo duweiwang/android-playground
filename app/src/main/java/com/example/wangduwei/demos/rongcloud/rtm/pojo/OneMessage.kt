@@ -89,7 +89,7 @@ class OneMessage() : MessageContent() {
         } catch (e: JSONException) {
             Log.e(TAG, "JSONException " + e.message)
         }
-        mutableListOf<>()
+//        mutableListOf<>()
 
         try {
             return jsonObj.toString().toByteArray(Charsets.UTF_8)
