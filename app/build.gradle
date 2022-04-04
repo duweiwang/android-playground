@@ -129,6 +129,16 @@ dependencies {
 
     //此处以集成 5.1.2 版本为例
     api 'cn.rongcloud.sdk:im_lib:5.1.8'
+
+    /*三个popupwindow对比*/
+    //https://github.com/tomergoldst/tooltips
+    implementation 'com.tomergoldst.android:tooltips:1.1.1'
+    //https://github.com/sephiroth74/android-target-tooltip
+    implementation 'com.github.sephiroth74:android-target-tooltip:2.0.4'
+    //https://github.com/skydoves/Balloon
+    implementation "com.github.skydoves:balloon:1.4.3"
+
+
 }
 repositories {
     mavenCentral()
