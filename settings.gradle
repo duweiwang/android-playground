@@ -1,3 +1,4 @@
 rootProject.name = 'android-playground'
 include ':app', /*':article', ':java', ':kotlin'*/ ':module_gradle', ':customview', ':lib-processor'
 include ':lib-camera'
+include ':lib-compose'
