@@ -12,8 +12,8 @@ object Version {
     const val compileSdk = 30
     const val targetSdk = 26
 
-    val java_version = JavaVersion.VERSION_1_8
-    const val kotlin_version = "1.3.41"
+    val java_version = JavaVersion.VERSION_11
+    const val kotlin_version = "1.5.21"
     const val Coroutine_Core = "1.4.2"
 
     const val androidKtx = "1.0.0"
