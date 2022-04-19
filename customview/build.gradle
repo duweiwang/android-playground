@@ -8,11 +8,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion Version.compileSdk
 
-
     defaultConfig {
-        minSdkVersion Version.minSdk
-        targetSdkVersion Version.targetSdk
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
