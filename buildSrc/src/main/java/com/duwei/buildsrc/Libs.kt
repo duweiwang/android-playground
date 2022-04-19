@@ -9,7 +9,7 @@ object Version {
     const val versionName = "1.0"
 
     const val minSdk = 21
-    const val compileSdk = 28
+    const val compileSdk = 30
     const val targetSdk = 26
 
     val java_version = JavaVersion.VERSION_1_8
