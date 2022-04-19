@@ -64,11 +64,6 @@ allprojects {
                     details.useVersion '26.1.0'
                 }
             }
-            if (requested.group == "androidx.appcompat"){
-                if (requested.name == "appcompat"){
-                    details.useVersion('1.0.2')
-                }
-            }
         }
     }
 }

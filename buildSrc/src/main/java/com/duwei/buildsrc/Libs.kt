@@ -9,7 +9,7 @@ object Version {
     const val versionName = "1.0"
 
     const val minSdk = 21
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val targetSdk = 26
 
     val java_version = JavaVersion.VERSION_11
@@ -17,7 +17,7 @@ object Version {
     const val Coroutine_Core = "1.4.2"
 
     const val androidKtx = "1.0.0"
-    const val appCompat = "1.3.0"
+    const val appCompat = "1.3.1"
     const val constraintLayout = "2.0.0-beta3"
 
     const val navigation = "2.0.0"
