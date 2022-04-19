@@ -1,14 +1,17 @@
+import com.duwei.buildsrc.Version
+
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdkVersion Version.compileSdk
 
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdkVersion Version.minSdk
+        targetSdkVersion Version.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

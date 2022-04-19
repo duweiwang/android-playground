@@ -4,9 +4,6 @@ import com.duwei.buildsrc.Libs
 
 buildscript {
     apply from: rootProject.file('dependencies.gradle')
-    ext {
-        kotlin_version = '1.4.21'
-    }
     repositories {
         google()
         maven{ url'https://maven.aliyun.com/nexus/content/groups/public/' }

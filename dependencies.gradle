@@ -1,13 +1,6 @@
 ext {
     versions = [
             buildTools      : "",
-            versionCode     : 1,
-            versionName     : "1.0",
-
-            minSdk          : 21,
-            compileSdk      : 28,
-            targetSdk       : 26,
-
             java_version    : JavaVersion.VERSION_1_8,
             kotlin_version  : '1.3.41',
 

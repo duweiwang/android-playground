@@ -1,4 +1,5 @@
 import com.duwei.buildsrc.Libs
+import com.duwei.buildsrc.Version
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
@@ -6,13 +7,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.wangduwei.plugin'
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdkVersion Version.compileSdk
     defaultConfig {
         applicationId "com.example.wangduwei.demos"
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-        versionCode versions.versionCode
-        versionName versions.versionName
+        minSdkVersion Version.minSdk
+        targetSdkVersion Version.targetSdk
+        versionCode Version.versionCode
+        versionName Version.versionName
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
