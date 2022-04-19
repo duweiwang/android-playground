@@ -11,7 +11,7 @@
     <fragment
         android:id="@+id/menu_second"
         android:name="com.example.wangduwei.demos.main.SecondFragment"
-        android:label="SecondFragment" >
+        android:label="SecondFragment">
 
     </fragment>
     <fragment
@@ -228,40 +228,52 @@
         android:name="com.example.wangduwei.demos.performance.memory.LeakTestFragment"
         android:label="LeakTestFragment" />
 
-    <fragment android:id="@+id/fragment_interpolator"
+    <fragment
+        android:id="@+id/fragment_interpolator"
         android:name="com.example.wangduwei.demos.fragment.InterpolatorDemoFragment"
-        android:label="InterpolatorDemoFragment"/>
+        android:label="InterpolatorDemoFragment" />
 
-    <fragment android:id="@+id/fragment_animation"
+    <fragment
+        android:id="@+id/fragment_animation"
         android:name="com.example.wangduwei.demos.fragment.AnimationDemoFragment"
-        android:label="AnimationDemoFragment"/>
+        android:label="AnimationDemoFragment" />
 
-    <fragment android:id="@+id/fragment_matrix"
+    <fragment
+        android:id="@+id/fragment_matrix"
         android:name="com.example.wangduwei.demos.fragment.MatrixFragment"
-        android:label="MatrixFragment"/>
+        android:label="MatrixFragment" />
 
-    <fragment android:id="@+id/fragment_nested_scroll"
+    <fragment
+        android:id="@+id/fragment_nested_scroll"
         android:name="com.example.wangduwei.demos.view.nestedscroll.androidinterface.NestedScrollDemo"
-        android:label="NestedScrollDemo"/>
+        android:label="NestedScrollDemo" />
 
-    <fragment android:id="@+id/fragment_recycler_pull"
+    <fragment
+        android:id="@+id/fragment_recycler_pull"
         android:name="com.example.wangduwei.demos.recyclerview.pullrefreshloadrecyclerview.RecyclerDemoFragment"
-        android:label="RecyclerDemoFragment"/>
+        android:label="RecyclerDemoFragment" />
 
-    <fragment android:id="@+id/fragment_loading"
+    <fragment
+        android:id="@+id/fragment_loading"
         android:name="com.example.wangduwei.demos.fragment.LoadingFragment"
-        android:label="LoadingFragment"/>
+        android:label="LoadingFragment" />
 
-    <fragment android:id="@+id/fragment_emoji"
+    <fragment
+        android:id="@+id/fragment_emoji"
         android:name="com.example.wangduwei.demos.view.spannable.emoji.EmojiFragment"
-        android:label="EmojiFragment"/>
+        android:label="EmojiFragment" />
 
-    <fragment android:id="@+id/fragment_coroutine"
+    <fragment
+        android:id="@+id/fragment_coroutine"
         android:name="com.example.wangduwei.demos.lifecircle.demo2.CoroutineFragment"
-        android:label="CoroutineFragment"
-        />
+        android:label="CoroutineFragment" />
     <fragment
         android:id="@+id/fragment_rongcloud"
         android:name="com.example.wangduwei.demos.fragment.RongCloudFragment"
         android:label="RongCloudFragment" />
+
+    <fragment
+        android:id="@+id/fragment_compose"
+        android:name="com.example.wangduwei.demos.fragment.ComposeFragment"
+        android:label="ComposeFragment" />
 </navigation>
