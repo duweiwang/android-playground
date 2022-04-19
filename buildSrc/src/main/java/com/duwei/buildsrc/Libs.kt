@@ -17,7 +17,7 @@ object Version {
     const val Coroutine_Core = "1.4.2"
 
     const val androidKtx = "1.0.0"
-    const val appCompat = "1.0.2"
+    const val appCompat = "1.3.0"
     const val constraintLayout = "2.0.0-beta3"
 
     const val navigation = "2.0.0"
@@ -27,6 +27,7 @@ object Version {
     const val blockCanary = "1.5.0"
     const val fragment = "1.2.1"
     const val pagingVersion = "3.0.0-alpha11"
+    const val composeVersion = "1.0.1"
 }
 
 object Libs {

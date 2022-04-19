@@ -25,7 +25,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Libs.Kotlin_Std_Jdk8
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation Libs.X_AppCompat
     implementation 'androidx.core:core-ktx:1.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

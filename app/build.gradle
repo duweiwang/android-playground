@@ -45,8 +45,7 @@ android {
     }
     composeOptions {
         kotlinCompilerVersion Version.kotlin_version
-        kotlinCompilerExtensionVersion "${v.compose}"
-
+        kotlinCompilerExtensionVersion Version.composeVersion
     }
 
     externalNativeBuild {
