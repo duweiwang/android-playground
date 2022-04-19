@@ -1,3 +1,4 @@
+import com.duwei.buildsrc.Libs
 import com.duwei.buildsrc.Version
 
 
@@ -30,7 +31,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation libraries.androidKtx
-    implementation libraries.kotlinStdlibJdk8
+    implementation Libs.Kotlin_Std_Jdk8
 }
 repositories {
     mavenCentral()

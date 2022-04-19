@@ -106,7 +106,7 @@ dependencies {
 
     //JPEG图方向获取
     implementation 'androidx.exifinterface:exifinterface:1.0.0-beta01'
-    implementation libraries.kotlinStdlibJdk8
+    implementation Libs.Kotlin_Std_Jdk8
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation 'com.github.markzhai:blockcanary-android:1.5.0'
 
