@@ -285,8 +285,8 @@
         android:id="@+id/fragment_compose_detail"
         android:name="com.example.wangduwei.demos.compose.ComposeDetailFragment"
         android:label="ComposeDetailFragment">
-<!--        <argument-->
-<!--            android:name="type"-->
-<!--            app:argType="com.example.wangduwei.demos.compose.ComposeType" />-->
+        <argument
+            android:name="type"
+            app:argType="com.example.wangduwei.demos.compose.ComposeType" />
     </fragment>
 </navigation>

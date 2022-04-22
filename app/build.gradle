@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.wangduwei.plugin'
+apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion Version.compileSdk
     defaultConfig {

@@ -15,7 +15,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment
  */
 class ComposeDetailFragment : BaseSupportFragment() {
 
-//    private val args by navArgs<ComposeDetailFragmentArgs>()
+    private val args by navArgs<ComposeDetailFragmentArgs>()
 
 
     override fun onCreateView(
@@ -25,11 +25,11 @@ class ComposeDetailFragment : BaseSupportFragment() {
     ): View? {
         return ComposeView(inflater.context).apply {
             setContent {
-//                when(args.type?.name){
-//                    "text"->{
+                when(args.type.name){
+                    "text"->{
                         TextScreen()
-//                    }
-//                }
+                    }
+                }
             }
         }
     }

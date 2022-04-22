@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.fragment.findNavController
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
+import com.example.wangduwei.demos.compose.ComposeDetailFragmentArgs
+import com.example.wangduwei.demos.compose.ComposeType
 import com.example.wangduwei.demos.main.BaseSupportFragment
 
 /**
@@ -96,7 +98,9 @@ class ComposeFragment : BaseSupportFragment() {
 
     private fun onClick(name: String) {
         findNavController().navigate(
-            R.id.fragment_compose_detail
+            R.id.fragment_compose_detail,
+            ComposeDetailFragmentArgs.Builder(ComposeType(name = name)).build()
+                .toBundle()
         )
     }
 
