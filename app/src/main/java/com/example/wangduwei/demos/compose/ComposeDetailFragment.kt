@@ -25,9 +25,12 @@ class ComposeDetailFragment : BaseSupportFragment() {
     ): View? {
         return ComposeView(inflater.context).apply {
             setContent {
-                when(args.type.name){
-                    "text"->{
+                when (args.type.name) {
+                    "text" -> {
                         TextScreen()
+                    }
+                    "button" -> {
+                        ButtonScreen()
                     }
                 }
             }
