@@ -13,18 +13,18 @@ buildscript {
     ext.deps = [
             'compose': [
                     'activityCompose'   : "androidx.activity:activity-compose:${v.composeActivity}",
-                    'composeComplier'   : "androidx.compose:compose-compiler:${v.compose}",
+                    'composeComplier'   : "androidx.compose:compose-compiler:${Version.composeVersion}",
                     'composeNavigation' : "androidx.navigation:navigation-compose:${v.composeNavigation}",
-                    'composeRuntime'    : "androidx.compose.runtime:runtime:${v.compose}",
+                    'composeRuntime'    : "androidx.compose.runtime:runtime:${Version.composeVersion}",
                     'constraintLayout'  : "androidx.constraintlayout:constraintlayout-compose:${v.composeConstraintLayout}",
-                    'core'              : "androidx.compose.ui:ui:${v.compose}",
-                    'foundation'        : "androidx.compose.foundation:foundation:${v.compose}",
-                    'tooling'           : "androidx.compose.ui:ui-tooling:${v.compose}",
-                    'layout'            : "androidx.compose.foundation:foundation-layout:${v.compose}",
-                    'material'          : "androidx.compose.material:material:${v.compose}",
-                    'savedInstanceState': "androidx.compose.runtime:runtime-saveable:${v.compose}",
-                    'uiTest'            : "androidx.compose.ui:ui-test-junit4:${v.compose}",
-                    'uiLiveData'        : "androidx.compose.runtime:runtime-livedata:${v.compose}"
+                    'core'              : "androidx.compose.ui:ui:${Version.composeVersion}",
+                    'foundation'        : "androidx.compose.foundation:foundation:${Version.composeVersion}",
+                    'tooling'           : "androidx.compose.ui:ui-tooling:${Version.composeVersion}",
+                    'layout'            : "androidx.compose.foundation:foundation-layout:${Version.composeVersion}",
+                    'material'          : "androidx.compose.material:material:${Version.composeVersion}",
+                    'savedInstanceState': "androidx.compose.runtime:runtime-saveable:${Version.composeVersion}",
+                    'uiTest'            : "androidx.compose.ui:ui-test-junit4:${Version.composeVersion}",
+                    'uiLiveData'        : "androidx.compose.runtime:runtime-livedata:${Version.composeVersion}"
             ],
     ]
     repositories {
