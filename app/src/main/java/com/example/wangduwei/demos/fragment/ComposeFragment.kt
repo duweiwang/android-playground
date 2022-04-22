@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.fragment.findNavController
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
@@ -29,9 +31,10 @@ import com.example.wangduwei.demos.main.BaseSupportFragment
  * @date 2022/4/19 5:00 PM
  *
  */
+@ExperimentalMaterialApi
 @PageInfo(description = "Compose", navigationId = R.id.fragment_compose)
 class ComposeFragment : BaseSupportFragment() {
-    val colors = listOf(
+    private val colors = listOf(
         Color(0xFFffd7d7.toInt()),
         Color(0xFFffe9d6.toInt()),
         Color(0xFFfffbd0.toInt()),
@@ -51,13 +54,16 @@ class ComposeFragment : BaseSupportFragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent(content = {
-                LazyColumnItemsScrollableComponent(demoList)
+                LazyColumnItemsScrollableComponent(demoList) {
+                    onClick(it)
+                }
             })
         }
     }
 
+    @ExperimentalMaterialApi
     @Composable
-    fun LazyColumnItemsScrollableComponent(demoList: List<String>) {
+    fun LazyColumnItemsScrollableComponent(demoList: List<String>, click: (String) -> Unit) {
         LazyColumn(modifier = Modifier.fillMaxHeight()) {
             items(items = demoList, itemContent = { demoName ->
                 val index = demoList.indexOf(demoName)
@@ -69,7 +75,8 @@ class ComposeFragment : BaseSupportFragment() {
                         backgroundColor = colors[index % colors.size],
                         modifier = Modifier
                             .fillParentMaxWidth()
-                            .padding(6.dp)
+                            .padding(6.dp),
+                        onClick = { click.invoke(demoName) }
                     ) {
                         Text(
                             text = demoName,
@@ -85,6 +92,12 @@ class ComposeFragment : BaseSupportFragment() {
                 }
             })
         }
+    }
+
+    private fun onClick(name: String) {
+        findNavController().navigate(
+            R.id.fragment_compose_detail
+        )
     }
 
 

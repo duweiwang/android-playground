@@ -20,7 +20,7 @@ object Version {
     const val appCompat = "1.3.1"
     const val constraintLayout = "2.0.0-beta3"
 
-    const val navigation = "2.0.0"
+    const val navigation = "2.4.2"
     const val lifecycle = "2.2.0"
     const val room = "2.2.0"
 
