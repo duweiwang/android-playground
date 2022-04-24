@@ -64,7 +64,7 @@ class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
                 2,
                 StaggeredGridLayoutManager.VERTICAL
             )//GridLayoutManager(activity, 2)
-            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+//            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             adapter = mAdapter
         }
 
