@@ -81,6 +81,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(path: ':customview')
     implementation project(':lib-processor')
+    implementation project(':lib-compose')
     annotationProcessor project(':lib-processor')
     kapt project(':lib-processor')
 

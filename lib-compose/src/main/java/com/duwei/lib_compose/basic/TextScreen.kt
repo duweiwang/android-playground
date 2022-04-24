@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.compose
+package com.duwei.lib_compose.basic
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

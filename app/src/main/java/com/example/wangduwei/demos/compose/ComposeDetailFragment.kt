@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.navArgs
+import com.duwei.lib_compose.basic.ButtonScreen
+import com.duwei.lib_compose.basic.TextScreen
 import com.example.wangduwei.demos.main.BaseSupportFragment
 
 /**

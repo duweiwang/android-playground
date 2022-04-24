@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.compose
+package com.duwei.lib_compose.basic
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
