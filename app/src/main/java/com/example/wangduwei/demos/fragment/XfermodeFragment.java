@@ -18,7 +18,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
 /***
  * Xfermode演示
  */
-@PageInfo(description = "Xfermode原理", navigationId = R.id.fragment_view_xfermode)
+@PageInfo(description = "演示图层混合模式的使用", navigationId = R.id.fragment_view_xfermode,title = "Xfermode",preview = R.drawable.preview_xfermode)
 public class XfermodeFragment extends BaseSupportFragment {
 
     private XFermodeView xFermodeView;

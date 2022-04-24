@@ -26,7 +26,7 @@ import com.example.wangduwei.demos.notification.style.NotificationStyleProgress;
  * @auther:duwei
  * @date:2018/9/14
  */
-@PageInfo(description = "演示安卓各种通知栏，大小图标，折叠等", navigationId = R.id.fragment_notification, title = "Notification", preview = R.drawable.push_notification)
+@PageInfo(description = "演示安卓各种通知栏，大小图标，折叠等", navigationId = R.id.fragment_notification, title = "Notification", preview = R.drawable.preview_push_notification)
 public class NotificationDemoFragment extends BaseSupportFragment implements View.OnClickListener {
     private NotificationStyle mStyle;
 
