@@ -51,12 +51,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         } else {
             holder.mImage.setBackgroundColor(mContext.getResources().getColor(R.color.md_orange_700));
         }
-        holder.mItemName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemClickListener.onItemClick(position);
-            }
-        });
+        holder.itemView.setOnClickListener(view -> mOnItemClickListener.onItemClick(position));
     }
 
     @Override

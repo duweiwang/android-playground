@@ -12,7 +12,10 @@ import com.example.lib_processor.PageInfo;
 import com.example.wangduwei.demos.R;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 
-@PageInfo(description = "OpenGl画图",navigationId = R.id.fragment_gl_basic)
+@PageInfo(description = "使用OpenGL绘制基本的图形",
+        navigationId = R.id.fragment_gl_basic,
+        title = "OpenGl画图",
+        preview = R.drawable.preview_opengl)
 public class OpenGLFragment extends BaseSupportFragment {
 
     @Nullable
