@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.lib_processor.FragmentInfo
 import com.example.wangduwei.demos.router.RouterManager
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -29,7 +30,11 @@ class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
     private lateinit var mAdapter: MainAdapter
     private lateinit var mTitles: List<FragmentInfo>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_main, null)
     }
 
@@ -55,8 +60,11 @@ class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
         mAdapter.setOnItemClickListener(this)
 
         main_recyclerview.apply {
-            layoutManager = GridLayoutManager(activity, 2)
-            addItemDecoration(DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL))
+            layoutManager = StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL
+            )//GridLayoutManager(activity, 2)
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             adapter = mAdapter
         }
 

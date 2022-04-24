@@ -27,7 +27,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
  * @author: duwei
  * @date: 2018/8/23
  */
-@PageInfo(description = "跨进程回调", navigationId = R.id.fragment_ipc_test)
+@PageInfo(description = "跨进程回调", navigationId = R.id.fragment_ipc_test,title = "IPC",preview = R.drawable.icon_admin)
 public class IPCFragment extends BaseSupportFragment implements BaseIPCWithCallback.StateListener {
     //实现ServiceConnection接口
     private IPCClientClass mClient = new IPCClientClass();
@@ -60,7 +60,7 @@ public class IPCFragment extends BaseSupportFragment implements BaseIPCWithCallb
         }
     }
 
-    private void bindRemoteService(){
+    private void bindRemoteService() {
         Intent intent = new Intent(getActivity(), RemoteService.class);
         getActivity().bindService(intent, mClient, Activity.BIND_AUTO_CREATE);
     }

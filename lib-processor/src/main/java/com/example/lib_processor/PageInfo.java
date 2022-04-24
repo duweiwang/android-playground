@@ -23,4 +23,16 @@ public @interface PageInfo {
      * 页面fragment对应的ID
      */
     int navigationId();
+
+    /**
+     *
+     * @return
+     */
+    String title() default "";
+
+    /**
+     *
+     * @return
+     */
+    int preview() default  -1;
 }

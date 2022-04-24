@@ -81,7 +81,11 @@ public class AnnotationProcessor extends AbstractProcessor {
         mMessager.printMessage(Diagnostic.Kind.NOTE, "---------------" + annotatedElement.getSimpleName());
         PageInfo pageInfo = annotatedElement.getAnnotation(PageInfo.class);
         mMessager.printMessage(Diagnostic.Kind.NOTE, "---------------" + pageInfo.description());
-        FragmentInfo fragmentInfo = new FragmentInfo(pageInfo.description(), pageInfo.navigationId());
+        FragmentInfo fragmentInfo = new FragmentInfo(
+                pageInfo.description(),
+                pageInfo.navigationId(),
+                pageInfo.title(),
+                pageInfo.preview());
         list.add(fragmentInfo);
     }
 
@@ -100,7 +104,7 @@ public class AnnotationProcessor extends AbstractProcessor {
                 .append("\tpublic static List<FragmentInfo> list = new ArrayList();\n")
                 .append("\tstatic {\n");
         for (FragmentInfo fragmentInfo : list) {
-            builder.append("\t\tlist.add(new FragmentInfo(\"" + fragmentInfo.getDescription() + "\"," + fragmentInfo.getId() + "));\n");
+            builder.append("\t\tlist.add(new FragmentInfo(\"" + fragmentInfo.getDescription() + "\"," + fragmentInfo.getId() + ",\"" + fragmentInfo.getTitle() + "\"," + fragmentInfo.getPreview() + "));\n");
         }
         builder.append("\t}\n\n")
                 .append("\tpublic List<FragmentInfo> getList(){\n")

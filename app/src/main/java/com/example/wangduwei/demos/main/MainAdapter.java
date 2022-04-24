@@ -1,5 +1,6 @@
 package com.example.wangduwei.demos.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, final int position) {
+    public void onBindViewHolder(MainViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         Log.d("wdw","onBindViewHolder");
         String text = mList.get(position).getDescription();
         holder.mItemName.setText(text);
