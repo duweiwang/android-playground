@@ -26,7 +26,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
 import java.util.List;
 
 /**
- * @desc: 演示ViewModel  && LiveData  &&  LifeCircle的基本使用
+ * @desc: 演示ViewModel  && LiveData  &&  LifeCycle的基本使用
  * @auther:duwei
  * @date:2018/11/8
  */
@@ -59,12 +59,9 @@ public class LifeCycleFragment extends BaseSupportFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
-        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), new Observer<List<Word>>() {
-            @Override
-            public void onChanged(@Nullable final List<Word> words) {
-                // Update the cached copy of the words in the adapter.
-                adapter.setWords(words);
-            }
+        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), words -> {
+            // Update the cached copy of the words in the adapter.
+            adapter.setWords(words);
         });
     }
 

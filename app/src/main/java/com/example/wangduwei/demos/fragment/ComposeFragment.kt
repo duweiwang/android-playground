@@ -34,7 +34,12 @@ import com.example.wangduwei.demos.main.BaseSupportFragment
  *
  */
 @ExperimentalMaterialApi
-@PageInfo(description = "Compose", navigationId = R.id.fragment_compose)
+@PageInfo(
+    description = "Compose",
+    navigationId = R.id.fragment_compose,
+    title = "Compose",
+    preview = R.drawable.preview_jetpack_compose_
+)
 class ComposeFragment : BaseSupportFragment() {
     private val colors = listOf(
         Color(0xFFffd7d7.toInt()),
