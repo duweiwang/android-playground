@@ -4,29 +4,6 @@ import com.duwei.buildsrc.Version
 
 buildscript {
     apply from: rootProject.file('dependencies.gradle')
-    ext.v = [
-            'compose': '1.0.1',
-            'composeActivity': '1.3.1',
-            'composeConstraintLayout': '1.0.0-beta02',
-            'composeNavigation': '2.4.0-alpha06',
-    ]
-    ext.deps = [
-            'compose': [
-                    'activityCompose'   : "androidx.activity:activity-compose:${v.composeActivity}",
-                    'composeComplier'   : "androidx.compose:compose-compiler:${Version.composeVersion}",
-                    'composeNavigation' : "androidx.navigation:navigation-compose:${v.composeNavigation}",
-                    'composeRuntime'    : "androidx.compose.runtime:runtime:${Version.composeVersion}",
-                    'constraintLayout'  : "androidx.constraintlayout:constraintlayout-compose:${v.composeConstraintLayout}",
-                    'core'              : "androidx.compose.ui:ui:${Version.composeVersion}",
-                    'foundation'        : "androidx.compose.foundation:foundation:${Version.composeVersion}",
-                    'tooling'           : "androidx.compose.ui:ui-tooling:${Version.composeVersion}",
-                    'layout'            : "androidx.compose.foundation:foundation-layout:${Version.composeVersion}",
-                    'material'          : "androidx.compose.material:material:${Version.composeVersion}",
-                    'savedInstanceState': "androidx.compose.runtime:runtime-saveable:${Version.composeVersion}",
-                    'uiTest'            : "androidx.compose.ui:ui-test-junit4:${Version.composeVersion}",
-                    'uiLiveData'        : "androidx.compose.runtime:runtime-livedata:${Version.composeVersion}"
-            ],
-    ]
     repositories {
         google()
         maven{ url'https://maven.aliyun.com/nexus/content/groups/public/' }

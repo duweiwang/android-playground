@@ -46,7 +46,7 @@ android {
     }
     composeOptions {
         kotlinCompilerVersion Version.kotlin_version
-        kotlinCompilerExtensionVersion Version.composeVersion
+        kotlinCompilerExtensionVersion Version.compose.composeVersion
     }
 
     externalNativeBuild {
@@ -149,18 +149,18 @@ dependencies {
     implementation "com.github.skydoves:balloon:1.4.3"
 
     // Compose
-    implementation deps.compose.activityCompose
-    implementation deps.compose.composeRuntime
-    implementation deps.compose.constraintLayout
-    implementation deps.compose.core
-    implementation deps.compose.foundation
-    implementation deps.compose.tooling
-    implementation deps.compose.layout
-    implementation deps.compose.material
-    implementation deps.compose.savedInstanceState
-    implementation deps.compose.uiLiveData
-    implementation deps.compose.composeNavigation
-    androidTestImplementation deps.compose.uiTest
+    implementation Libs.compose.activityCompose
+    implementation Libs.compose.composeRuntime
+    implementation Libs.compose.constraintLayout
+    implementation Libs.compose.core
+    implementation Libs.compose.foundation
+    implementation Libs.compose.tooling
+    implementation Libs.compose.layout
+    implementation Libs.compose.material
+    implementation Libs.compose.savedInstanceState
+    implementation Libs.compose.uiLiveData
+    implementation Libs.compose.composeNavigation
+    androidTestImplementation Libs.compose.uiTest
 
 
 

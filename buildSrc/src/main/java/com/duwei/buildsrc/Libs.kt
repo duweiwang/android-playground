@@ -27,7 +27,13 @@ object Version {
     const val blockCanary = "1.5.0"
     const val fragment = "1.2.1"
     const val pagingVersion = "3.0.0-alpha11"
-    const val composeVersion = "1.0.1"
+
+    object compose {
+        const val composeVersion = "1.0.1"
+        const val composeActivity = "1.3.1"
+        const val composeConstraintLayout = "1.0.0-beta02"
+        const val composeNavigation = "2.4.0-alpha06"
+    }
 }
 
 object Libs {
@@ -61,5 +67,21 @@ object Libs {
     const val Kotlin_Gradle_Plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
 
     const val X_Paging = "androidx.paging:paging-runtime:${Version.pagingVersion}"
+
+    object compose {
+        const val activityCompose = "androidx.activity:activity-compose:${Version.compose.composeActivity}"
+        const val composeComplier = "androidx.compose:compose-compiler:${Version.compose.composeVersion}"
+        const val composeNavigation = "androidx.navigation:navigation-compose:${Version.compose.composeNavigation}"
+        const val composeRuntime = "androidx.compose.runtime:runtime:${Version.compose.composeVersion}"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Version.compose.composeConstraintLayout}"
+        const val core = "androidx.compose.ui:ui:${Version.compose.composeVersion}"
+        const val foundation = "androidx.compose.foundation:foundation:${Version.compose.composeVersion}"
+        const val tooling = "androidx.compose.ui:ui-tooling:${Version.compose.composeVersion}"
+        const val layout = "androidx.compose.foundation:foundation-layout:${Version.compose.composeVersion}"
+        const val material = "androidx.compose.material:material:${Version.compose.composeVersion}"
+        const val savedInstanceState = "androidx.compose.runtime:runtime-saveable:${Version.compose.composeVersion}"
+        const val uiTest = "androidx.compose.ui:ui-test-junit4:${Version.compose.composeVersion}"
+        const val uiLiveData = "androidx.compose.runtime:runtime-livedata:${Version.compose.composeVersion}"
+    }
 
 }
