@@ -49,6 +49,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         if (obj.getPreview() != -1) {
             holder.mImage.setImageResource(obj.getPreview());
         } else {
+            holder.mImage.setImageResource(android.R.color.transparent);
             holder.mImage.setBackgroundColor(mContext.getResources().getColor(R.color.md_orange_700));
         }
         holder.itemView.setOnClickListener(view -> mOnItemClickListener.onItemClick(position));

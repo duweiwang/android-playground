@@ -27,7 +27,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
  * @author: duwei
  * @date: 2018/8/23
  */
-@PageInfo(description = "跨进程回调", navigationId = R.id.fragment_ipc_test,title = "IPC",preview = R.drawable.icon_admin)
+@PageInfo(description = "跨进程回调", navigationId = R.id.fragment_ipc_test,title = "IPC",preview = -1)
 public class IPCFragment extends BaseSupportFragment implements BaseIPCWithCallback.StateListener {
     //实现ServiceConnection接口
     private IPCClientClass mClient = new IPCClientClass();
