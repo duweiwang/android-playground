@@ -264,10 +264,6 @@
         android:label="EmojiFragment" />
 
     <fragment
-        android:id="@+id/fragment_coroutine"
-        android:name="com.example.wangduwei.demos.lifecircle.demo2.CoroutineFragment"
-        android:label="CoroutineFragment" />
-    <fragment
         android:id="@+id/fragment_rongcloud"
         android:name="com.example.wangduwei.demos.fragment.RongCloudFragment"
         android:label="RongCloudFragment" />
