@@ -74,6 +74,11 @@
             android:permission="com.duwei.PROVIDER"
             android:process=":provider" />
 
+        <service
+            android:name=".service.FileObserverService"
+            android:enabled="true"
+            android:exported="true"></service>
+
     </application>
 
 </manifest>
