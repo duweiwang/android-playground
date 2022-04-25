@@ -16,7 +16,12 @@ import kotlinx.android.synthetic.main.fragment_pop_view.*
  *  @auther: davewang
  *  @since: 2019/7/16
  **/
-@PageInfo(description = "弹出气泡", navigationId = R.id.fragment_pop)
+@PageInfo(
+    description = "弹出气泡",
+    navigationId = R.id.fragment_pop,
+    title = "Popup",
+    preview = R.drawable.preview_pop
+)
 class PopFragment : BaseSupportFragment() {
 
     lateinit var mContainer: LinearLayout
