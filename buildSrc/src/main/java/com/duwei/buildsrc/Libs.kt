@@ -22,7 +22,7 @@ object Version {
 
     const val navigation = "2.3.2"
     const val lifecycle = "2.2.0"
-    const val room = "2.2.0"
+    const val room = "2.4.2"
 
     const val blockCanary = "1.5.0"
     const val fragment = "1.2.1"
@@ -67,6 +67,14 @@ object Libs {
     const val Kotlin_Gradle_Plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10"
 
     const val X_Paging = "androidx.paging:paging-runtime:${Version.pagingVersion}"
+
+    object AndroidX{
+        object room{
+            const val runtime = "androidx.room:room-runtime:${Version.room}"
+            const val compiler = "androidx.room:room-compiler:${Version.room}"
+            const val coroutine = "androidx.room:room-coroutines:2.1.0-alpha04"
+        }
+    }
 
     object compose {
         const val activityCompose = "androidx.activity:activity-compose:${Version.compose.composeActivity}"

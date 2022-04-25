@@ -97,8 +97,10 @@ dependencies {
     implementation Libs.X_Lifecycle_Runtime
     annotationProcessor Libs.X_Lifecycle_Compiler
     //room
-    implementation Libs.X_Room_Runtime
-    annotationProcessor Libs.X_Room_Compiler
+    implementation Libs.AndroidX.room.runtime
+    implementation Libs.AndroidX.room.coroutine
+    annotationProcessor Libs.AndroidX.room.compiler
+    //
     implementation Libs.X_Paging
     implementation Libs.Kotlin_Coroutine_Android
     implementation Libs.Kotlin_Coroutine_Core
