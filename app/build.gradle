@@ -123,8 +123,8 @@ dependencies {
     implementation 'com.github.markzhai:blockcanary-android:1.5.0'
 
     // 仅在debug包启用BlockCanary进行卡顿监控和提示的话，可以这么用
-    debugImplementation libraries.blockCanaryDebug
-    releaseImplementation libraries.blockCanaryRelease
+//    debugImplementation libraries.blockCanaryDebug
+//    releaseImplementation libraries.blockCanaryRelease
 
     implementation Libs.X_Annotation
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
