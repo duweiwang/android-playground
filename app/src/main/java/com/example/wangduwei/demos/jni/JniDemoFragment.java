@@ -19,10 +19,14 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
  * @author: duwei
  * @date: 2019/2/27
  */
-@PageInfo(description = "JNI基础", navigationId = R.id.fragment_jni)
+@PageInfo(description = "JNI基础",
+        navigationId = R.id.fragment_jni,
+        title = "JNI",
+        preview = R.drawable.preview_jni)
 public class JniDemoFragment extends BaseSupportFragment {
     int[] ar = new int[]{1, 2, 3, 4, 5};
-    int[] array = new int[]{1, 2, 3, 4, 5,6,7,8,9,0};
+    int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
