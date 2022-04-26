@@ -9,15 +9,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class FileObserverService extends Service {
 
-    public static final String ACTION_COMMAND_START = "com.feketga.fileobservertest.intent.ACTION_COMMAND_START";
-    public static final String ACTION_COMMAND_STOP = "com.feketga.fileobservertest.intent.ACTION_COMMAND_STOP";
-    public static final String EXTRA_FILE_PATH = "com.feketga.fileobservertest.intent.EXTRA_FILE_PATH";
+    public static final String ACTION_COMMAND_START = "com.fo.intent.ACTION_COMMAND_START";
+    public static final String ACTION_COMMAND_STOP = "com.fo.intent.ACTION_COMMAND_STOP";
+    public static final String EXTRA_FILE_PATH = "com.fo.intent.EXTRA_FILE_PATH";
 
-    public static final String ACTION_COMMAND_CLEAR = "com.feketga.fileobservertest.intent.ACTION_COMMAND_CLEAR";
-    public static final String ACTION_COMMAND_DUMP = "com.feketga.fileobservertest.intent.ACTION_COMMAND_DUMP";
+    public static final String ACTION_COMMAND_CLEAR = "com.fo.intent.ACTION_COMMAND_CLEAR";
+    public static final String ACTION_COMMAND_DUMP = "com.fo.intent.ACTION_COMMAND_DUMP";
 
-    public static final String ACTION_EVENT = "com.feketga.fileobservertest.intent.ACTION_EVENT";
-    public static final String EXTRA_EVENT_DUMP = "com.feketga.fileobservertest.intent.EXTRA_EVENT_DUMP";
+    public static final String ACTION_EVENT = "com.fo.intent.ACTION_EVENT";
+    public static final String EXTRA_EVENT_DUMP = "com.fo.intent.EXTRA_EVENT_DUMP";
 
     private String mObservedPath;
     private FileObserver mFileObserver;

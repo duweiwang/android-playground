@@ -22,8 +22,6 @@ import java.io.FileNotFoundException
  * @author 杜伟
  * @date 2022/4/25 6:53 PM
  *
- * todo 权限
- *
  */
 @PageInfo(description = "FileObserver", navigationId = R.id.fragment_fileobserver)
 class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListener {
@@ -62,6 +60,8 @@ class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val fileDir = requireContext().filesDir.absolutePath
+        file_path.setText(fileDir)
         fragment_toolbar.setOnMenuItemClickListener(this)
     }
 
@@ -139,7 +139,7 @@ class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListe
     }
 
     private fun deleteFile() {
-        val file = File(file_path.text.toString());
+        val file = File(file_path.text.toString(),"demo.txt")
         if (file.delete()) {
             appendToCommandDump("DELETE: OK: Deleted: " + file.absolutePath + "\n");
         } else {
@@ -149,7 +149,7 @@ class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListe
 
     private fun readFile() {
         try {
-            val text = File(file_path.text.toString()).readText()
+            val text = File(file_path.text.toString(),"demo.txt").readText()
             appendToCommandDump(text)
         } catch (e: FileNotFoundException) {
             appendToCommandDump("FileNotFoundException")
@@ -158,12 +158,11 @@ class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListe
     }
 
     private fun writeFile() {
-        File(file_path.text.toString()).writeText("hello" + System.currentTimeMillis())
-
+        File(file_path.text.toString(),"demo.txt").writeText("hello" + System.currentTimeMillis())
     }
 
     private fun createFile() {
-        val result = File(file_path.text.toString()).createNewFile()
+        val result = File(file_path.text.toString(),"demo.txt").createNewFile()
         appendToCommandDump("create file result = $result\n")
     }
 
