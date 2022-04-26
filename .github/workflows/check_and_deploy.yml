@@ -4,8 +4,9 @@ name: Test and deploy
 ## Actions that will be executed when you push code currently none
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ master ]
+#    tags:
+#      - 'v*'
 ## 2
 jobs:
   ## 3
