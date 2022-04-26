@@ -35,6 +35,9 @@ jobs:
       # 1
       - name: Checkout code
         uses: actions/checkout@v2
+      #1.1
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
       # 2
       - name: Generate Release APK
         run: ./gradlew assembleRelease
