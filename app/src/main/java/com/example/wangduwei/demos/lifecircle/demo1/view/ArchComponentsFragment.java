@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,15 +22,16 @@ import com.example.wangduwei.demos.lifecircle.demo1.viewmodel.WordListAdapter;
 import com.example.wangduwei.demos.lifecircle.demo1.viewmodel.WordViewModel;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 
-import java.util.List;
-
 /**
  * @desc: 演示ViewModel  && LiveData  &&  LifeCycle的基本使用
  * @auther:duwei
  * @date:2018/11/8
  */
-@PageInfo(description = "架构组件", navigationId = R.id.fragment_life_circle)
-public class LifeCycleFragment extends BaseSupportFragment {
+@PageInfo(description = "MVVM模式、ViewModel、LiveData、LifeCycle、协程等",
+        navigationId = R.id.fragment_arch_components,
+        title = "架构组件",
+        preview = R.drawable.preview_arch_components)
+public class ArchComponentsFragment extends BaseSupportFragment {
     private WordViewModel mWordViewModel;
     public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 

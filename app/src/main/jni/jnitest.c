@@ -178,10 +178,7 @@ Java_com_example_wangduwei_demos_jni_JniCenter_accessJavaStatisticField(JNIEnv *
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_wangduwei_demos_jni_JniCenter_subscribeListener(JNIEnv
-* env,
-jobject thiz, jcallback
-listener) {
+Java_com_example_wangduwei_demos_jni_JniCenter_subscribeListener(JNIEnv *env, jobject thiz, jobject listener) {
     //todo
 
 }
