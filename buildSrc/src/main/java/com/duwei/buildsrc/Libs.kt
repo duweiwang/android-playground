@@ -74,6 +74,13 @@ object Libs {
             const val compiler = "androidx.room:room-compiler:${Version.room}"
             const val coroutine = "androidx.room:room-coroutines:2.1.0-alpha04"
         }
+
+        object work {
+            const val work_version = "2.7.1"
+            const val runtime = "androidx.work:work-runtime:$work_version"
+            const val runtime_ktx = "androidx.work:work-runtime-ktx:$work_version"
+            const val multiprocess = "androidx.work:work-multiprocess:$work_version"
+        }
     }
 
     object compose {

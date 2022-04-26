@@ -165,7 +165,9 @@ dependencies {
     implementation Libs.compose.composeNavigation
     androidTestImplementation Libs.compose.uiTest
 
-
+    implementation Libs.AndroidX.work.runtime
+    implementation Libs.AndroidX.work.runtime_ktx
+    implementation Libs.AndroidX.work.multiprocess
 
 }
 repositories {
