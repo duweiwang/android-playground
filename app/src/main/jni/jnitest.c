@@ -177,6 +177,15 @@ Java_com_example_wangduwei_demos_jni_JniCenter_accessJavaStatisticField(JNIEnv *
     (*env)->SetStaticIntField(env, cls, fid, 200);
 }
 
+JNIEXPORT void JNICALL
+Java_com_example_wangduwei_demos_jni_JniCenter_subscribeListener(JNIEnv
+* env,
+jobject thiz, jcallback
+listener) {
+    //todo
+
+}
+
 
 
 

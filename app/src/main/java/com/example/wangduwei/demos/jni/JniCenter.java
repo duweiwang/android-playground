@@ -89,4 +89,7 @@ public class JniCenter {
      */
     public static native int[][] initArrayInNative(int size);
 
+
+    public native void subscribeListener(JNIListener listener);
+
 }
