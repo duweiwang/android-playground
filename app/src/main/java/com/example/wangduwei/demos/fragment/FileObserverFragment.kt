@@ -23,7 +23,12 @@ import java.io.FileNotFoundException
  * @date 2022/4/25 6:53 PM
  *
  */
-@PageInfo(description = "FileObserver", navigationId = R.id.fragment_fileobserver)
+@PageInfo(
+    description = "观察文件或目录的操作",
+    navigationId = R.id.fragment_fileobserver,
+    title = "FileObserver",
+    preview = R.drawable.preview_file_observer
+)
 class FileObserverFragment : BaseSupportFragment(), Toolbar.OnMenuItemClickListener {
 
     private val handle = Handler()

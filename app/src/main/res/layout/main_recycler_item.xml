@@ -22,6 +22,7 @@
             android:id="@+id/entrance_flag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:minHeight="50dp" />
