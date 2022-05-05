@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.wangduwei.demos.lifecircle.paging
+package com.example.wangduwei.demos.lifecycle.paging
 
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.*

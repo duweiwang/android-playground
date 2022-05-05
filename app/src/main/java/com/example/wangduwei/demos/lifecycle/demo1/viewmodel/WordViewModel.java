@@ -1,11 +1,11 @@
-package com.example.wangduwei.demos.lifecircle.demo1.viewmodel;
+package com.example.wangduwei.demos.lifecycle.demo1.viewmodel;
 
 import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.wangduwei.demos.lifecircle.demo1.data.Word;
-import com.example.wangduwei.demos.lifecircle.demo1.data.WordRepository;
+import com.example.wangduwei.demos.lifecycle.demo1.data.Word;
+import com.example.wangduwei.demos.lifecycle.demo1.data.WordRepository;
 
 import java.util.List;
 

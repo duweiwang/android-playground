@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.lifecircle.demo1.viewmodel;
+package com.example.wangduwei.demos.lifecycle.demo1.viewmodel;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.wangduwei.demos.R;
-import com.example.wangduwei.demos.lifecircle.demo1.data.Word;
+import com.example.wangduwei.demos.lifecycle.demo1.data.Word;
 
 import java.util.List;
 

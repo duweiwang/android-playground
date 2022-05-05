@@ -124,7 +124,7 @@
 
     <fragment
         android:id="@+id/fragment_arch_components"
-        android:name="com.example.wangduwei.demos.lifecircle.demo1.view.ArchComponentsFragment"
+        android:name="com.example.wangduwei.demos.lifecycle.demo1.view.ArchComponentsFragment"
         android:label="LifeCircleFragment" />
 
     <fragment

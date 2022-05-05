@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.example.wangduwei.demos.lifecircle.paging
+package com.example.wangduwei.demos.lifecycle.paging
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.wangduwei.demos.lifecircle.paging.Cheese
 
 /**
  * Database Access Object for the Cheese database.

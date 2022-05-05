@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.lifecircle.demo1.view;
+package com.example.wangduwei.demos.lifecycle.demo1.view;
 
 import android.content.Intent;
 import android.os.Bundle;

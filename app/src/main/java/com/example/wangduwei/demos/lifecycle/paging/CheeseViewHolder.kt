@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.example.wangduwei.demos.lifecircle.paging
+package com.example.wangduwei.demos.lifecycle.paging
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.wangduwei.demos.R
-import com.example.wangduwei.demos.lifecircle.paging.Cheese
 
 /**
  * A simple ViewHolder that can bind a Cheese item. It also accepts null items since the data may

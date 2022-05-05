@@ -63,7 +63,7 @@
         <activity
             android:name=".permission.main.PermissionDialogHolderActivity"
             android:theme="@style/Transparent" />
-        <activity android:name=".lifecircle.demo1.view.NewWordActivity" />
+        <activity android:name=".lifecycle.demo1.view.NewWordActivity" />
         <activity android:name=".downloadmanager.DownloadManagerActivity" />
         <activity android:name=".media.camera.camera1.Camera1DemoActivity" />
         <activity android:name=".performance.memory.LeakedTargetActivity" />

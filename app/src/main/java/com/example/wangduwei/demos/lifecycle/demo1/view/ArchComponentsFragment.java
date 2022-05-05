@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.lifecircle.demo1.view;
+package com.example.wangduwei.demos.lifecycle.demo1.view;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lib_processor.PageInfo;
 import com.example.wangduwei.demos.AppState;
 import com.example.wangduwei.demos.R;
-import com.example.wangduwei.demos.lifecircle.demo1.data.Word;
-import com.example.wangduwei.demos.lifecircle.demo1.viewmodel.WordListAdapter;
-import com.example.wangduwei.demos.lifecircle.demo1.viewmodel.WordViewModel;
+import com.example.wangduwei.demos.lifecycle.demo1.data.Word;
+import com.example.wangduwei.demos.lifecycle.demo1.viewmodel.WordListAdapter;
+import com.example.wangduwei.demos.lifecycle.demo1.viewmodel.WordViewModel;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 
 /**

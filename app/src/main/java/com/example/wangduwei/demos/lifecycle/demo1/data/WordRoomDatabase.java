@@ -1,4 +1,4 @@
-package com.example.wangduwei.demos.lifecircle.demo1.data;
+package com.example.wangduwei.demos.lifecycle.demo1.data;
 
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.room.Database;

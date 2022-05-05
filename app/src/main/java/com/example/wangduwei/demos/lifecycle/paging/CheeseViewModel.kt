@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.wangduwei.demos.lifecircle.paging
+package com.example.wangduwei.demos.lifecycle.paging
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
