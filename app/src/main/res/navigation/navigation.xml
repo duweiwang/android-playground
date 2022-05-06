@@ -289,4 +289,9 @@
     <fragment android:id="@+id/fragment_fileobserver"
         android:name="com.example.wangduwei.demos.fragment.FileObserverFragment"
         android:label="FileObserverFragment"/>
+
+    <fragment android:id="@+id/fragment_android_ipc"
+        android:label="AndroidIPCFragment"
+        android:name="com.example.wangduwei.demos.ipc.AndroidIPCFragment"/>
+
 </navigation>
