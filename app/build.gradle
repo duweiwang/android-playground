@@ -98,7 +98,9 @@ dependencies {
     annotationProcessor Libs.X_Lifecycle_Compiler
     //room
     implementation Libs.AndroidX.room.runtime
-    implementation Libs.AndroidX.room.coroutine
+//    implementation Libs.AndroidX.room.coroutine
+    implementation Libs.AndroidX.room.ktx
+    implementation Libs.AndroidX.room.paging
     annotationProcessor Libs.AndroidX.room.compiler
     //
     implementation Libs.X_Paging
@@ -168,6 +170,16 @@ dependencies {
     implementation Libs.AndroidX.work.runtime
     implementation Libs.AndroidX.work.runtime_ktx
     implementation Libs.AndroidX.work.multiprocess
+
+    implementation Libs.Retrofit.runtime
+    implementation Libs.Retrofit.gson
+    implementation Libs.Retrofit.mock
+
+    annotationProcessor "com.github.bumptech.glide:compiler:4.12.0"
+    kapt "com.github.bumptech.glide:compiler:4.12.0"
+    implementation "com.github.bumptech.glide:glide:4.12.0"
+
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.0"
 
 }
 repositories {
