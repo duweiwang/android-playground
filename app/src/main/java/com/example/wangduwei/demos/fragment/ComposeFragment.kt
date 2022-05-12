@@ -51,7 +51,9 @@ class ComposeFragment : BaseSupportFragment() {
 
     val demoList = listOf(
         "text",
-        "button"
+        "button",
+        "animation",
+        "gestures"
     )
 
     override fun onCreateView(
