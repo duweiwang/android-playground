@@ -1,20 +1,25 @@
 package com.duwei.lib_compose.basic
 
+import android.util.Log
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /**
  * @author 杜伟
@@ -196,9 +201,93 @@ fun rememberCoroutineScopeComponent() {
     }
 }
 
+
+/**
+ * 注意和 mutableStateOf 的区别
+ */
+@ExperimentalAnimationApi
 @Composable
 fun deriveStateOfComponent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        val listState = rememberLazyListState()
 
+        LazyColumn(state = listState) {
+            items(1000) { index ->
+                Text(text = "Item: $index")
+            }
+        }
+
+        val showButtonDerive by remember {
+            derivedStateOf {
+                listState.firstVisibleItemIndex > 0
+            }
+        }
+
+        Log.d("Track", "Recompose")
+        Column {
+            AnimatedVisibility(showButtonDerive) {
+                Button({}) {
+                    Text("Row 1 hiding")
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+fun snapshotFlowComponent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        val listState = rememberLazyListState()
+
+        LazyColumn(state = listState) {
+            items(1000) { index ->
+                Text(text = "Item: $index")
+            }
+        }
+
+        var showButtonSnapshot by remember {
+            mutableStateOf(false)
+        }
+
+
+        Log.d("Track", "Recompose")
+        Column {
+            AnimatedVisibility(showButtonSnapshot) {
+                Button({}) {
+                    Text("Row 1 and 2 hiding")
+                }
+            }
+        }
+
+        LaunchedEffect(listState) {
+            snapshotFlow { listState.firstVisibleItemIndex }
+                .map { index -> index > 2 }
+                .distinctUntilChanged()
+                .collect {
+                    showButtonSnapshot = it
+                }
+        }
+    }
+}
+
+/**
+ * To ensure we always get the state variable value, we should use rememberUpdatedState.
+ */
+@Composable
+fun rememberUpdatedStateComponent(timer: Int) {
+    Text("Time $timer")
+    val myRememberTimer by rememberUpdatedState(timer)
+    LaunchedEffect(key1 = Unit) {
+        delay(1000)
+        Log.d("Track", "$myRememberTimer")
+    }
 }
 
 
