@@ -1,12 +1,16 @@
 import com.duwei.buildsrc.Libs
 import com.duwei.buildsrc.Version
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 //apply plugin: 'com.wangduwei.plugin'
-apply plugin: 'androidx.navigation.safeargs'
+    id 'androidx.navigation.safeargs'
+}
+
 android {
     compileSdkVersion Version.compileSdk
     defaultConfig {
