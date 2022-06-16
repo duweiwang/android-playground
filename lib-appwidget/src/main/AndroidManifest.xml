@@ -2,4 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.duwei.lib_appwidget">
 
+    <application>
+        <receiver
+            android:name=".CoffeeLoggerWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/coffee_logger_widget_info" />
+        </receiver>
+    </application>
+
 </manifest>

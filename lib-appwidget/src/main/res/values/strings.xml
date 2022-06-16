@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+
+
+
+    <string name="coffee_amount_limit">Coffee amount limit</string>
+    <string name="save_configuration">Save configuration</string>
+    <string name="ristretto">Ristretto (4g)</string>
+    <string name="ristretto_short">Ristretto</string>
+    <string name="espresso">Espresso (6g)</string>
+    <string name="espresso_short">Espresso</string>
+    <string name="long_coffee">Long coffee (7g)</string>
+    <string name="long_coffee_short">Long</string>
+    <string name="grams_of_coffee">grams of coffee</string>
+    <string name="grams_of_coffee_value_placeholder">0</string>
+    <string name="grams">grams</string>
+    <string name="add_more_coffee">Add more coffee</string>
+    <string name="today">Today</string>
+    <string name="intake_saved">Your coffee intake has been added</string>
+    <string name="undo_string">Undo</string>
+
+    <array name="coffee_texts">
+        <item>Get a fresh start!</item>
+        <item>Get some energy!</item>
+        <item>Need a coffee?</item>
+        <item>You could get some coffee</item>
+        <item>A coffee would be nice</item>
+        <item>More coffee, more fun!</item>
+        <item>A little more coffee</item>
+        <item>Energize your day</item>
+        <item>Coffee in, code out</item>
+        <item>Coffee has no limit</item>
+        <item>Sugar? Milk? Coffee?</item>
+        <item>You are not addicted</item>
+        <item>Espresso or long?</item>
+    </array>
+</resources>

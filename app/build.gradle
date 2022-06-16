@@ -86,6 +86,7 @@ dependencies {
     implementation project(path: ':customview')
     implementation project(':lib-processor')
     implementation project(':lib-compose')
+    implementation project(':lib-appwidget')
     annotationProcessor project(':lib-processor')
     kapt project(':lib-processor')
 
