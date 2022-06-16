@@ -37,7 +37,7 @@ import java.util.*
 class CoffeeLoggerPersistence(private val context: Context) {
 
   companion object {
-    private const val PREFS_NAME = "com.raywenderlich.android.coffeelogs.CoffeeLoggerWidget"
+    private const val PREFS_NAME = "com.duwei.lib_appwidget.CoffeeLoggerWidget"
     private const val PREF_PREFIX_KEY = "coffee_logger"
     private const val PREF_LIMIT_PREFIX = "coffee_limit_"
   }

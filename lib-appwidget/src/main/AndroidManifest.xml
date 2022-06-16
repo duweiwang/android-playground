@@ -14,6 +14,20 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/coffee_logger_widget_info" />
         </receiver>
+
+
+        <activity android:name=".WidgetMainActivity">
+        </activity>
+
+        <service
+            android:name=".CoffeeQuotesService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".CoffeeLoggerWidgetConfigureActivity"></activity>
+
+
+
     </application>
 
 </manifest>
