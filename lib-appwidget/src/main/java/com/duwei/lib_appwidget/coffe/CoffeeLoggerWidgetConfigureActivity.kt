@@ -1,4 +1,4 @@
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.duwei.lib_appwidget.R
 
 class CoffeeLoggerWidgetConfigureActivity : AppCompatActivity() {
 
@@ -16,7 +17,7 @@ class CoffeeLoggerWidgetConfigureActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coffee_logger_widget_configure)
+        setContentView(R.layout.demo_coffee_logger_widget_configure)
 
         findViewById<View>(R.id.add_button).setOnClickListener(onClickListener)
 

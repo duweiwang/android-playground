@@ -1,4 +1,4 @@
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 import android.app.Service
 import android.appwidget.AppWidgetManager

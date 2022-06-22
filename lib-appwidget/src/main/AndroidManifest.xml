@@ -4,7 +4,7 @@
 
     <application>
         <receiver
-            android:name=".CoffeeLoggerWidget"
+            android:name=".coffe.CoffeeLoggerWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -16,15 +16,15 @@
         </receiver>
 
 
-        <activity android:name=".WidgetMainActivity">
+        <activity android:name=".coffe.WidgetMainActivity">
         </activity>
 
         <service
-            android:name=".CoffeeQuotesService"
+            android:name=".coffe.CoffeeQuotesService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".CoffeeLoggerWidgetConfigureActivity"></activity>
+        <activity android:name=".coffe.CoffeeLoggerWidgetConfigureActivity"></activity>
 
 
 

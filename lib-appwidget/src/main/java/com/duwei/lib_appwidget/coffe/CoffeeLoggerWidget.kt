@@ -1,4 +1,4 @@
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
+import com.duwei.lib_appwidget.R
 
 /**
  * Implementation of App Widget functionality.
@@ -43,7 +44,7 @@ class CoffeeLoggerWidget : AppWidgetProvider() {
             val widgetText = coffeeLoggerPersistence.loadTitlePref().toString()
 
             // Construct the RemoteViews object
-            val views = RemoteViews(context.packageName, R.layout.coffee_logger_widget)
+            val views = RemoteViews(context.packageName, R.layout.demo_coffee_logger_widget)
             views.setTextViewText(R.id.appwidget_text, widgetText)
 
             views.setOnClickPendingIntent(

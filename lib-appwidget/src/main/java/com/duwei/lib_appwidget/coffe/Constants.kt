@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 class Constants {
   companion object {

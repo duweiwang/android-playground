@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -38,6 +38,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.duwei.lib_appwidget.R
 import com.google.android.material.snackbar.Snackbar
 
 class WidgetMainActivity : AppCompatActivity() {
@@ -48,7 +49,7 @@ class WidgetMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_widget_main)
+        setContentView(R.layout.demo_coffee_widget_main)
         gramsValue = findViewById(R.id.grams)
         refreshTodayLabel()
         if (intent != null && intent.action == Constants.ADD_COFFEE_INTENT) {

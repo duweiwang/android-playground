@@ -28,7 +28,7 @@
  * THE SOFTWARE.
  */
 
-package com.duwei.lib_appwidget
+package com.duwei.lib_appwidget.coffe
 
 enum class CoffeeTypes(val grams: Int) {
   RISTRETTO(4),
