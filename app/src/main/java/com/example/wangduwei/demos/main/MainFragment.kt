@@ -1,5 +1,6 @@
 package com.example.wangduwei.demos.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.lib_processor.FragmentInfo
 import com.example.wangduwei.demos.router.RouterManager
+import com.example.wangduwei.demos.service.ForegroundService
 import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
@@ -70,6 +72,8 @@ class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
 
         floatbtn.setOnClickListener {
             guideView.attachTarget(floatbtn);
+            val intent = Intent(context,ForegroundService::class.java)
+            context?.startForegroundService(intent)
         }
     }
 
