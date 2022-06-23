@@ -4,7 +4,7 @@
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
 
-
+    <string name="app_name">EXAMPLE</string>
 
     <string name="coffee_amount_limit">Coffee amount limit</string>
     <string name="save_configuration">Save configuration</string>
