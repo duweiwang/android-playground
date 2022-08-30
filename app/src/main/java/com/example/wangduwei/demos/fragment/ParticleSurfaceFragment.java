@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.customview.surfaceview.FireflySurfaceView;
 import com.example.lib_processor.PageInfo;
@@ -21,14 +22,25 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
  * @auther:duwei
  * @date:2019/2/22
  */
-@PageInfo(description = "浮点粒子效果", navigationId = R.id.fragment_surface_particle)
+@PageInfo(description = "浮点粒子效果",
+        navigationId = R.id.fragment_surface_particle)
 public class ParticleSurfaceFragment extends BaseSupportFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        LinearLayout linearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+
         FireflySurfaceView fireflyView = new FireflySurfaceView(container.getContext(), null);
         fireflyView.setBackgroundResource(R.mipmap.ic_firefly_bg);
-        return fireflyView;
+
+
+        linearLayout.addView(fireflyView, lp);
+        return linearLayout;
     }
 }
