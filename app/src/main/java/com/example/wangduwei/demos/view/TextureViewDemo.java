@@ -13,6 +13,10 @@ import java.io.IOException;
  * @desc:
  * @auther:duwei
  * @date:2018/5/2
+ *
+ * 使用TextureView预览相机
+ *
+ *
  */
 
 public class TextureViewDemo extends TextureView implements TextureView.SurfaceTextureListener{
