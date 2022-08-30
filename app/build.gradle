@@ -106,7 +106,7 @@ dependencies {
 //    implementation Libs.AndroidX.room.coroutine
     implementation Libs.AndroidX.room.ktx
     implementation Libs.AndroidX.room.paging
-    annotationProcessor Libs.AndroidX.room.compiler
+    kapt Libs.AndroidX.room.compiler
     //
     implementation Libs.X_Paging
     implementation Libs.Kotlin_Coroutine_Android

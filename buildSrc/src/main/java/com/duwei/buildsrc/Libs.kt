@@ -51,8 +51,8 @@ object Libs {
     const val X_Lifecycle_Runtime = "androidx.lifecycle:lifecycle-runtime:${Version.lifecycle}"
 
     const val X_Lifecycle_Compiler = "androidx.lifecycle:lifecycle-compiler:${Version.lifecycle}"
-    const val X_Room_Runtime = "androidx.room:room-runtime:${Version.room}"
-    const val X_Room_Compiler = "androidx.room:room-compiler:${Version.room}"
+//    const val X_Room_Runtime = "androidx.room:room-runtime:${Version.room}"
+//    const val X_Room_Compiler = "androidx.room:room-compiler:${Version.room}"
     const val blockCanaryDebug = "com.github.markzhai:blockcanary-android:${Version.blockCanary}"
 
     const val blockCanaryRelease = "com.github.markzhai:blockcanary-no-op:${Version.blockCanary}"
