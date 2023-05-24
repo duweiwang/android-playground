@@ -29,6 +29,14 @@
                 android:clickable="true"
                 android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/leak_animator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="动画泄露"
+                android:clickable="true"
+                android:textSize="16sp" />
+
         </LinearLayout>
     </ScrollView>
 

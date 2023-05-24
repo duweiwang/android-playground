@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.lib_processor.PageInfo;
 import com.example.wangduwei.demos.R;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 
@@ -17,6 +18,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment;
  * @auther : wangduwei
  * @since : 2019/9/6  17:25
  **/
+@PageInfo(description = "内存泄露", navigationId = R.id.fragment_performance)
 public class LeakTestFragment extends BaseSupportFragment {
 
     @Nullable
@@ -29,6 +31,7 @@ public class LeakTestFragment extends BaseSupportFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.leak_inner_class).setOnClickListener(this);
+        view.findViewById(R.id.leak_animator).setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +40,9 @@ public class LeakTestFragment extends BaseSupportFragment {
         switch (view.getId()){
             case R.id.leak_inner_class:
                 LeakedTargetActivity.start(getActivity(),LeakedTargetActivity.FROM_INNER_CLASS_LEAK);
+                break;
+            case R.id.leak_animator:
+                LeakedTargetActivity.start(getActivity(),LeakedTargetActivity.FROM_ANIMATOR_LEAK);
                 break;
         }
     }
