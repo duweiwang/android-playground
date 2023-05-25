@@ -74,10 +74,12 @@ public class LeakedTargetActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if(warningAnimation != null){
-//            warningAnimation.end();
-//            warningAnimation.cancel();
-//        }
+        ///只调用end方法会触发内存泄露，
+        ///调用cancel之后不会触发内存泄露
+        if(warningAnimation != null){
+            warningAnimation.end();
+            warningAnimation.cancel();
+        }
     }
 
     private class InnerClass implements Runnable {
