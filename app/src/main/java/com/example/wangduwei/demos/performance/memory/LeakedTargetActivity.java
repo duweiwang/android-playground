@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -28,7 +29,8 @@ public class LeakedTargetActivity extends Activity {
     private int mFrom;
 
     private TextView textView;
-    private ValueAnimator warningAnimation = ValueAnimator.ofInt(1,2,3);
+    private ValueAnimator warningAnimation = ValueAnimator.ofArgb(Color.RED,
+            Color.GREEN, Color.BLUE, Color.YELLOW);
 
     public static void start(Context context, int from) {
         Intent intent = new Intent(context, LeakedTargetActivity.class);
