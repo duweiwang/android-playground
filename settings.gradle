@@ -3,3 +3,4 @@ include ':app', /*':article', ':java', ':kotlin'*/ ':module_gradle', ':customvie
 include ':lib-camera'
 include ':lib-compose'
 include ':lib-appwidget'
+include ':lib-alive'

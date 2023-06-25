@@ -2,20 +2,13 @@ package com.example.wangduwei.demos.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
-
-import com.example.wangduwei.demos.R
-
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.internal.NavigationMenuItemView
-import com.google.android.material.internal.NavigationMenuView
+import com.duwei.alive.SyncAccountHelper
+import com.example.wangduwei.demos.R
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 /**
  * 入口Activity
@@ -34,6 +27,8 @@ class MainActivity : AppCompatActivity(){
         val navController = host.navController
 
         activity_main_bottom_navigation.setupWithNavController(navController)
+
+        SyncAccountHelper.addAndOpenSyncAccount(application)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

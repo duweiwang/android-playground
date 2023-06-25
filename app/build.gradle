@@ -87,6 +87,7 @@ dependencies {
     implementation project(':lib-processor')
     implementation project(':lib-compose')
     implementation project(':lib-appwidget')
+    implementation project(':lib-alive')
     annotationProcessor project(':lib-processor')
     kapt project(':lib-processor')
 
