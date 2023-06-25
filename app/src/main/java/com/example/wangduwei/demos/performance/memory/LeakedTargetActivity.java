@@ -69,6 +69,10 @@ public class LeakedTargetActivity extends Activity {
             });
             warningAnimation.start();
         }
+
+        if(mFrom == FROM_HANDLER_LEAK){
+
+        }
     }
 
     @Override
