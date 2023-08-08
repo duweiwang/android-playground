@@ -20,7 +20,7 @@ public class NotificationStyleBigPicture extends NotificationStyle {
     public int showNotification(Context context, int number, long time) {
         NotificationCompat.Builder builder = getNotificationBuild(context,number,time);
         Bitmap largeIcon = NotificationUtils.drawableToBitamp(context.getResources().getDrawable(R.drawable.guide_enjoy_haha));
-        Bitmap bigPicture = NotificationUtils.drawableToBitamp(context.getResources().getDrawable(R.drawable.goemoji_1f60a));
+        Bitmap bigPicture = NotificationUtils.drawableToBitamp(context.getResources().getDrawable(R.drawable.preview_push_notification));
         builder.setStyle(new NotificationCompat.BigPictureStyle()
                 .bigLargeIcon(largeIcon)
                 .bigPicture(bigPicture)

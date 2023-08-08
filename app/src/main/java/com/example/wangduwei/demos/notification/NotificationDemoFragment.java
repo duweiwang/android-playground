@@ -13,7 +13,9 @@ import com.example.wangduwei.demos.R;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 import com.example.wangduwei.demos.notification.basic.BasicNotificationUsage;
 import com.example.wangduwei.demos.notification.style.NotificationStyle;
+import com.example.wangduwei.demos.notification.style.NotificationStyleBigHeadupRemoteView;
 import com.example.wangduwei.demos.notification.style.NotificationStyleBigPicture;
+import com.example.wangduwei.demos.notification.style.NotificationStyleBigRemoteView;
 import com.example.wangduwei.demos.notification.style.NotificationStyleBigText;
 import com.example.wangduwei.demos.notification.style.NotificationStyleFullScreen;
 import com.example.wangduwei.demos.notification.style.NotificationStyleInbox;
@@ -71,6 +73,12 @@ public class NotificationDemoFragment extends BaseSupportFragment implements Vie
                 break;
             case R.id.style_inbox:
                 mStyle = new NotificationStyleInbox(getActivity());
+                break;
+            case R.id.style_BigHeadupRemoteView:
+                mStyle = new NotificationStyleBigHeadupRemoteView(getActivity());
+                break;
+            case R.id.style_BigRemoteView:
+                mStyle = new NotificationStyleBigRemoteView(getActivity());
                 break;
         }
 

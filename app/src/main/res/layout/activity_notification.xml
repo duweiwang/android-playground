@@ -21,7 +21,7 @@
 
     <Button
         android:id="@+id/style_big_picture"
-        android:text="BigText"
+        android:text="BigPicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -53,4 +53,17 @@
         android:text="InBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/style_BigHeadupRemoteView"
+        android:text="BigHeadupRemoteView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
+        android:id="@+id/style_BigRemoteView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BigRemoteView" />
 </LinearLayout>
