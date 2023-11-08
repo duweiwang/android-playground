@@ -294,4 +294,9 @@
         android:label="AndroidIPCFragment"
         android:name="com.example.wangduwei.demos.ipc.AndroidIPCFragment"/>
 
+    <fragment
+        android:id="@+id/fragment_opensource_demo"
+        android:name="com.example.wangduwei.demos.fragment.OpenSourceDemoFragment"
+        android:label="OpenSourceDemoFragment" />
+
 </navigation>
