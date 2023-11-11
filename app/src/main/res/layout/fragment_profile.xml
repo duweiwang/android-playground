@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /*
+  ~  * Copyright (c) 2020 Razeware LLC
+  ~  *
+  ~  * Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~  * of this software and associated documentation files (the "Software"), to deal
+  ~  * in the Software without restriction, including without limitation the rights
+  ~  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~  * copies of the Software, and to permit persons to whom the Software is
+  ~  * furnished to do so, subject to the following conditions:
+  ~  *
+  ~  * The above copyright notice and this permission notice shall be included in
+  ~  * all copies or substantial portions of the Software.
+  ~  *
+  ~  * Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
+  ~  * distribute, sublicense, create a derivative work, and/or sell copies of the
+  ~  * Software in any work that is designed, intended, or marketed for pedagogical or
+  ~  * instructional purposes related to programming, coding, application development,
+  ~  * or information technology.  Permission for such use, copying, modification,
+  ~  * merger, publication, distribution, sublicensing, creation of derivative works,
+  ~  * or sale is expressly withheld.
+  ~  *
+  ~  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~  * THE SOFTWARE.
+  ~  */
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorPrimary">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--Total value-->
+    <TextView
+      android:id="@+id/totalValueTitle"
+      style="@style/ProfileTotalValueStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_vertical_padding"
+      android:text="@string/profile_total_value_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/totalValueTextView"
+      style="@style/ProfileTotalValueStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:includeFontPadding="false"
+      android:textColor="@android:color/white"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/totalValueTitle"
+      tools:text="$123.45" />
+
+    <View
+      android:id="@+id/totalValueSeparator"
+      android:layout_width="0dp"
+      android:layout_height="0.5dp"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintEnd_toEndOf="@id/endGuideline"
+      app:layout_constraintStart_toStartOf="@id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/totalValueTextView" />
+
+    <!--Name-->
+    <TextView
+      android:id="@+id/nameTitle"
+      style="@style/ProfileLabelStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:text="@string/profile_name_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/totalValueSeparator" />
+
+    <TextView
+      android:id="@+id/nameTextView"
+      style="@style/ProfileSubtextStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/nameTitle"
+      tools:text="Husayn Hakeem" />
+
+    <View
+      android:id="@+id/nameSeparator"
+      android:layout_width="0dp"
+      android:layout_height="0.5dp"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintEnd_toEndOf="@id/endGuideline"
+      app:layout_constraintStart_toStartOf="@id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
+
+    <!--Account number-->
+    <TextView
+      android:id="@+id/accountNumberTitle"
+      style="@style/ProfileLabelStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:text="@string/profile_account_number_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/nameSeparator" />
+
+    <TextView
+      android:id="@+id/accountNumberTextView"
+      style="@style/ProfileSubtextStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/accountNumberTitle"
+      tools:text="ABCDEFGHIJ" />
+
+    <View
+      android:id="@+id/accountNumberSeparator"
+      android:layout_width="0dp"
+      android:layout_height="0.5dp"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintEnd_toEndOf="@id/endGuideline"
+      app:layout_constraintStart_toStartOf="@id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/accountNumberTextView" />
+
+    <!--Phone number-->
+    <TextView
+      android:id="@+id/phoneNumberTitle"
+      style="@style/ProfileLabelStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:text="@string/profile_phone_number_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/accountNumberSeparator" />
+
+    <TextView
+      android:id="@+id/phoneNumberTextView"
+      style="@style/ProfileSubtextStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/phoneNumberTitle"
+      tools:text="(123) 456-7890" />
+
+    <View
+      android:id="@+id/phoneNumberSeparator"
+      android:layout_width="0dp"
+      android:layout_height="0.5dp"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintEnd_toEndOf="@id/endGuideline"
+      app:layout_constraintStart_toStartOf="@id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/phoneNumberTextView" />
+
+    <!--Stocks-->
+    <TextView
+      android:id="@+id/stocksTitle"
+      style="@style/ProfileLabelStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:text="@string/profile_my_stocks_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/phoneNumberSeparator" />
+
+    <TextView
+      android:id="@+id/stocksTextView"
+      style="@style/ProfileSubtextStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/stocksTitle"
+      tools:text="GOOG, APPL, AMZN, TSLA, GOOGL" />
+
+    <View
+      android:id="@+id/stocksSeparator"
+      android:layout_width="0dp"
+      android:layout_height="0.5dp"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:background="@android:color/darker_gray"
+      app:layout_constraintEnd_toEndOf="@id/endGuideline"
+      app:layout_constraintStart_toStartOf="@id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/stocksTextView" />
+
+    <!--Recommend stock-->
+    <TextView
+      android:id="@+id/recommendedStockTitle"
+      style="@style/ProfileLabelStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/profile_item_spacing"
+      android:text="@string/profile_recommended_stock_label"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/stocksSeparator" />
+
+    <TextView
+      android:id="@+id/recommendedStockTextView"
+      style="@style/ProfileSubtextStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/profile_vertical_padding"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/beginGuideline"
+      app:layout_constraintTop_toBottomOf="@+id/recommendedStockTitle"
+      tools:text="ZOOX" />
+
+    <ImageButton
+      android:id="@+id/refreshRecommendedStockButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@android:color/transparent"
+      android:contentDescription="@string/profile_refresh_recommended_stock_description"
+      android:src="@drawable/ic_refresh_white_24"
+      app:layout_constraintBottom_toBottomOf="@+id/recommendedStockTextView"
+      app:layout_constraintEnd_toStartOf="@id/endGuideline"
+      app:layout_constraintTop_toTopOf="@+id/recommendedStockTitle" />
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/beginGuideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_begin="@dimen/profile_horizontal_padding" />
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/endGuideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_end="@dimen/profile_horizontal_padding" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

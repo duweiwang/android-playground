@@ -36,4 +36,16 @@
     <string name="network_only_by_item">network only (by item)</string>
     <string name="network_only_by_page">network only (by page)</string>
 
+
+    <string name="profile_total_value">$%.2f</string>
+    <string name="profile_total_value_label">Total Value</string>
+    <string name="profile_name_label">Full name</string>
+    <string name="profile_account_number_label">Account number</string>
+    <string name="profile_phone_number_label">Phone number</string>
+    <string name="profile_my_stocks_label">My stocks</string>
+    <string name="profile_recommended_stock_label">Recommended Stock</string>
+    <string name="profile_refresh_recommended_stock_description">Refresh recommended stock</string>
+    <string name="profile_tip_title">Recommended Stock</string>
+    <string name="profile_tip_message">Check out our stock recommendation, thoroughly curated for you by our AI-backed software!</string>
+
 </resources>
