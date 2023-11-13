@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
+import com.example.wangduwei.demos.opensource.PopupMenuCascadeDelegate
 import www.sanju.motiontoast.MotionToast
 import www.sanju.motiontoast.MotionToastStyle
 
@@ -19,6 +20,8 @@ import www.sanju.motiontoast.MotionToastStyle
  */
 @PageInfo(description = "开源项目集合", navigationId = R.id.fragment_opensource_demo)
 class OpenSourceDemoFragment : BaseSupportFragment() {
+
+    private lateinit var displayDelegate: PopupMenuCascadeDelegate
 
     private var clickCount = 0;
 
@@ -33,6 +36,9 @@ class OpenSourceDemoFragment : BaseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        displayDelegate = PopupMenuCascadeDelegate()
+        displayDelegate.onViewCreated(view)
+
 
         view.findViewById<Button>(R.id.motion_toast).setOnClickListener {
             if (clickCount > 3) {
