@@ -32,4 +32,19 @@
         <item name="autoFocus">true</item>
         <item name="flash">off</item>
     </style>
+
+    <style name="ProfileSubtextStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ProfileLabelStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ProfileTotalValueStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

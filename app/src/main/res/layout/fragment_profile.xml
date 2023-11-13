@@ -221,7 +221,6 @@
       android:layout_height="wrap_content"
       android:background="@android:color/transparent"
       android:contentDescription="@string/profile_refresh_recommended_stock_description"
-      android:src="@drawable/ic_refresh_white_24"
       app:layout_constraintBottom_toBottomOf="@+id/recommendedStockTextView"
       app:layout_constraintEnd_toStartOf="@id/endGuideline"
       app:layout_constraintTop_toTopOf="@+id/recommendedStockTitle" />
