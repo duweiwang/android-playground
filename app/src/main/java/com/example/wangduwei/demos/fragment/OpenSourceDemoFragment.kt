@@ -1,10 +1,12 @@
 package com.example.wangduwei.demos.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
@@ -25,6 +27,11 @@ class OpenSourceDemoFragment : BaseSupportFragment() {
 
     private var clickCount = 0;
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +44,7 @@ class OpenSourceDemoFragment : BaseSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayDelegate = PopupMenuCascadeDelegate()
+        displayDelegate.mActivity = activity
         displayDelegate.onViewCreated(view)
 
 

@@ -1,5 +1,6 @@
 package com.example.wangduwei.demos.main;
 
+import android.app.Activity;
 import android.view.View;
 
 /**
@@ -8,6 +9,8 @@ import android.view.View;
 public abstract class AbsBusinessDelegate {
 
     public View mView;
+
+    public Activity mActivity;
 
     public void onViewCreated(View view) {
         mView = view;

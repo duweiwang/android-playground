@@ -10,4 +10,6 @@
     <color name="theme">#03A9F4</color>
     <color name="bottom_navigation_normal">#CCCCCC</color>
     <color name="fa_wave_progress_color">#FF6666</color>
+    <color name="color_control_normal">#356859</color>
+    <color name="window_background">#B5D2C3</color>
 </resources>
