@@ -24,4 +24,21 @@
         android:id="@+id/guideView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <com.example.customview.sidebar.SideBar
+        android:id="@+id/school_friend_sidrbar"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"/>
+
+    <TextView
+        android:id="@+id/school_friend_dialog"
+        android:layout_width="80.0dip"
+        android:layout_height="80.0dip"
+        android:layout_gravity="center"
+        android:background="@drawable/contact_select_pinyin_bg"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="45sp"
+        android:visibility="gone"/>
 </FrameLayout>

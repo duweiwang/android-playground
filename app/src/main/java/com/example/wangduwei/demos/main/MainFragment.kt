@@ -1,24 +1,23 @@
 package com.example.wangduwei.demos.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.example.wangduwei.demos.R
-
-import java.util.Arrays
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.customview.sidebar.SideBar
 import com.example.lib_processor.FragmentInfo
+import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.router.RouterManager
 import com.example.wangduwei.demos.service.ForegroundService
 import kotlinx.android.synthetic.main.fragment_main.*
+
 
 /**
  * RecyclerView:
@@ -27,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
  * 所以可以通过此方法判断RecyclerView是否滑到底部或顶部
  */
 
-class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
+class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener,SideBar.OnTouchingLetterChangedListener {
 
     private lateinit var mAdapter: MainAdapter
     private lateinit var mTitles: List<FragmentInfo>
@@ -72,13 +71,23 @@ class MainFragment : BaseSupportFragment(), MainAdapter.OnItemClickListener {
 
         floatbtn.setOnClickListener {
             guideView.attachTarget(floatbtn);
-            val intent = Intent(context,ForegroundService::class.java)
-            context?.startForegroundService(intent)
+            val intent = Intent(context, ForegroundService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context?.startForegroundService(intent)
+            }
         }
+
+        val mSideBar = view.findViewById<SideBar>(R.id.school_friend_sidrbar)
+        val mDialog = view.findViewById<TextView>(R.id.school_friend_dialog)
+        mSideBar.setTextView(mDialog);
+        mSideBar.setOnTouchingLetterChangedListener(this);
     }
 
     override fun onItemClick(position: Int) {
         val navController = findNavController()
         navController.navigate(mTitles[position].id)
+    }
+
+    override fun onTouchingLetterChanged(s: String?) {
     }
 }
