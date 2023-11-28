@@ -195,7 +195,7 @@ dependencies {
     implementation 'com.squareup.curtains:curtains:1.2.4'
 
     //媒体选择器
-    implementation 'com.github.akshaaatt:Media-Picker:1.0.2'
+//    implementation 'com.github.akshaaatt:Media-Picker:1.0.2'
     //启动优化库
     implementation 'io.github.idisfkj:android-startup:1.1.0'
 }

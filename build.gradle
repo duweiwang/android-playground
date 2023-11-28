@@ -1,16 +1,12 @@
-import com.duwei.buildsrc.Libs
 import com.duwei.buildsrc.Version
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     apply from: rootProject.file('dependencies.gradle')
-    repositories {
-        google()
-        mavenCentral()
-        maven{ url'https://maven.aliyun.com/nexus/content/groups/public/' }
-         maven{ url'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
-//        jcenter()
-    }
+    apply from: rootProject.file('gradle/baseMothed.gradle')
+
+    addRepositories(repositories)
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Version.kotlin_version}"
@@ -21,16 +17,7 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven{ url'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven{ url'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
-        maven { url "https://jitpack.io" }
-
-        //融云 maven 仓库地址
-        maven {url "https://maven.rongcloud.cn/repository/maven-releases/"}
-    }
+    addRepositories(repositories)
 
     //support library 强制使用指定的版本，防止被第三方库中的高版本替代
     configurations.all {
