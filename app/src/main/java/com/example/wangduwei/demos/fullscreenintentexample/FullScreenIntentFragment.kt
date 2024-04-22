@@ -18,6 +18,7 @@ import com.example.wangduwei.demos.main.BaseSupportFragment
     description = "FullScreenIntent",
     navigationId = R.id.fragment_fullscreenintent,
     title = "FullScreenIntent",
+    preview = R.drawable.full_screen_intent
 )
 class FullScreenIntentFragment : BaseSupportFragment() {
 
