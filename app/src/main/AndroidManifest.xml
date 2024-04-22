@@ -90,6 +90,19 @@
             </intent-filter>
         </receiver>
 
+
+        <activity android:name=".fullscreenintentexample.FullScreenActivity" />
+
+        <activity android:name=".fullscreenintentexample.LockScreenActivity"
+            android:showOnLockScreen="true"/>
+
+        <receiver
+            android:name=".fullscreenintentexample.NotificationReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".fullscreenintentexample.FullScreenTestActivity"/>
+
     </application>
 
 </manifest>

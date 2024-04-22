@@ -299,4 +299,9 @@
         android:name="com.example.wangduwei.demos.fragment.OpenSourceDemoFragment"
         android:label="OpenSourceDemoFragment" />
 
+    <fragment
+        android:id="@+id/fragment_fullscreenintent"
+        android:name="com.example.wangduwei.demos.fullscreenintentexample.FullScreenIntentFragment"
+        android:label="FullScreenIntentFragment"/>
+
 </navigation>
