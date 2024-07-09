@@ -4,8 +4,8 @@ import android.content.Context;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 
+import com.example.lib_gles.TextResourceReader;
 import com.example.wangduwei.demos.R;
-import com.example.wangduwei.demos.gles.TextResourceReader;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

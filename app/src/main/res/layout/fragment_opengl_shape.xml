@@ -14,19 +14,19 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <com.example.wangduwei.demos.gles.shape.triangle.TriangleView
+        <com.example.lib_gles.shape.triangle.TriangleView
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <com.example.wangduwei.demos.gles.shape.circle.CircleView
+        <com.example.lib_gles.shape.circle.CircleView
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <com.example.wangduwei.demos.gles.shape.rectangle.RectangleView
+        <com.example.lib_gles.shape.rectangle.RectangleView
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
 
-        <com.example.wangduwei.demos.gles.shape.circle.CircleContentLayout
+        <com.example.lib_gles.shape.circle.CircleContentLayout
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
 

@@ -4,9 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.example.wangduwei.demos.gles.fbo.Test7Renderer;
-import com.example.wangduwei.demos.gles.render.OpenGLRender;
-import com.example.wangduwei.demos.gles.texture.OpenGLRender7;
+import com.example.lib_gles.render.OpenGLRender;
+
 
 public class OpenGLView extends GLSurfaceView {
     private GLSurfaceView.Renderer mRender;

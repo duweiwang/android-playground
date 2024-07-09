@@ -88,6 +88,7 @@ dependencies {
     implementation project(':lib-compose')
     implementation project(':lib-appwidget')
     implementation project(':lib-alive')
+    implementation project(':lib-gles')
     annotationProcessor project(':lib-processor')
     kapt project(':lib-processor')
 
@@ -200,35 +201,35 @@ dependencies {
     implementation 'io.github.idisfkj:android-startup:1.1.0'
 
 
-    implementation group: "com.tencent.matrix", name: "matrix-android-lib", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-android-commons", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-trace-canary", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-resource-canary-android", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-resource-canary-common", version: MATRIX_VERSION, changing: true
-    //性能、泄漏全面监控，对 IO 质量心中有数
-    implementation group: "com.tencent.matrix", name: "matrix-io-canary", version: MATRIX_VERSION, changing: true
-    //SQLite性能隐患
-    implementation group: "com.tencent.matrix", name: "matrix-sqlite-lint-android-sdk", version: MATRIX_VERSION, changing: true
-    //
-    implementation group: "com.tencent.matrix", name: "matrix-battery-canary", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-hooks", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-mallctl", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-fd", version: MATRIX_VERSION, changing: true
-
-    implementation group: "com.tencent.matrix", name: "matrix-backtrace", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-traffic", version: MATRIX_VERSION, changing: true
-    implementation group: "com.tencent.matrix", name: "matrix-memory-canary", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-android-lib", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-android-commons", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-trace-canary", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-resource-canary-android", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-resource-canary-common", version: MATRIX_VERSION, changing: true
+//    //性能、泄漏全面监控，对 IO 质量心中有数
+//    implementation group: "com.tencent.matrix", name: "matrix-io-canary", version: MATRIX_VERSION, changing: true
+//    //SQLite性能隐患
+//    implementation group: "com.tencent.matrix", name: "matrix-sqlite-lint-android-sdk", version: MATRIX_VERSION, changing: true
+//    //
+//    implementation group: "com.tencent.matrix", name: "matrix-battery-canary", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-hooks", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-mallctl", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-fd", version: MATRIX_VERSION, changing: true
+//
+//    implementation group: "com.tencent.matrix", name: "matrix-backtrace", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-traffic", version: MATRIX_VERSION, changing: true
+//    implementation group: "com.tencent.matrix", name: "matrix-memory-canary", version: MATRIX_VERSION, changing: true
 }
 
-
-apply plugin: 'com.tencent.matrix-plugin'
-matrix {
-    trace {
-        enable = true	//if you don't want to use trace canary, set false
-        baseMethodMapFile = "${project.buildDir}/matrix_output/Debug.methodmap"
-        blackListFile = "${project.projectDir}/matrixTrace/blackMethodList.txt"
-    }
-}
+//
+//apply plugin: 'com.tencent.matrix-plugin'
+//matrix {
+//    trace {
+//        enable = true	//if you don't want to use trace canary, set false
+//        baseMethodMapFile = "${project.buildDir}/matrix_output/Debug.methodmap"
+//        blackListFile = "${project.projectDir}/matrixTrace/blackMethodList.txt"
+//    }
+//}
 
 repositories {
     mavenCentral()

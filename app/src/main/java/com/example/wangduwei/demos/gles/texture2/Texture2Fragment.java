@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.lib_gles.ShaderHelper;
+import com.example.lib_gles.TextureHelper;
 import com.example.wangduwei.demos.R;
-import com.example.wangduwei.demos.gles.ShaderHelper;
-import com.example.wangduwei.demos.gles.TextureHelper;
 import com.example.wangduwei.demos.main.BaseSupportFragment;
 
 import java.nio.ByteBuffer;
