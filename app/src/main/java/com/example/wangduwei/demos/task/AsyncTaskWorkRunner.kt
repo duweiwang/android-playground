@@ -4,6 +4,8 @@ import android.os.AsyncTask
 
 /**
  * Created by gabriel on 2/16/18.
+ *
+ * https://github.com/Criptext/Android-Email-Client
  */
 class AsyncTaskWorkRunner : WorkRunner {
 

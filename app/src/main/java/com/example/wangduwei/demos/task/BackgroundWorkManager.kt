@@ -3,6 +3,8 @@ package com.example.wangduwei.demos.task
 
 /**
  * Created by gabriel on 2/20/18.
+ *
+ * https://github.com/Criptext/Android-Email-Client
  */
 
 abstract class BackgroundWorkManager<in I : Any, O : Any> {

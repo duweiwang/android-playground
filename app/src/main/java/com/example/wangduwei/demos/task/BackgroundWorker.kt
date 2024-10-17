@@ -3,6 +3,8 @@ package com.example.wangduwei.demos.task
 /**
  * Every one of your blocking operations should run inside a BackgroundWorker instance.
  * Created by gabriel on 9/20/17.
+ *
+ * https://github.com/Criptext/Android-Email-Client
  */
 interface BackgroundWorker<T> {
     val canBeParallelized: Boolean

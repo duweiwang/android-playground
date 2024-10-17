@@ -4,6 +4,8 @@ import android.content.Context
 
 /**
  * Created by gabriel on 2/27/18.
+ *
+ * https://github.com/Criptext/Android-Email-Client
  */
 
 class UIMessage(val resId: Int, val args: Array<Any>) {

@@ -86,27 +86,22 @@ fun ChangeColorAndSize() {
     var boxState: BoxState by remember {
         mutableStateOf(BoxState.Small)
     }
-    val transition = updateTransition(targetState = boxState)
+    val transition = updateTransition(targetState = boxState, label = "")
 
     Column(Modifier.padding(16.dp)) {
         Spacer(Modifier.height(16.dp))
 
-        val color by transition.animateColor {
-            it.color
-        }
+        val color by transition.animateColor(label = "") { it.color }
+
         val size by transition.animateDp(transitionSpec = {
             if (targetState == BoxState.Large) {
                 spring(stiffness = Spring.StiffnessVeryLow)
             } else {
                 spring(stiffness = Spring.StiffnessHigh)
             }
-        }) {
-            it.size
-        }
+        }, label = "") { it.size }
 
-        Button(
-            onClick = { boxState = boxState.not() }
-        ) {
+        Button(onClick = { boxState = boxState.not() }) {
             Text("Change Color and size")
         }
         Spacer(Modifier.height(16.dp))
