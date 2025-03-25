@@ -1,5 +1,6 @@
 package com.example.wangduwei.demos.compose
 
+import BoxScreen
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,9 @@ class ComposeDetailFragment : BaseSupportFragment() {
                     }
                     "gestures"->{
                         GestureScreen()
+                    }
+                    "box"->{
+                        BoxScreen()
                     }
                 }
             }

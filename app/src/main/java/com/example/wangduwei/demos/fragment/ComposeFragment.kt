@@ -49,11 +49,12 @@ class ComposeFragment : BaseSupportFragment() {
         Color(0xFFd0fff8.toInt())
     )
 
-    val demoList = listOf(
+    private val demoList = listOf(
         "text",
         "button",
         "animation",
-        "gestures"
+        "gestures",
+        "box"
     )
 
     override fun onCreateView(
