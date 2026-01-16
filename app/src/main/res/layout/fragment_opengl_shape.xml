@@ -35,6 +35,11 @@
             android:layout_width="match_parent"
             android:layout_height="600dp"/>
 
+        <com.example.lib_gles.shake.ShakeEffectView
+            android:id="@+id/shake_effect_view"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
+
     </LinearLayout>
 
 </ScrollView>

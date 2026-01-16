@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lib_gles.shake.ShakeEffectView
 import com.example.lib_gles.soulout.SoulOutView
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
@@ -31,5 +32,11 @@ class OpenGLFragment : BaseSupportFragment() {
         soulOutView.setImageResource(R.drawable.img)
         soulOutView.setMaxFrames(60)  // 动画60帧完成（约1秒）
         soulOutView.setSkipFrames(30) // 延迟30帧后重复
+
+
+        val shakeEffectView = view.findViewById<ShakeEffectView>(R.id.shake_effect_view)
+        shakeEffectView.setImageResource(R.drawable.img)  // 设置图片
+        shakeEffectView.setMaxFrames(60)   // 动画60帧（约1秒）
+        shakeEffectView.setSkipFrames(30)  // 延迟30帧后重复
     }
 }
