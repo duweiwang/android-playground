@@ -30,6 +30,11 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
 
+        <com.example.lib_gles.soulout.SoulOutView
+            android:id="@+id/soul_out_view"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
+
     </LinearLayout>
 
 </ScrollView>

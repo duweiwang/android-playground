@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lib_gles.soulout.SoulOutView
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
@@ -21,5 +22,14 @@ class OpenGLFragment : BaseSupportFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_opengl_shape, null)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val soulOutView = view.findViewById<SoulOutView>(R.id.soul_out_view)
+        soulOutView.setImageResource(R.drawable.img)
+        soulOutView.setMaxFrames(60)  // 动画60帧完成（约1秒）
+        soulOutView.setSkipFrames(30) // 延迟30帧后重复
     }
 }

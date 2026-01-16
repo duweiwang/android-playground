@@ -4,6 +4,9 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+/**
+ * 使用 OpenGL ES 绘制三角形
+ */
 public class TriangleView extends GLSurfaceView {
     GLSurfaceView.Renderer renderer;
 

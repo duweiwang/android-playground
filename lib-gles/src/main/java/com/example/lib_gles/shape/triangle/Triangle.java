@@ -11,6 +11,10 @@ import static android.opengl.GLES20.*;
 
 /**
  * 三角形对象
+ *
+ *
+ * 调用 @draw 方法绘制一个三角形
+ *
  */
 public class Triangle implements IShape {
     private static final int POINTS_PER_COORDINATE = 3;
