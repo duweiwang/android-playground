@@ -27,7 +27,7 @@ android {
 
         ndk {
             moduleName "jni_demo" //so文件名
-            abiFilters /*"armeabi",*/ "armeabi-v7a"//, "x86"//CPU类型
+            abiFilters "arm64-v8a", "armeabi-v7a"//, "x86"//CPU类型
         }
 
         viewBinding {
@@ -69,6 +69,7 @@ android {
         }
 
     }
+    ndkVersion '25.2.9519653'
 //    sourceSets{
 //        main{
 //            java{

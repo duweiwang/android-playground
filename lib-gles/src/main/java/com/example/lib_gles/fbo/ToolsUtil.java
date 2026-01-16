@@ -19,7 +19,11 @@ import java.io.InputStreamReader;
 public class ToolsUtil {
     public static int loadTexture(final Context context, final int resourceId) {
         final int[] textureHandle = new int[1];
-        GLES20.glGenTextures(1, textureHandle, 0);
+        GLES20.glGenTextures(
+                1,          //需要生成的纹理对象的数量
+                textureHandle,//用于存储生成的纹理名称（ID）的数组
+                0             //在 textures 数组中开始存储纹理 ID 的偏移量
+        );
 
         if (textureHandle[0] != 0) {
             final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -28,7 +32,20 @@ public class ToolsUtil {
             final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+            /**
+             * 纹理目标类型，指定要设置哪种类型的纹理
+             * 要设置的纹理参数名称
+             * 要为指定参数设置的值
+             */
+            GLES20.glTexParameteri(
+                    GLES20.GL_TEXTURE_2D,
+                    // GLES20.GL_TEXTURE_2D：2D纹理（最常用）
+                    //GLES20.GL_TEXTURE_CUBE_MAP：立方体贴图纹理
+                    //GLES20.GL_TEXTURE_2D_ARRAY：纹理数组（ES 3.0+）
+                    GLES20.GL_TEXTURE_MIN_FILTER,
+                    //GL_TEXTURE_MIN_FILTER	纹理被缩小时使用的过滤方式
+                    //GL_TEXTURE_MAG_FILTER	纹理被放大时使用的过滤方式
+                    GLES20.GL_NEAREST);
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);

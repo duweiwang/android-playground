@@ -1,5 +1,6 @@
 package com.example.lib_gles;
 
+import android.opengl.GLES20;
 import android.util.Log;
 
 import static android.opengl.GLES20.GL_COMPILE_STATUS;
@@ -21,6 +22,12 @@ import static android.opengl.GLES20.glLinkProgram;
 import static android.opengl.GLES20.glShaderSource;
 import static android.opengl.GLES20.glValidateProgram;
 
+/**
+ *
+ * compileVertexShader
+ *                      ---->  linkProgram
+ * compileFragmentShader
+ */
 public class ShaderHelper {
 
     public static int compileVertexShader(String shaderSource) {
@@ -33,22 +40,22 @@ public class ShaderHelper {
 
 
     private static int compileShader(int shaderType, String shaderSource) {
-        final int shaderId = glCreateShader(shaderType); //create empty shader
+        final int shaderId = GLES20.glCreateShader(shaderType); //create empty shader
 
         if (shaderId == 0) {
             Log.d("wdw", "create shader fail");
             return 0;
         }
 
-        glShaderSource(shaderId, shaderSource);//set source
+        GLES20.glShaderSource(shaderId, shaderSource);//set source
 
-        glCompileShader(shaderId);//compile it
+        GLES20.glCompileShader(shaderId);//compile it
 
 
         final int[] compileStatus = new int[1];
-        glGetShaderiv(shaderId, GL_COMPILE_STATUS, compileStatus, 0);//get status code to array
+        GLES20.glGetShaderiv(shaderId, GL_COMPILE_STATUS, compileStatus, 0);//get status code to array
         if (compileStatus[0] == 0) {
-            glDeleteShader(shaderId);
+            GLES20.glDeleteShader(shaderId);
             Log.d("wdw", "compile shader fail" + glGetShaderInfoLog(shaderId));
             return 0;
         }
@@ -63,15 +70,15 @@ public class ShaderHelper {
             return 0;
         }
 
-        glAttachShader(programId, vertexShader);
-        glAttachShader(programId, fragmentShader);
+        GLES20.glAttachShader(programId, vertexShader);
+        GLES20.glAttachShader(programId, fragmentShader);
 
-        glLinkProgram(programId);
+        GLES20.glLinkProgram(programId);
 
         final int[] linkStatus = new int[1];
-        glGetProgramiv(programId, GL_LINK_STATUS, linkStatus, 0);
+        GLES20.glGetProgramiv(programId, GL_LINK_STATUS, linkStatus, 0);
         if (linkStatus[0] == 0) {
-            glDeleteProgram(programId);
+            GLES20.glDeleteProgram(programId);
             Log.d("wdw", "link program fail " + glGetProgramInfoLog(programId));
             return 0;
         }
@@ -80,10 +87,10 @@ public class ShaderHelper {
 
 
     public static boolean validateProgram(int programObjectId){
-        glValidateProgram(programObjectId);
+        GLES20.glValidateProgram(programObjectId);
 
         final int[] validateSatus = new int[1];
-        glGetProgramiv(programObjectId,GL_VALIDATE_STATUS,validateSatus,0);
+        GLES20.glGetProgramiv(programObjectId,GL_VALIDATE_STATUS,validateSatus,0);
 
         return validateSatus[0] != 0;
 
