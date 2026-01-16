@@ -103,6 +103,14 @@ public abstract class BaseGLFilterView extends GLSurfaceView {
         protected Bitmap mBitmap;
         protected boolean mTextureNeedsUpdate = false;
         
+        // 单位矩阵
+        protected static final float[] IDENTITY_MATRIX = {
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        };
+        
         // 标准顶点坐标
         protected static final float[] VERTEX_DATA = {
             -1.0f, -1.0f,  // 左下
@@ -196,7 +204,7 @@ public abstract class BaseGLFilterView extends GLSurfaceView {
             // 绘制前准备
             onDrawPrepare();
             
-            // 设置顶点属性
+            // 设置顶点属性 (nofilter_v.glsl 中是 vec4，传4个分量)
             GLES30.glEnableVertexAttribArray(mPositionHandle);
             GLES30.glVertexAttribPointer(mPositionHandle, 2, GLES30.GL_FLOAT, false, 0, mVertexBuffer);
             
@@ -240,8 +248,11 @@ public abstract class BaseGLFilterView extends GLSurfaceView {
             
             Log.d(TAG, "Position: " + mPositionHandle + ", TexCoord: " + mTextureCoordHandle);
             
-            // 获取通用uniform位置
-            mMvpMatrixHandle = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+            // 获取通用uniform位置 - 尝试两种命名方式
+            mMvpMatrixHandle = GLES30.glGetUniformLocation(mProgramId, "mvpMatrix");
+            if (mMvpMatrixHandle < 0) {
+                mMvpMatrixHandle = GLES30.glGetUniformLocation(mProgramId, "uMvpMatrix");
+            }
             mTextureHandle = GLES30.glGetUniformLocation(mProgramId, "inputImageTexture");
             
             Log.d(TAG, "MVP: " + mMvpMatrixHandle + ", Texture: " + mTextureHandle);
@@ -283,7 +294,13 @@ public abstract class BaseGLFilterView extends GLSurfaceView {
         /**
          * 绘制前设置（设置特效参数）
          */
-        protected abstract void onDrawArraysPre();
+        protected void onDrawArraysPre() {
+            // 默认设置单位矩阵
+            if (mMvpMatrixHandle >= 0) {
+                GLES30.glUniformMatrix4fv(mMvpMatrixHandle, 1, false, IDENTITY_MATRIX, 0);
+            }
+            // 子类可以覆盖
+        }
         
         /**
          * 执行绘制

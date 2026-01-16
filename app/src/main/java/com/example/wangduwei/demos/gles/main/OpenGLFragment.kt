@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.lib_gles.glitch.GlitchEffectView
 import com.example.lib_gles.shake.ShakeEffectView
 import com.example.lib_gles.soulout.SoulOutView
 import com.example.lib_processor.PageInfo
@@ -38,5 +39,9 @@ class OpenGLFragment : BaseSupportFragment() {
         shakeEffectView.setImageResource(R.drawable.img)  // 设置图片
         shakeEffectView.setMaxFrames(60)   // 动画60帧（约1秒）
         shakeEffectView.setSkipFrames(30)  // 延迟30帧后重复
+
+
+        val glitchView = view.findViewById<GlitchEffectView>(R.id.glitch_view)
+        glitchView.setImageResource(R.drawable.img)
     }
 }

@@ -40,6 +40,12 @@
             android:layout_width="match_parent"
             android:layout_height="600dp"/>
 
+        <!-- 毛刺效果 -->
+        <com.example.lib_gles.glitch.GlitchEffectView
+            android:id="@+id/glitch_view"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
+
     </LinearLayout>
 
 </ScrollView>
