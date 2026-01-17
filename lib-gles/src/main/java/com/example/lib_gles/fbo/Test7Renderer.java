@@ -113,14 +113,12 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
      */
     public Test7Renderer(final Context activityContext) {
         mActivityContext = activityContext;
-
         // X, Y, Z
         final float[] cubePositionData =
                 {
-                        // In OpenGL counter-clockwise winding is default. This means that when we look at a triangle,
-                        // if the points are counter-clockwise we are looking at the "front". If not we are looking at
-                        // the back. OpenGL has an optimization where all back-facing triangles are culled, since they
-                        // usually represent the backside of an object and aren't visible anyways.
+                        // 在OpenGL中，默认采用逆时针环绕方式。这意味着当我们观察一个三角形时，
+                        // 如果顶点按逆时针排列，我们看到的就是它的"正面"。如果不是逆时针，我们看到的就是背面。
+                        // OpenGL有一项优化：所有背面朝向的三角形都会被剔除，因为它们通常代表物体的背面且不可见。
 
                         // Front face
                         -1.0f, 1.0f, 1.0f,
