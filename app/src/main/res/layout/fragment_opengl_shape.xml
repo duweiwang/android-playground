@@ -8,6 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <com.example.wangduwei.demos.gles.main.OpenGL_FBOView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"/>
 
 
         <com.example.wangduwei.demos.gles.main.OpenGLView

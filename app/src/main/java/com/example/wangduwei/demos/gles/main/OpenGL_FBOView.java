@@ -4,28 +4,28 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import com.example.lib_gles.fbo.Test7Renderer;
 import com.example.lib_gles.render.OpenGLRender;
 
 /**
  * 这个是空气曲棍球游戏的绘制
  */
-public class OpenGLView extends GLSurfaceView {
-    private GLSurfaceView.Renderer mRender;
+public class OpenGL_FBOView extends GLSurfaceView {
+    private Renderer mRender;
 
-    public OpenGLView(Context context) {
+    public OpenGL_FBOView(Context context) {
         this(context,null);
     }
 
-    public OpenGLView(Context context, AttributeSet attrs) {
+    public OpenGL_FBOView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     private void init(Context context){
         setEGLContextClientVersion(2);
-//        mRender = new Test7Renderer(context);
+        mRender = new Test7Renderer(context);
 //        mRender = new OpenGLRender7(context);
-        mRender = new OpenGLRender(context);
         setRenderer(mRender);
     }
 }

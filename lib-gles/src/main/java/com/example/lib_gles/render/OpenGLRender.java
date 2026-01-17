@@ -16,6 +16,12 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * 空气曲棍球项目的代码
+ * 1、三角形扇
+ * 2、画线
+ * 3、画2个点
+ */
 public class OpenGLRender implements GLSurfaceView.Renderer {
     //002:used for triangle fan
     /* private float[] vertex = {
