@@ -17,6 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
+        <com.example.wangduwei.demos.gles.main.OpenGLTexture_View
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+
         <com.example.lib_gles.shape.triangle.TriangleView
             android:layout_width="match_parent"
             android:layout_height="400dp" />
