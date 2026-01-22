@@ -23,11 +23,21 @@ import javax.microedition.khronos.opengles.GL10;
  *
  * 因为这个Demo绘制的是3D的正方体，所以需要给FBO挂上深度测试
  *
+ * 先把正方体绘制进纹理，再把纹理绘制到屏幕
+ *
  * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
  * renderers -- the static class GLES20 is used instead.
  */
 public class Test7Renderer implements GLSurfaceView.Renderer {
     private static final String TAG = "Test7Renderer";
+    private static final int BYTES_PER_FLOAT = 4;
+    private static final int POSITION_DATA_SIZE = 3;
+    private static final int COLOR_DATA_SIZE = 4;
+    private static final int TEXTURE_COORDINATE_DATA_SIZE = 2;
+    private static final int TEX_SIZE = 480;
+    private static final long ROTATE_PERIOD_MS = 10000L;
+    private static final float FULL_ROTATION_DEGREES = 360.0f;
+    private static final float MODEL_TRANSLATE_Z = -5.0f;
 
     private final Context mActivityContext;
 
@@ -35,20 +45,20 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
      * Store the model matrix. This matrix is used to move models from object space (where each model can be thought
      * of being located at the center of the universe) to world space.
      */
-    private float[] mModelMatrix = new float[16];
+    private final float[] mModelMatrix = new float[16];
 
     /**
      * Store the view matrix. This can be thought of as our camera. This matrix transforms world space to eye space;
      * it positions things relative to our eye.
      */
-    private float[] mViewMatrix = new float[16];
+    private final float[] mViewMatrix = new float[16];
 
     /**
      * Store the projection matrix. This is used to project the scene onto a 2D viewport.
      */
-    private float[] mProjectionMatrix = new float[16];
+    private final float[] mProjectionMatrix = new float[16];
 
-    private float[] mMVPMatrix = new float[16];
+    private final float[] mMVPMatrix = new float[16];
 
     private final FloatBuffer mCubePositions;
     private final FloatBuffer mCubeColors;
@@ -83,12 +93,6 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
      * This will be used to pass in model texture coordinate information.
      */
     private int mTextureCoordinateHandle;
-
-    private final int mBytesPerFloat = 4;
-
-    private final int mPositionDataSize = 3;
-    private final int mColorDataSize = 4;
-    private final int mTextureCoordinateDataSize = 2;
 
     private int mProgramHandle;
 
@@ -264,23 +268,9 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
                 };
 
         // Initialize the buffers.
-        mCubePositions = ByteBuffer
-                .allocateDirect(cubePositionData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        mCubePositions.put(cubePositionData).position(0);
-
-        mCubeColors = ByteBuffer
-                .allocateDirect(cubeColorData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        mCubeColors.put(cubeColorData).position(0);
-
-        mCubeTextureCoordinates = ByteBuffer
-                .allocateDirect(cubeTextureCoordinateData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
-        mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0);
+        mCubePositions = createFloatBuffer(cubePositionData);
+        mCubeColors = createFloatBuffer(cubeColorData);
+        mCubeTextureCoordinates = createFloatBuffer(cubeTextureCoordinateData);
     }
 
     protected String getVertexShader(int shader) {
@@ -293,15 +283,12 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-        // Set the background clear color to black.
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         // Use culling to remove back faces.
         GLES20.glEnable(GLES20.GL_CULL_FACE);
-
         // Enable depth testing
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-
         // The below glEnable() call is a holdover from OpenGL ES 1, and is not needed in OpenGL ES 2.
         // Enable texture mapping
         GLES20.glEnable(GLES20.GL_TEXTURE_2D);
@@ -337,9 +324,10 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
         mProgramHandle = ToolsUtil.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
                 new String[]{"a_Position", "a_Color", "a_TexCoordinate"});
+        initProgramHandles();
 
         // Load the texture
-        mTextureDataHandle = ToolsUtil.loadTexture(mActivityContext, R.drawable.air_hockey_surface);
+        mTextureDataHandle = ToolsUtil.loadTexture(mActivityContext, R.drawable.terrainnormal2);
     }
 
     @Override
@@ -362,8 +350,8 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-
-        int texWidth = 480, texHeight = 480;
+        final int texWidth = TEX_SIZE;
+        final int texHeight = TEX_SIZE;
 
         //查询当前设备（GPU / OpenGL ES 环境）支持的最大 Renderbuffer 尺寸
         IntBuffer maxRenderbufferSize = IntBuffer.allocate(1);
@@ -379,109 +367,40 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
 
         //-----------------------------常规的2D纹理代码-----------------------------------
-        IntBuffer texture = IntBuffer.allocate(1);//存储纹理对象ID
-        GLES20.glGenTextures(1, texture);//生成ID
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0));
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, texWidth, texHeight, 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_SHORT_5_6_5, null);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        IntBuffer texture = createColorTexture(texWidth, texHeight);
         //----------------------------------------------------------------
+        IntBuffer depthRenderbuffer = createDepthRenderbuffer(texWidth, texHeight);
 
-
-        //
-        IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
-        GLES20.glGenRenderbuffers(1, depthRenderbuffer);
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, texWidth, texHeight);
-
-
-
-        IntBuffer framebuffer = IntBuffer.allocate(1);
-        GLES20.glGenFramebuffers(1, framebuffer);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer.get(0));
-        //绑定颜色纹理到 FBO（作为输出颜色缓冲）
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D,
-                texture.get(0),
-                0);
-        //绑定深度 Renderbuffer 到 FBO（用于深度测试）
-        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_DEPTH_ATTACHMENT,
-                GLES20.GL_RENDERBUFFER,
-                depthRenderbuffer.get(0));
-
+        IntBuffer framebuffer = createFramebuffer(texture, depthRenderbuffer);
 
 
         // check for framebuffer complete
         int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
         if (status == GLES20.GL_FRAMEBUFFER_COMPLETE) {
+            // 绑定 FBO，把场景渲染到“纹理”
             // render to texture using FBO
             GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             // Do a complete rotation every 10 seconds.
-            long time = SystemClock.uptimeMillis() % 10000L;
-            float angleInDegrees = (360.0f / 10000.0f) * (2 * (int) time);
+            long time = SystemClock.uptimeMillis() % ROTATE_PERIOD_MS;
+            float angleInDegrees = computeRotationAngle(time, 2.0f);
 
             GLES20.glUseProgram(mProgramHandle);
-
-            // Set program handles for cube drawing.
-            mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
-            mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix");
-            mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
-            mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
-            mColorHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Color");
-            mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
-
-            // Set the active texture unit to texture unit 0.
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-
-            // Bind the texture to this unit.
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureDataHandle);
-
-            // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-            GLES20.glUniform1i(mTextureUniformHandle, 0);
-
-            Matrix.setIdentityM(mModelMatrix, 0);
-            Matrix.translateM(mModelMatrix, 0, 0.0f, -1.0f, -5.0f);
-            Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 1.0f, 0.0f);
-            drawCube();
+            renderCube(mTextureDataHandle, -1.0f, angleInDegrees);
 //-----------------------------------------------------------------
+            // 切回默认帧缓冲（屏幕）
             // render to window system provided framebuffer
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
             GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             // Do a complete rotation every 10 seconds.
-            time = SystemClock.uptimeMillis() % 10000L;
-            angleInDegrees = (360.0f / 10000.0f) * ((int) time);
+            time = SystemClock.uptimeMillis() % ROTATE_PERIOD_MS;
+            angleInDegrees = computeRotationAngle(time, 1.0f);
 
             GLES20.glUseProgram(mProgramHandle);
-
-            // Set program handles for cube drawing.
-            mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
-            mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix");
-            mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
-            mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
-            mColorHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Color");
-            mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
-
-            // Set the active texture unit to texture unit 0.
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-
-            // Bind the texture to this unit.
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0)/*mTextureDataHandle*/);
-
-            // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-            GLES20.glUniform1i(mTextureUniformHandle, 0);
-
-            Matrix.setIdentityM(mModelMatrix, 0);
-            Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -5.0f);
-            Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 1.0f, 0.0f);
-            drawCube();
+            renderCube(texture.get(0)/*mTextureDataHandle*/, 0.0f, angleInDegrees);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         }
 
@@ -497,20 +416,20 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
     private void drawCube() {
         // Pass in the position information
         mCubePositions.position(0);
-        GLES20.glVertexAttribPointer(mPositionHandle, mPositionDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(mPositionHandle, POSITION_DATA_SIZE, GLES20.GL_FLOAT, false,
                 0, mCubePositions);
 
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
         // Pass in the color information
         mCubeColors.position(0);
-        GLES20.glVertexAttribPointer(mColorHandle, mColorDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(mColorHandle, COLOR_DATA_SIZE, GLES20.GL_FLOAT, false,
                 0, mCubeColors);
         GLES20.glEnableVertexAttribArray(mColorHandle);
 
         // Pass in the texture coordinate information
         mCubeTextureCoordinates.position(0);
-        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false,
+        GLES20.glVertexAttribPointer(mTextureCoordinateHandle, TEXTURE_COORDINATE_DATA_SIZE, GLES20.GL_FLOAT, false,
                 0, mCubeTextureCoordinates);
 
         GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
@@ -531,5 +450,82 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
         // Draw the cube.
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    private static FloatBuffer createFloatBuffer(float[] data) {
+        FloatBuffer buffer = ByteBuffer
+                .allocateDirect(data.length * BYTES_PER_FLOAT)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        buffer.put(data).position(0);
+        return buffer;
+    }
+
+    private void initProgramHandles() {
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
+        mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix");
+        mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
+        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
+        mColorHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Color");
+        mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
+    }
+
+    private static IntBuffer createColorTexture(int width, int height) {
+        IntBuffer texture = IntBuffer.allocate(1);
+        GLES20.glGenTextures(1, texture);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0));
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, width, height, 0,
+                GLES20.GL_RGB, GLES20.GL_UNSIGNED_SHORT_5_6_5, null);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        return texture;
+    }
+
+    private static IntBuffer createDepthRenderbuffer(int width, int height) {
+        IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
+        GLES20.glGenRenderbuffers(1, depthRenderbuffer);
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, width, height);
+        return depthRenderbuffer;
+    }
+
+    private static IntBuffer createFramebuffer(IntBuffer texture, IntBuffer depthRenderbuffer) {
+        IntBuffer framebuffer = IntBuffer.allocate(1);
+        GLES20.glGenFramebuffers(1, framebuffer);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer.get(0));
+        //绑定颜色纹理到 FBO（作为输出颜色缓冲）
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D,
+                texture.get(0),
+                0);
+        //绑定深度 Renderbuffer 到 FBO（用于深度测试）
+        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_DEPTH_ATTACHMENT,
+                GLES20.GL_RENDERBUFFER,
+                depthRenderbuffer.get(0));
+        return framebuffer;
+    }
+
+    private static float computeRotationAngle(long timeMs, float speedMultiplier) {
+        return (FULL_ROTATION_DEGREES / ROTATE_PERIOD_MS) * (speedMultiplier * (int) timeMs);
+    }
+
+    private void renderCube(int textureId, float translateY, float angleInDegrees) {
+        // Set the active texture unit to texture unit 0.
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+        // Bind the texture to this unit.
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+        GLES20.glUniform1i(mTextureUniformHandle, 0);
+
+        Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, translateY, MODEL_TRANSLATE_Z);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 1.0f, 0.0f);
+        drawCube();
     }
 }
