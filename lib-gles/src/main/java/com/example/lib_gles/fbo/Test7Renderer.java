@@ -20,6 +20,9 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * 这个类演示了FBO的使用！！！！！！！！！！！！！
  *
+ *
+ * 因为这个Demo绘制的是3D的正方体，所以需要给FBO挂上深度测试
+ *
  * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
  * renderers -- the static class GLES20 is used instead.
  */
@@ -83,24 +86,10 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
     private final int mBytesPerFloat = 4;
 
-    /**
-     * Size of the position data in elements.
-     */
     private final int mPositionDataSize = 3;
-
-    /**
-     * Size of the color data in elements.
-     */
     private final int mColorDataSize = 4;
-
-    /**
-     * Size of the texture coordinate data in elements.
-     */
     private final int mTextureCoordinateDataSize = 2;
 
-    /**
-     * This is a handle to our cube shading program.
-     */
     private int mProgramHandle;
 
     /**
@@ -108,9 +97,6 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
      */
     private int mTextureDataHandle;
 
-    /**
-     * Initialize the model data.
-     */
     public Test7Renderer(final Context activityContext) {
         mActivityContext = activityContext;
         // X, Y, Z
@@ -278,16 +264,22 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
                 };
 
         // Initialize the buffers.
-        mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mCubePositions = ByteBuffer
+                .allocateDirect(cubePositionData.length * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
         mCubePositions.put(cubePositionData).position(0);
 
-        mCubeColors = ByteBuffer.allocateDirect(cubeColorData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mCubeColors = ByteBuffer
+                .allocateDirect(cubeColorData.length * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
         mCubeColors.put(cubeColorData).position(0);
 
-        mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.length * mBytesPerFloat)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mCubeTextureCoordinates = ByteBuffer
+                .allocateDirect(cubeTextureCoordinateData.length * mBytesPerFloat)
+                .order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
         mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0);
     }
 
@@ -332,7 +324,10 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
         // Set the view matrix. This matrix can be said to represent the camera position.
         // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
         // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-        Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
+        Matrix.setLookAtM(mViewMatrix, 0,
+                eyeX, eyeY, eyeZ,
+                lookX, lookY, lookZ,
+                upX, upY, upZ);
 
         final String vertexShader = getVertexShader(R.raw.per_pixel_vertex_shader);
         final String fragmentShader = getFragmentShader(R.raw.per_pixel_fragment_shader);
@@ -367,48 +362,59 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        IntBuffer framebuffer = IntBuffer.allocate(1);
-        IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
-        IntBuffer texture = IntBuffer.allocate(1);
 
         int texWidth = 480, texHeight = 480;
+
+        //查询当前设备（GPU / OpenGL ES 环境）支持的最大 Renderbuffer 尺寸
         IntBuffer maxRenderbufferSize = IntBuffer.allocate(1);
         GLES20.glGetIntegerv(GLES20.GL_MAX_RENDERBUFFER_SIZE, maxRenderbufferSize);
+
+
         // check if GL_MAX_RENDERBUFFER_SIZE is >= texWidth and texHeight
         if ((maxRenderbufferSize.get(0) <= texWidth) || (maxRenderbufferSize.get(0) <= texHeight)) {
             // cannot use framebuffer objects as we need to create
             // a depth buffer as a renderbuffer object
             // return with appropriate error
         }
-        // generate the framebuffer, renderbuffer, and texture object names
-        GLES20.glGenFramebuffers(1, framebuffer);
-        GLES20.glGenRenderbuffers(1, depthRenderbuffer);
-        GLES20.glGenTextures(1, texture);
-        // bind texture and load the texture mip-level 0
-        // texels are RGB565
-        // no texels need to be specified as we are going to draw into
-        // the texture
+
+
+        //-----------------------------常规的2D纹理代码-----------------------------------
+        IntBuffer texture = IntBuffer.allocate(1);//存储纹理对象ID
+        GLES20.glGenTextures(1, texture);//生成ID
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0));
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, texWidth, texHeight,
-                0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_SHORT_5_6_5, null);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, texWidth, texHeight, 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_SHORT_5_6_5, null);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        // bind renderbuffer and create a 16-bit depth buffer
-        // width and height of renderbuffer = width and height of
-        // the texture
+        //----------------------------------------------------------------
+
+
+        //
+        IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
+        GLES20.glGenRenderbuffers(1, depthRenderbuffer);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16,
-                texWidth, texHeight);
-        // bind the framebuffer
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, texWidth, texHeight);
+
+
+
+        IntBuffer framebuffer = IntBuffer.allocate(1);
+        GLES20.glGenFramebuffers(1, framebuffer);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer.get(0));
-        // specify texture as color attachment
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D, texture.get(0), 0);
-        // specify depth_renderbufer as depth attachment
-        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
-                GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
+        //绑定颜色纹理到 FBO（作为输出颜色缓冲）
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D,
+                texture.get(0),
+                0);
+        //绑定深度 Renderbuffer 到 FBO（用于深度测试）
+        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_DEPTH_ATTACHMENT,
+                GLES20.GL_RENDERBUFFER,
+                depthRenderbuffer.get(0));
+
+
+
         // check for framebuffer complete
         int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
         if (status == GLES20.GL_FRAMEBUFFER_COMPLETE) {

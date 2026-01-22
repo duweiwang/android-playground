@@ -40,7 +40,10 @@ public class TextureHelper {
             GLES20.glDeleteTextures(1, textureObjId, 0);
             return 0;
         }
+
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureObjId[0]);
+
+
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,//缩小的情况下
                 GLES20.GL_TEXTURE_MIN_FILTER,
                 GLES20.GL_LINEAR_MIPMAP_LINEAR);//缩小情况下使用三线性过滤
@@ -48,6 +51,8 @@ public class TextureHelper {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,//放大的情况下
                 GLES20.GL_TEXTURE_MAG_FILTER,
                 GLES20.GL_LINEAR);//放大情况下使用双线性过滤
+
+
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
         //设置环绕方向S，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
@@ -58,7 +63,7 @@ public class TextureHelper {
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
         bitmap.recycle();
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);//传0，解除绑定
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, GLES20.GL_NONE);//传0，解除绑定
         return textureObjId[0];
     }
 
