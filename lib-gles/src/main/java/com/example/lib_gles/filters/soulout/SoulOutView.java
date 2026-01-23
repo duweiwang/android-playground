@@ -1,11 +1,11 @@
-package com.example.lib_gles.soulout;
+package com.example.lib_gles.filters.soulout;
 
 import android.content.Context;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
 
-import com.example.lib_gles.base.BaseGLFilterView;
+import com.example.lib_gles.filters.base.BaseGLFilterView;
 
 /**
  * SoulOut Effect View - 灵魂出窍特效View

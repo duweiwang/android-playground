@@ -8,7 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <com.example.wangduwei.demos.gles.main.OpenGL_FBOView
+
+        <com.example.lib_gles.fbo.fbo_simple.FboSimpleView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"/>
+
+        <com.example.lib_gles.fbo.fbo_3d.Fbo3DCubeView
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
 
@@ -17,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <com.example.wangduwei.demos.gles.main.OpenGLTexture_View
+        <com.example.wangduwei.demos.gles.main.OpenGLImageTextureGLView
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
@@ -37,18 +42,18 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
 
-        <com.example.lib_gles.soulout.SoulOutView
+        <com.example.lib_gles.filters.soulout.SoulOutView
             android:id="@+id/soul_out_view"
             android:layout_width="match_parent"
             android:layout_height="600dp"/>
 
-        <com.example.lib_gles.shake.ShakeEffectView
+        <com.example.lib_gles.filters.shake.ShakeEffectView
             android:id="@+id/shake_effect_view"
             android:layout_width="match_parent"
             android:layout_height="600dp"/>
 
         <!-- 毛刺效果 -->
-        <com.example.lib_gles.glitch.GlitchEffectView
+        <com.example.lib_gles.filters.glitch.GlitchEffectView
             android:id="@+id/glitch_view"
             android:layout_width="match_parent"
             android:layout_height="600dp"/>

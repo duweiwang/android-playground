@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * 第七章；纹理
  */
-public class OpenGLRender7 implements GLSurfaceView.Renderer {
+public class OpenGLTextureRender implements GLSurfaceView.Renderer {
 
     private final Context context;
     private final float[] projectionMatrix = new float[16];
@@ -31,7 +31,7 @@ public class OpenGLRender7 implements GLSurfaceView.Renderer {
 
     private int texture;
 
-    public OpenGLRender7(Context context) {
+    public OpenGLTextureRender(Context context) {
         this.context = context;
     }
 

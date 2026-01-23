@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.lib_gles.glitch.GlitchEffectView
-import com.example.lib_gles.shake.ShakeEffectView
-import com.example.lib_gles.soulout.SoulOutView
+import com.example.lib_gles.filters.glitch.GlitchEffectView
+import com.example.lib_gles.filters.shake.ShakeEffectView
+import com.example.lib_gles.filters.soulout.SoulOutView
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment

@@ -1,4 +1,4 @@
-package com.example.lib_gles.base;
+package com.example.lib_gles.filters.base;
 
 import android.content.Context;
 import android.graphics.Bitmap;

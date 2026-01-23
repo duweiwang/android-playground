@@ -1,10 +1,10 @@
-package com.example.lib_gles.glitch;
+package com.example.lib_gles.filters.glitch;
 
 import android.content.Context;
 import android.opengl.GLES30;
 import android.util.AttributeSet;
 
-import com.example.lib_gles.base.BaseGLFilterView;
+import com.example.lib_gles.filters.base.BaseGLFilterView;
 
 /**
  * Glitch Effect View - 毛刺特效View

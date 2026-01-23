@@ -1,11 +1,11 @@
-package com.example.lib_gles.shake;
+package com.example.lib_gles.filters.shake;
 
 import android.content.Context;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
 
-import com.example.lib_gles.base.BaseGLFilterView;
+import com.example.lib_gles.filters.base.BaseGLFilterView;
 
 /**
  * Shake Effect View - 抖动特效View

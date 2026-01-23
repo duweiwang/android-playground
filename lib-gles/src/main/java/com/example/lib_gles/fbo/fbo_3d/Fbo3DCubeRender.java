@@ -1,4 +1,4 @@
-package com.example.lib_gles.fbo;
+package com.example.lib_gles.fbo.fbo_3d;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -8,6 +8,7 @@ import android.os.SystemClock;
 
 
 import com.example.lib_gles.R;
+import com.example.lib_gles.fbo.ToolsUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,7 +29,7 @@ import javax.microedition.khronos.opengles.GL10;
  * This class implements our custom renderer. Note that the GL10 parameter passed in is unused for OpenGL ES 2.0
  * renderers -- the static class GLES20 is used instead.
  */
-public class Test7Renderer implements GLSurfaceView.Renderer {
+public class Fbo3DCubeRender implements GLSurfaceView.Renderer {
     private static final String TAG = "Test7Renderer";
     private static final int BYTES_PER_FLOAT = 4;
     private static final int POSITION_DATA_SIZE = 3;
@@ -101,7 +102,7 @@ public class Test7Renderer implements GLSurfaceView.Renderer {
      */
     private int mTextureDataHandle;
 
-    public Test7Renderer(final Context activityContext) {
+    public Fbo3DCubeRender(final Context activityContext) {
         mActivityContext = activityContext;
         // X, Y, Z
         final float[] cubePositionData =
