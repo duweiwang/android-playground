@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 
-        <com.example.wangduwei.demos.gles.main.OpenGLImageTextureGLView
+        <com.example.lib_gles.texture.OpenGLImageTextureGLView
             android:layout_width="match_parent"
             android:layout_height="400dp" />
 

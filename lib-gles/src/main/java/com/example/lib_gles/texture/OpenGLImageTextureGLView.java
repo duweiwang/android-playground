@@ -1,10 +1,8 @@
-package com.example.wangduwei.demos.gles.main;
+package com.example.lib_gles.texture;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-
-import com.example.lib_gles.texture.OpenGLTextureRender;
 
 /**
  * 这个是空气曲棍球游戏的绘制-第七章 纹理贴图
