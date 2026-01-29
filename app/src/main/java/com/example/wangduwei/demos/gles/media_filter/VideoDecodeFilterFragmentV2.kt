@@ -25,7 +25,7 @@ import javax.microedition.khronos.opengles.GL10
 
 @PageInfo(
     description = "OpenGl视频特效",
-    navigationId = R.id.fragment_gl_video,
+    navigationId = R.id.fragment_gl_video_v2,
     title = "OpenGl视频特效V2",
     preview = R.drawable.preview_opengl
 )
