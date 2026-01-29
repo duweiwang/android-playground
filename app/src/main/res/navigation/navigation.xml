@@ -118,6 +118,11 @@
         android:label="OpenGLFragment" />
 
     <fragment
+        android:id="@+id/fragment_gl_video"
+        android:name="com.example.wangduwei.demos.gles.media_filter.VideoDecodeFilterFragment"
+        android:label="VideoDecodeFilterFragment" />
+
+    <fragment
         android:id="@+id/fragment_permission"
         android:name="com.example.wangduwei.demos.permission.test.PermissionFragment"
         android:label="PermissionFragment" />
