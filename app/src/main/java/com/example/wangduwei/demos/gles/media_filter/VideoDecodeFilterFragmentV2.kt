@@ -10,11 +10,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
 import com.example.lib_gles.video_filter.core.DecoderOutputSurface
 import com.example.lib_gles.video_filter.core.bean.Resolution
 import com.example.lib_gles.video_filter.core.filter.GlFilter
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
+import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
+import com.example.lib_gles.video_filter.filter_impl.GlSoulOutFilter
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
@@ -58,6 +61,22 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
         super.onViewCreated(view, savedInstanceState)
         if (view is FrameLayout) {
             initAndAddTexture(view)
+            addBtn(view)
+        }
+    }
+
+    private fun addBtn(frameLayout: FrameLayout) {
+        val btn = Button(frameLayout.context)
+        btn.text = "add filter"
+        frameLayout.addView(
+            btn,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        )
+        btn.setOnClickListener {
+            glFilterList.putGlFilter(GlFilterPeriod(0L,10 * 1000L, GlSoulOutFilter(frameLayout.context)))
         }
     }
 
