@@ -245,6 +245,7 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         if (filterList != null) {
             glFilterFBO.enable();
             glViewport(0, 0, glFilterFBO.getWidth(), glFilterFBO.getHeight());
+            GLES20.glClear(GL_COLOR_BUFFER_BIT);
         }
         surfaceTexture.getTransformMatrix(STMatrix);
 
@@ -294,4 +295,3 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         this.flipHorizontal = flipHorizontal;
     }
 }
-
