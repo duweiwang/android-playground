@@ -7,12 +7,15 @@ import android.media.MediaPlayer.OnPreparedListener
 import android.os.Bundle
 import android.opengl.GLSurfaceView
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import com.example.lib_gles.video_filter.core.DecoderOutputSurface
+import com.example.lib_gles.video_filter.core.bean.FillMode
+import com.example.lib_gles.video_filter.core.bean.FillModeCustomItem
 import com.example.lib_gles.video_filter.core.bean.Resolution
 import com.example.lib_gles.video_filter.core.filter.GlFilter
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
@@ -61,11 +64,12 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
         super.onViewCreated(view, savedInstanceState)
         if (view is FrameLayout) {
             initAndAddTexture(view)
-            addBtn(view)
+            addFilterBtn(view)
+            addScaleBtn(view)
         }
     }
 
-    private fun addBtn(frameLayout: FrameLayout) {
+    private fun addFilterBtn(frameLayout: FrameLayout) {
         val btn = Button(frameLayout.context)
         btn.text = "add filter"
         frameLayout.addView(
@@ -77,6 +81,33 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
         )
         btn.setOnClickListener {
             glFilterList.putGlFilter(GlFilterPeriod(0L,10 * 1000L, GlSoulOutFilter(frameLayout.context)))
+        }
+    }
+
+    private fun addScaleBtn(frameLayout: FrameLayout) {
+        val btn = Button(frameLayout.context)
+        btn.text = "变换"
+        frameLayout.addView(
+            btn,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.END
+            }
+        )
+        btn.setOnClickListener {
+            val scale = 0.5f
+            val customItem = FillModeCustomItem(
+                scale,
+                0f,
+                0f,
+                0f,
+                540f,
+                960f
+            )
+            mDecoderSurface.setFillMode(FillMode.CUSTOM)
+            mDecoderSurface.setFillModeCustomItem(customItem)
         }
     }
 
