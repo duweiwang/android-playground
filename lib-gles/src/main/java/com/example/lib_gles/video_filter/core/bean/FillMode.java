@@ -8,13 +8,14 @@ public enum FillMode {
     public static float[] getScaleAspectFit(int angle, int widthIn, int heightIn, int widthOut, int heightOut) {
         final float[] scale = {1, 1};
         scale[0] = scale[1] = 1;
-        if (angle == 90 || angle == 270) {
+        if (angle == 90 || angle == 270) {//如果有旋转，宽高互换
             int cx = widthIn;
             widthIn = heightIn;
             heightIn = cx;
         }
-
+        //输入的宽高比
         float aspectRatioIn = (float) widthIn / (float) heightIn;
+        //宽度固定，输出的高度
         float heightOutCalculated = (float) widthOut / aspectRatioIn;
 
         if (heightOutCalculated < heightOut) {

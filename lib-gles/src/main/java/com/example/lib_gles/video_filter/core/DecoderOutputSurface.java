@@ -52,7 +52,7 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
 
     private GlFilter glFilter;
     private GlFilterList filterList;
-    private EFramebufferObject glFilterFrameBuffer;
+    private EFramebufferObject glFilterFBO;
 
     private GlPreviewFilter previewFilter;
 
@@ -101,8 +101,8 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         GLES20.glBindTexture(GL_TEXTURE_2D, 0);
 
 
-        glFilterFrameBuffer = new EFramebufferObject();
-        glFilterFrameBuffer.setup(outputResolution.width(), outputResolution.height());
+        glFilterFBO = new EFramebufferObject();
+        glFilterFBO.setup(outputResolution.width(), outputResolution.height());
 
         previewFilter = new GlPreviewFilter(GL_TEXTURE_EXTERNAL_OES);
         previewFilter.setup();
@@ -181,24 +181,40 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         float scale[];
         switch (fillMode) {
             case PRESERVE_ASPECT_FIT:
-                scale = FillMode.getScaleAspectFit(rotation.getRotation(), inputResolution.width(), inputResolution.height(), outputResolution.width(), outputResolution.height());
-                Matrix.scaleM(MVPMatrix, 0, scale[0] * scaleDirectionX, scale[1] * scaleDirectionY, 1);
+                scale = FillMode.getScaleAspectFit(rotation.getRotation(),
+                        inputResolution.width(), inputResolution.height(),
+                        outputResolution.width(), outputResolution.height());
+
+                Matrix.scaleM(MVPMatrix, 0,
+                        scale[0] * scaleDirectionX, //scale factor x
+                        scale[1] * scaleDirectionY, //scale factor y
+                        1);//scale factor z
                 if (rotation != Rotation.NORMAL) {
                     Matrix.rotateM(MVPMatrix, 0, -rotation.getRotation(), 0.f, 0.f, 1.f);
                 }
                 break;
             case PRESERVE_ASPECT_CROP:
-                scale = FillMode.getScaleAspectCrop(rotation.getRotation(), inputResolution.width(), inputResolution.height(), outputResolution.width(), outputResolution.height());
-                Matrix.scaleM(MVPMatrix, 0, scale[0] * scaleDirectionX, scale[1] * scaleDirectionY, 1);
+                scale = FillMode.getScaleAspectCrop(rotation.getRotation(),
+                        inputResolution.width(), inputResolution.height(),
+                        outputResolution.width(), outputResolution.height());
+
+                Matrix.scaleM(MVPMatrix, 0,
+                        scale[0] * scaleDirectionX, //scale factor x
+                        scale[1] * scaleDirectionY, //scale factor y
+                        1);//scale factor z
                 if (rotation != Rotation.NORMAL) {
                     Matrix.rotateM(MVPMatrix, 0, -rotation.getRotation(), 0.f, 0.f, 1.f);
                 }
                 break;
             case CUSTOM:
                 if (fillModeCustomItem != null) {
+                    //平移
                     Matrix.translateM(MVPMatrix, 0, fillModeCustomItem.getTranslateX(), -fillModeCustomItem.getTranslateY(), 0f);
-                    scale = FillMode.getScaleAspectCrop(rotation.getRotation(), inputResolution.width(), inputResolution.height(), outputResolution.width(), outputResolution.height());
 
+                    scale = FillMode.getScaleAspectCrop(rotation.getRotation(),
+                            inputResolution.width(), inputResolution.height(),
+                            outputResolution.width(), outputResolution.height());
+                    //缩放
                     if (fillModeCustomItem.getRotate() == 0 || fillModeCustomItem.getRotate() == 180) {
                         Matrix.scaleM(MVPMatrix,
                                 0,
@@ -212,7 +228,7 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
                                 fillModeCustomItem.getScale() * scale[1] * (fillModeCustomItem.getVideoWidth() / fillModeCustomItem.getVideoHeight()) * scaleDirectionY,
                                 1);
                     }
-
+                    //旋转
                     Matrix.rotateM(MVPMatrix, 0, -(rotation.getRotation() + fillModeCustomItem.getRotate()), 0.f, 0.f, 1.f);
 
 //                    Log.d(TAG, "inputResolution = " + inputResolution.width() + " height = " + inputResolution.height());
@@ -227,18 +243,18 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         }
         Log.d(TAG, "onDrawFrame: ...filterList:"+filterList);
         if (filterList != null) {
-            glFilterFrameBuffer.enable();
-            glViewport(0, 0, glFilterFrameBuffer.getWidth(), glFilterFrameBuffer.getHeight());
+            glFilterFBO.enable();
+            glViewport(0, 0, glFilterFBO.getWidth(), glFilterFBO.getHeight());
         }
         surfaceTexture.getTransformMatrix(STMatrix);
 
-        // 这句绘制的目的地是哪?  --如果glFilterFrameBuffer没有启用, 那就fbo, 否则就是glFilterFrameBuffer
+        // 这句绘制的目的地是哪?  --如果glFilterFBO没有启用, 那就是父类的framebufferObject, 否则就是glFilterFBO
         previewFilter.draw(textureID, MVPMatrix, STMatrix, 1.0f);
 
         if (filterList != null) {
             fbo.enable();  // 重新启用了最外层的fbo , 那么glFilter的输出就到了这个fbo .
             GLES20.glClear(GL_COLOR_BUFFER_BIT);
-            filterList.draw(glFilterFrameBuffer.getTexName(), fbo, presentationTimeUs, extraTextureIds);
+            filterList.draw(glFilterFBO.getTexName(), fbo, presentationTimeUs, extraTextureIds);
         }
     }
 
