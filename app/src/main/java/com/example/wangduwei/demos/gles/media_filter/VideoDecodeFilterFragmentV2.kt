@@ -98,11 +98,12 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
         )
         btn.setOnClickListener {
             val scale = 0.5f
+            val translateY = -0.25f
             val customItem = FillModeCustomItem(
                 scale,
                 0f,
                 0f,
-                0f,
+                translateY,
                 540f,
                 960f
             )
