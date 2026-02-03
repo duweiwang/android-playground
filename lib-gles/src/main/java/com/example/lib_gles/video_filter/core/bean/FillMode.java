@@ -1,8 +1,8 @@
 package com.example.lib_gles.video_filter.core.bean;
 
 public enum FillMode {
-    PRESERVE_ASPECT_FIT,
-    PRESERVE_ASPECT_CROP,
+    PRESERVE_ASPECT_FIT,//等比缩放，完整显示内容，不裁剪，可能会留黑
+    PRESERVE_ASPECT_CROP,//等比缩放，铺满输出画布，超出部分会被裁
     CUSTOM;
 
     public static float[] getScaleAspectFit(int angle, int widthIn, int heightIn, int widthOut, int heightOut) {
