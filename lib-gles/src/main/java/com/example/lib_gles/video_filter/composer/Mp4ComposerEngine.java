@@ -61,7 +61,9 @@ class Mp4ComposerEngine {
             final boolean flipVertical,
             final boolean flipHorizontal,
             final long startTimeMs,
-            final long endTimeMs
+            final long endTimeMs,
+            final String audioPath,
+            final Mp4Composer.AudioMode audioMode
     ) throws IOException {
 
 
@@ -119,24 +121,44 @@ class Mp4ComposerEngine {
 
 
             // setup audio if present and not muted
-            if (mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null && !mute) {
-                // has Audio video
+            boolean hasAudio = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null;
+            boolean useExternalAudio = audioPath != null && audioPath.length() > 0
+                    && audioMode != null
+                    && audioMode != Mp4Composer.AudioMode.ORIGINAL;
 
-                if (timeScale < 2) {
-                    audioComposer = new AudioComposer(mediaExtractor, audioTrackIndex, muxRender);
-                    if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
-                        ((AudioComposer) audioComposer).setClipRange(startTimeMs, endTimeMs);
+            if (!mute && (hasAudio || useExternalAudio)) {
+                if (useExternalAudio && audioMode == Mp4Composer.AudioMode.REPLACE) {
+                    audioComposer = new ExternalAudioComposer(audioPath, muxRender, durationUs);
+                } else if (useExternalAudio && audioMode == Mp4Composer.AudioMode.MIX) {
+                    if (!hasAudio) {
+                        audioComposer = new ExternalAudioComposer(audioPath, muxRender, durationUs);
+                    } else {
+                        if (timeScale >= 2) {
+                            throw new IllegalArgumentException("Mix audio does not support timeScale >= 2.");
+                        }
+                        audioComposer = new MixAudioComposer(mediaExtractor, audioTrackIndex, audioPath, muxRender, durationUs, startTimeMs, endTimeMs);
                     }
-                } else {
-                    audioComposer = new RemixAudioComposer(mediaExtractor, audioTrackIndex, mediaExtractor.getTrackFormat(audioTrackIndex), muxRender, timeScale);
+                } else if (hasAudio) {
+                    // original audio
+                    if (timeScale < 2) {
+                        audioComposer = new AudioComposer(mediaExtractor, audioTrackIndex, muxRender);
+                        if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
+                            ((AudioComposer) audioComposer).setClipRange(startTimeMs, endTimeMs);
+                        }
+                    } else {
+                        audioComposer = new RemixAudioComposer(mediaExtractor, audioTrackIndex, mediaExtractor.getTrackFormat(audioTrackIndex), muxRender, timeScale);
+                    }
                 }
 
-
-                audioComposer.setup();
-
-                mediaExtractor.selectTrack(audioTrackIndex);
-
-                runPipelines();
+                if (audioComposer != null) {
+                    audioComposer.setup();
+                    if (audioComposer instanceof AudioComposer || audioComposer instanceof RemixAudioComposer) {
+                        mediaExtractor.selectTrack(audioTrackIndex);
+                    }
+                    runPipelines();
+                } else {
+                    runPipelinesNoAudio();
+                }
             } else {
                 // no audio video
                 runPipelinesNoAudio();

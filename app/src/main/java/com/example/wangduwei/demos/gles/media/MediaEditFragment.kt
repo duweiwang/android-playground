@@ -32,6 +32,10 @@ class MediaEditFragment: BaseSupportFragment() {
         "6466608-hd_1080_1920_25fps.mp4"
     ).absolutePath
 
+    private val audioPath = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+        "file_example_MP3_1MG.mp3"
+    ).absolutePath
 
 
     override fun onCreateView(
@@ -106,6 +110,46 @@ class MediaEditFragment: BaseSupportFragment() {
             if (hasStoragePermission().not()) {
                 return@setOnClickListener
             }
+            val defaultText = "视频加音频输出"
+            audioOutput.isEnabled = false
+            audioOutput.text = "处理中 0%"
+            val outFile = File(requireContext().filesDir, "mix_audio_${System.currentTimeMillis()}.mp4")
+            Mp4Composer(videoPath, outFile.absolutePath)
+                .audioPath(audioPath)
+                .audioMode(Mp4Composer.AudioMode.MIX)
+                .listener(object : Mp4Composer.Listener {
+                    override fun onProgress(progress: Double) {
+                        val percent = (progress * 100).toInt().coerceIn(0, 100)
+                        activity?.runOnUiThread {
+                            audioOutput.text = "处理中 ${percent}%"
+                        }
+                    }
+
+                    override fun onCompleted() {
+                        activity?.runOnUiThread {
+                            audioOutput.isEnabled = true
+                            audioOutput.text = defaultText
+                            Toast.makeText(requireContext(), "输出完成: ${outFile.absolutePath}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onCanceled() {
+                        activity?.runOnUiThread {
+                            audioOutput.isEnabled = true
+                            audioOutput.text = defaultText
+                            Toast.makeText(requireContext(), "已取消", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailed(exception: Exception) {
+                        activity?.runOnUiThread {
+                            audioOutput.isEnabled = true
+                            audioOutput.text = defaultText
+                            Toast.makeText(requireContext(), "输出失败: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+                .start()
         }
 
     }

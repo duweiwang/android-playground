@@ -25,6 +25,12 @@ public class Mp4Composer {
 
     private final static String TAG = Mp4Composer.class.getSimpleName();
 
+    public enum AudioMode {
+        ORIGINAL,
+        REPLACE,
+        MIX
+    }
+
     private final String srcPath;
     private final String destPath;
     private GlFilter filter;
@@ -42,6 +48,8 @@ public class Mp4Composer {
     private long clipStartMs, clipEndMs;
     private boolean flipVertical = false;
     private boolean flipHorizontal = false;
+    private String audioPath;
+    private AudioMode audioMode = AudioMode.ORIGINAL;
 
     private ExecutorService executorService;
 
@@ -122,6 +130,16 @@ public class Mp4Composer {
 
     public Mp4Composer timeScale(final int timeScale) {
         this.timeScale = timeScale;
+        return this;
+    }
+
+    public Mp4Composer audioPath(@NonNull String audioPath) {
+        this.audioPath = audioPath;
+        return this;
+    }
+
+    public Mp4Composer audioMode(@NonNull AudioMode audioMode) {
+        this.audioMode = audioMode;
         return this;
     }
 
@@ -237,7 +255,9 @@ public class Mp4Composer {
                             flipVertical,
                             flipHorizontal,
                             clipStartMs,
-                            clipEndMs
+                            clipEndMs,
+                            audioPath,
+                            audioMode
                     );
 
                 } catch (Exception e) {
