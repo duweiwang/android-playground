@@ -123,6 +123,11 @@
         android:label="VideoDecodeFilterFragment" />
 
     <fragment
+        android:id="@+id/fragment_gl_export"
+        android:name="com.example.wangduwei.demos.gles.media.MediaEditFragment"
+        android:label="MediaEditFragment" />
+
+    <fragment
         android:id="@+id/fragment_gl_video_v2"
         android:name="com.example.wangduwei.demos.gles.media_filter.VideoDecodeFilterFragmentV2"
         android:label="VideoDecodeFilterFragment" />
