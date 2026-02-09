@@ -14,9 +14,6 @@ import com.example.lib_gles.video_filter.core.filter.GlFilter;
 import com.example.lib_gles.video_filter.utils.GlUtil;
 
 
-/**
- * Created by sudamasayuki on 2017/05/16.
- */
 public class GlPreviewFilter extends GlFilter {
 
     public static final int GL_TEXTURE_EXTERNAL_OES = 0x8D65;
