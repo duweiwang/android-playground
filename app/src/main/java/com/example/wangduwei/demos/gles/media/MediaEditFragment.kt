@@ -32,6 +32,14 @@ class MediaEditFragment: BaseSupportFragment() {
         "6466608-hd_1080_1920_25fps.mp4"
     ).absolutePath
 
+    private val videoPath2 = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+        "ForBiggerEscapes.mp4"
+    ).absolutePath
+
+
+
+
     private val audioPath = File(
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
         "file_example_MP3_1MG.mp3"
@@ -114,7 +122,7 @@ class MediaEditFragment: BaseSupportFragment() {
             audioOutput.isEnabled = false
             audioOutput.text = "处理中 0%"
             val outFile = File(requireContext().filesDir, "mix_audio_${System.currentTimeMillis()}.mp4")
-            Mp4Composer(videoPath, outFile.absolutePath)
+            Mp4Composer(videoPath2, outFile.absolutePath)
                 .audioPath(audioPath)
                 .audioMode(Mp4Composer.AudioMode.MIX)
                 .listener(object : Mp4Composer.Listener {
