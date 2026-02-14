@@ -32,7 +32,7 @@ import javax.microedition.khronos.opengles.GL10
 @PageInfo(
     description = "OpenGl视频特效",
     navigationId = R.id.fragment_gl_video_v2,
-    title = "OpenGl视频特效V2",
+    title = "OpenGl视频特效GLSurfaceView",
     preview = R.drawable.preview_opengl
 )
 class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {

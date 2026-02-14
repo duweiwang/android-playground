@@ -36,7 +36,7 @@ import java.io.IOException
 @PageInfo(
     description = "OpenGl视频特效",
     navigationId = R.id.fragment_gl_video,
-    title = "OpenGl视频特效",
+    title = "OpenGl视频特效TextureView",
     preview = R.drawable.preview_opengl
 )
 class VideoDecodeFilterFragment : BaseSupportFragment(), SurfaceTextureListener,
