@@ -3,6 +3,7 @@ package com.example.lib_gles.video_filter.core.filter;
 import android.util.Log;
 
 import com.example.lib_gles.video_filter.core.EFramebufferObject;
+import com.example.lib_gles.video_filter.core.GLogger;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +39,7 @@ public class GlFilterList {
     }
 
     public void draw(int texName, EFramebufferObject fbo, long presentationTimeUs, Map<String, Integer> extraTextureIds) {
-        Log.d(TAG, "draw: presentationTimeUs:"+presentationTimeUs+", glFilerPeriod:"+glFilerPeriod);
+        GLogger.d(TAG, "draw: presentationTimeUs:"+presentationTimeUs+", glFilerPeriod:"+glFilerPeriod);
         for (GlFilterPeriod glFilterPeriod : glFilerPeriod) {
             if (glFilterPeriod.contains(presentationTimeUs / (1000*1000))) {
                 needLastFrame = glFilterPeriod.filter.needLastFrame();
