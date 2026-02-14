@@ -241,7 +241,7 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
             default:
                 break;
         }
-        Log.d(TAG, "onDrawFrame: ...filterList:"+filterList);
+        GLogger.d(TAG, "onDrawFrame: ...filterList:"+filterList);
         if (filterList != null) {
             glFilterFBO.enable();
             glViewport(0, 0, glFilterFBO.getWidth(), glFilterFBO.getHeight());

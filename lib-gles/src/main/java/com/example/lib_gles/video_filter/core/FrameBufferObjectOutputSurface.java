@@ -61,7 +61,7 @@ public abstract class FrameBufferObjectOutputSurface implements SurfaceTexture.O
 
     @Override
     public void onFrameAvailable(SurfaceTexture st) {
-        if (VERBOSE) Log.d(TAG, "new frame available");
+        GLogger.d(TAG, "new frame available");
         synchronized (frameSyncObject) {
             if (frameAvailable) {
                 throw new RuntimeException("frameAvailable already set, frame could be dropped");
@@ -109,7 +109,7 @@ public abstract class FrameBufferObjectOutputSurface implements SurfaceTexture.O
 
 
     public void drawImage(long presentationTimeUs) {
-        Log.d(TAG, "drawImage: presentationTimeUs:" + presentationTimeUs);
+        GLogger.d(TAG, "drawImage: presentationTimeUs:" + presentationTimeUs);
         framebufferObject.enable();
         GLES20.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
 

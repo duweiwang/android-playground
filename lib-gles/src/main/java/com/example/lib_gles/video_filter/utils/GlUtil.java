@@ -8,6 +8,8 @@ import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.example.lib_gles.video_filter.core.GLogger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +19,12 @@ public class GlUtil {
     private static final String TAG = "GlUtil";
 
     public static void printMatrix(String matrxName, final float[] mvpMatrix) {
-        Log.d(TAG, "----------------"+matrxName+"-----------------");
+        GLogger.d(TAG, "----------------"+matrxName+"-----------------");
         String s = "";
         for (int i = 0; i < mvpMatrix.length; i++) {
             s += mvpMatrix[i]+",";
         }
-        Log.d(TAG, " " + s);
+        GLogger.d(TAG, " " + s);
     }
 
     /**
