@@ -117,6 +117,14 @@
         android:name="com.example.wangduwei.demos.gles.main.OpenGLFragment"
         android:label="OpenGLFragment" />
 
+    <fragment android:id="@+id/fragment_glsl_view"
+        android:name="com.example.wangduwei.demos.gles.glsl.GlslDemoFragment"
+        android:label="GlslDemoFragment"/>
+    <fragment
+        android:id="@+id/fragment_glsl_shader_preview"
+        android:name="com.example.wangduwei.demos.gles.glsl.ShaderPreviewFragment"
+        android:label="ShaderPreviewFragment" />
+
     <fragment
         android:id="@+id/fragment_gl_video"
         android:name="com.example.wangduwei.demos.gles.media_filter.VideoDecodeFilterFragment"
