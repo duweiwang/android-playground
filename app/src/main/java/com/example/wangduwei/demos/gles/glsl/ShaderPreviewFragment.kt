@@ -3,8 +3,10 @@ package com.example.wangduwei.demos.gles.glsl
 import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
+import android.opengl.GLUtils
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.example.lib_gles.ShaderHelper
 import com.example.lib_gles.TextResourceReader
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
+import android.graphics.BitmapFactory
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -22,6 +25,7 @@ import javax.microedition.khronos.opengles.GL10
 class ShaderPreviewFragment : BaseSupportFragment() {
 
     private lateinit var glSurfaceView: GLSurfaceView
+    private lateinit var renderer: ShaderRenderer
 
     @RawRes
     private var shaderResId: Int = 0
@@ -49,8 +53,13 @@ class ShaderPreviewFragment : BaseSupportFragment() {
         }
         glSurfaceView = view.findViewById(R.id.glsl_preview_surface)
         glSurfaceView.setEGLContextClientVersion(2)
-        glSurfaceView.setRenderer(ShaderRenderer(requireContext(), shaderResId))
+        renderer = ShaderRenderer(requireContext(), shaderResId)
+        glSurfaceView.setRenderer(renderer)
         glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        glSurfaceView.setOnTouchListener { _, event ->
+            handleTouch(event)
+            true
+        }
     }
 
     override fun onResume() {
@@ -61,6 +70,23 @@ class ShaderPreviewFragment : BaseSupportFragment() {
     override fun onPause() {
         glSurfaceView.onPause()
         super.onPause()
+    }
+
+    private fun handleTouch(event: MotionEvent) {
+        val width = glSurfaceView.width
+        val height = glSurfaceView.height
+        if (width <= 0 || height <= 0) {
+            return
+        }
+        val normalizedY = height - event.y
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                renderer.updateMouse(event.x, normalizedY, 1f)
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                renderer.updateMouse(event.x, normalizedY, 0f)
+            }
+        }
     }
 
     private class ShaderRenderer(
@@ -81,10 +107,19 @@ class ShaderPreviewFragment : BaseSupportFragment() {
         private var positionHandle: Int = -1
         private var resolutionHandle: Int = -1
         private var timeHandle: Int = -1
+        private var mouseHandle: Int = -1
+        private var channel0Handle: Int = -1
+        private var channel0TextureId: Int = 0
 
         private var surfaceWidth: Int = 1
         private var surfaceHeight: Int = 1
         private var startTimeMs: Long = 0L
+        @Volatile
+        private var mouseX: Float = 0f
+        @Volatile
+        private var mouseY: Float = 0f
+        @Volatile
+        private var mouseDown: Float = 0f
 
         override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
             val vertexShader = """
@@ -103,6 +138,9 @@ class ShaderPreviewFragment : BaseSupportFragment() {
             positionHandle = GLES20.glGetAttribLocation(programId, "aPosition")
             resolutionHandle = firstValidUniformLocation(programId, "uResolution", "iResolution")
             timeHandle = firstValidUniformLocation(programId, "uTime", "iTime")
+            mouseHandle = firstValidUniformLocation(programId, "uMouse", "iMouse")
+            channel0Handle = firstValidUniformLocation(programId, "uChannel0", "iChannel0")
+            channel0TextureId = createChannel0Texture()
             startTimeMs = SystemClock.elapsedRealtime()
 
             GLES20.glClearColor(0f, 0f, 0f, 1f)
@@ -128,6 +166,14 @@ class ShaderPreviewFragment : BaseSupportFragment() {
             }
             if (timeHandle >= 0) {
                 GLES20.glUniform1f(timeHandle, elapsedSeconds)
+            }
+            if (mouseHandle >= 0) {
+                GLES20.glUniform4f(mouseHandle, mouseX, mouseY, mouseDown, 0f)
+            }
+            if (channel0Handle >= 0 && channel0TextureId != 0) {
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, channel0TextureId)
+                GLES20.glUniform1i(channel0Handle, 0)
             }
 
             GLES20.glEnableVertexAttribArray(positionHandle)
@@ -161,6 +207,44 @@ class ShaderPreviewFragment : BaseSupportFragment() {
                 }
             }
             return -1
+        }
+
+        fun updateMouse(x: Float, y: Float, down: Float) {
+            mouseX = x
+            mouseY = y
+            mouseDown = down
+        }
+
+        private fun createChannel0Texture(): Int {
+            val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.img) ?: return 0
+            val textures = IntArray(1)
+            GLES20.glGenTextures(1, textures, 0)
+            val textureId = textures[0]
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
+            GLES20.glTexParameteri(
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR
+            )
+            GLES20.glTexParameteri(
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR
+            )
+            GLES20.glTexParameteri(
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_WRAP_S,
+                GLES20.GL_CLAMP_TO_EDGE
+            )
+            GLES20.glTexParameteri(
+                GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_WRAP_T,
+                GLES20.GL_CLAMP_TO_EDGE
+            )
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)
+            bitmap.recycle()
+            return textureId
         }
     }
 
