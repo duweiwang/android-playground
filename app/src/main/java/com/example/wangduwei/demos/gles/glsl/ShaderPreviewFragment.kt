@@ -107,7 +107,11 @@ class ShaderPreviewFragment : BaseSupportFragment() {
         private var positionHandle: Int = -1
         private var resolutionHandle: Int = -1
         private var timeHandle: Int = -1
-        private var mouseHandle: Int = -1
+        private var mouse4Handle: Int = -1
+        private var mouse2Handle: Int = -1
+        private var color3Handle: Int = -1
+        private var colorA3Handle: Int = -1
+        private var colorB3Handle: Int = -1
         private var channel0Handle: Int = -1
         private var channel0TextureId: Int = 0
 
@@ -125,9 +129,11 @@ class ShaderPreviewFragment : BaseSupportFragment() {
             val vertexShader = """
                 attribute vec2 aPosition;
                 varying vec2 vUv;
+                varying vec3 v_position;
 
                 void main() {
                     vUv = (aPosition + 1.0) * 0.5;
+                    v_position = vec3(aPosition, 0.0);
                     gl_Position = vec4(aPosition, 0.0, 1.0);
                 }
             """.trimIndent()
@@ -136,9 +142,18 @@ class ShaderPreviewFragment : BaseSupportFragment() {
 
             programId = ShaderHelper.buildProgram(vertexShader, fragmentShader)
             positionHandle = GLES20.glGetAttribLocation(programId, "aPosition")
-            resolutionHandle = firstValidUniformLocation(programId, "uResolution", "iResolution")
-            timeHandle = firstValidUniformLocation(programId, "uTime", "iTime")
-            mouseHandle = firstValidUniformLocation(programId, "uMouse", "iMouse")
+            resolutionHandle = firstValidUniformLocation(
+                programId,
+                "uResolution",
+                "iResolution",
+                "u_resolution"
+            )
+            timeHandle = firstValidUniformLocation(programId, "uTime", "iTime", "u_time")
+            mouse4Handle = firstValidUniformLocation(programId, "uMouse", "iMouse")
+            mouse2Handle = firstValidUniformLocation(programId, "u_mouse")
+            color3Handle = firstValidUniformLocation(programId, "uColor", "u_color")
+            colorA3Handle = firstValidUniformLocation(programId, "uColorA", "u_color_a")
+            colorB3Handle = firstValidUniformLocation(programId, "uColorB", "u_color_b")
             channel0Handle = firstValidUniformLocation(programId, "uChannel0", "iChannel0")
             channel0TextureId = createChannel0Texture()
             startTimeMs = SystemClock.elapsedRealtime()
@@ -167,8 +182,20 @@ class ShaderPreviewFragment : BaseSupportFragment() {
             if (timeHandle >= 0) {
                 GLES20.glUniform1f(timeHandle, elapsedSeconds)
             }
-            if (mouseHandle >= 0) {
-                GLES20.glUniform4f(mouseHandle, mouseX, mouseY, mouseDown, 0f)
+            if (mouse4Handle >= 0) {
+                GLES20.glUniform4f(mouse4Handle, mouseX, mouseY, mouseDown, 0f)
+            }
+            if (mouse2Handle >= 0) {
+                GLES20.glUniform2f(mouse2Handle, mouseX, mouseY)
+            }
+            if (color3Handle >= 0) {
+                GLES20.glUniform3f(color3Handle, 1f, 0f, 0f)
+            }
+            if (colorA3Handle >= 0) {
+                GLES20.glUniform3f(colorA3Handle, 1f, 0f, 0f)
+            }
+            if (colorB3Handle >= 0) {
+                GLES20.glUniform3f(colorB3Handle, 1f, 1f, 0f)
             }
             if (channel0Handle >= 0 && channel0TextureId != 0) {
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)

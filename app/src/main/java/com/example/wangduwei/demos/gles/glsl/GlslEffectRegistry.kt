@@ -31,6 +31,18 @@ object GlslEffectRegistry {
         ShaderEffectItem(
             name = "Aurora Noise (Shadertoy)",
             shaderResId = R.raw.aurora_noise_fragment_shader
+        ),
+        ShaderEffectItem(
+            name = "【基础】触摸屏幕换色",
+            shaderResId = R.raw.mouse_color_fragment_shader
+        ),
+        ShaderEffectItem(
+            name = "【基础】双矩形",
+            shaderResId = R.raw.double_rect_fragment_shader
+        ),
+        ShaderEffectItem(
+            name = "【基础】噪声双色流动",
+            shaderResId = R.raw.noise_dual_color_fragment_shader
         )
     )
 }
