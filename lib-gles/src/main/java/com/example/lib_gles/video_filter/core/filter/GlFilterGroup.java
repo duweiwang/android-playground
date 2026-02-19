@@ -62,6 +62,10 @@ public class GlFilterGroup extends GlFilter {
                 count++;
             }
         }
+
+        if (mWidth > 0 && mHeight > 0) {
+            setFrameSize(mWidth, mHeight);
+        }
     }
 
     @Override
@@ -96,6 +100,10 @@ public class GlFilterGroup extends GlFilter {
 
     @Override
     public int draw(final int texName, final EFramebufferObject fbo, Map<String,Integer> extraTextureIds) {
+        checkSetUp();
+        if ((mWidth <= 0 || mHeight <= 0) && fbo != null) {
+            setFrameSize(fbo.getWidth(), fbo.getHeight());
+        }
         prevTexName = texName;
         int textName = -1;
         Map<String, Integer> extraTexIds = new HashMap<>();

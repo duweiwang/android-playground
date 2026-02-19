@@ -1,5 +1,6 @@
 package com.example.wangduwei.demos.gles.media_filter
 
+import android.graphics.BitmapFactory
 import android.graphics.SurfaceTexture
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -18,9 +19,11 @@ import com.example.lib_gles.video_filter.core.bean.FillMode
 import com.example.lib_gles.video_filter.core.bean.FillModeCustomItem
 import com.example.lib_gles.video_filter.core.bean.Resolution
 import com.example.lib_gles.video_filter.core.filter.GlFilter
+import com.example.lib_gles.video_filter.core.filter.GlFilterGroup
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
 import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
 import com.example.lib_gles.video_filter.filter_impl.GlSoulOutFilter
+import com.example.lib_gles.video_filter.filter_impl.GlWatermarkFilter
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
@@ -79,8 +82,22 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         )
+
         btn.setOnClickListener {
-            glFilterList.putGlFilter(GlFilterPeriod(0L,10 * 1000L, GlSoulOutFilter(frameLayout.context)))
+            val watermarkBitmap = BitmapFactory.decodeResource(resources, R.drawable.guide_enjoy_haha)
+                ?: return@setOnClickListener
+            val watermarkFilter = GlWatermarkFilter(
+                watermarkBitmap,
+                24f,
+                0.8f,
+                1.0f,
+                GlWatermarkFilter.Position.RIGHT_BOTTOM
+            )
+            val group = GlFilterGroup(
+                GlSoulOutFilter(frameLayout.context),
+                watermarkFilter
+            )
+            glFilterList.putGlFilter(GlFilterPeriod(0L, Long.MAX_VALUE, group))
         }
     }
 
