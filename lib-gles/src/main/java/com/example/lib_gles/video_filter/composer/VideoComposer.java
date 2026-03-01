@@ -198,13 +198,19 @@ class VideoComposer {
         return DRAIN_STATE_CONSUMED;
     }
 
+    /**
+     * 尽量从解码器取解码帧并渲染
+     * @return
+     */
     private int drainDecoder() {
         if (isDecoderEOS) return DRAIN_STATE_NONE;
         int result = decoder.dequeueOutputBuffer(bufferInfo, 0);
         Log.d(TAG+".drainDecoder", "drainDecoder: dequeueOutputBuffer, return:"+result);
         switch (result) {
+            // 当前无可用输出，稍后重试。
             case MediaCodec.INFO_TRY_AGAIN_LATER:
                 return DRAIN_STATE_NONE;
+            // 输出状态变更，立即重试一次以尽快拿到有效帧。
             case MediaCodec.INFO_OUTPUT_FORMAT_CHANGED:
             case MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED:
                 return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
@@ -218,6 +224,7 @@ class VideoComposer {
 
         // added by shaopx begin
         Log.d(TAG+".drainDecoder", "drainDecoder: bufferInfo.presentationTimeUs:"+bufferInfo.presentationTimeUs +", endTimeMs:"+endTimeMs);
+        // 裁剪模式下，解码时间戳越界时，也要触发 encoder 输入 EOS，避免多写尾帧。
         if (enableClip() && bufferInfo.presentationTimeUs > endTimeMs*1000) {
             Log.w(TAG+".drainDecoder", "drainDecoder: reach the clip end ms! bufferInfo.offset:"+bufferInfo.offset+", size:"+bufferInfo.size+",presentationTimeUs:"+bufferInfo.presentationTimeUs);
             encoder.signalEndOfInputStream();
@@ -232,8 +239,10 @@ class VideoComposer {
 
         // NOTE: doRender will block if buffer (of encoder) is full.
         // Refer: http://bigflake.com/mediacodec/CameraToMpegTest.java.txt
+        // 归还 decoder 输出 buffer；doRender=true 时该 buffer 会被渲染到 SurfaceTexture。
         decoder.releaseOutputBuffer(result, doRender);
         if (doRender) {
+            // 等待 GPU 拿到新图像，执行滤镜绘制，再把帧提交给 encoder 的输入 surface。
             decoderSurface.awaitNewImage();
             decoderSurface.drawImage(bufferInfo.presentationTimeUs* 1000);
             encoderSurface.setPresentationTime(bufferInfo.presentationTimeUs * 1000);
@@ -242,14 +251,20 @@ class VideoComposer {
         return DRAIN_STATE_CONSUMED;
     }
 
+    /**
+     * 尽量从编码器取码流并写入 muxer
+     * @return
+     */
     private int drainEncoder() {
         if (isEncoderEOS) return DRAIN_STATE_NONE;
         int result = encoder.dequeueOutputBuffer(bufferInfo, 0);
         Log.d(TAG+".drainEncoder", "drainEncoder: dequeueOutputBuffer() return:"+result);
         switch (result) {
+            // 还没有编码产物，先返回。
             case MediaCodec.INFO_TRY_AGAIN_LATER:
                 return DRAIN_STATE_NONE;
             case MediaCodec.INFO_OUTPUT_FORMAT_CHANGED:
+                // 第一次格式变更时拿到真实输出格式（含 csd），并通知 muxer 建轨。
                 if (actualOutputFormat != null) {
                     throw new RuntimeException("Video output format changed twice.");
                 }
@@ -258,6 +273,7 @@ class VideoComposer {
                 muxRender.onSetOutputFormat();
                 return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
             case MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED:
+                // 旧 API 需要刷新输出 buffer 数组引用。
                 encoderOutputBuffers = encoder.getOutputBuffers();
                 return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
         }
