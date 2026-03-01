@@ -382,8 +382,6 @@ class MixAudioComposer implements IAudioComposer {
 
     private boolean feedEncoder(long timeoutUs) {
         if (encoderEOS) return false;
-        int inputIndex = encoder.dequeueInputBuffer(timeoutUs);
-        if (inputIndex < 0) return false;
 
         if (currentMain == null) currentMain = mainQueue.poll();
         if (currentExt == null) currentExt = extQueue.poll();
@@ -398,11 +396,16 @@ class MixAudioComposer implements IAudioComposer {
 
         if (startPtsUs == Long.MAX_VALUE) {
             if (mainDecoderEOS && extDecoderEOS && mainQueue.isEmpty() && extQueue.isEmpty()) {
-                encoder.queueInputBuffer(inputIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+                int eosInputIndex = encoder.dequeueInputBuffer(timeoutUs);
+                if (eosInputIndex < 0) return false;
+                encoder.queueInputBuffer(eosInputIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                 return true;
             }
             return false;
         }
+
+        int inputIndex = encoder.dequeueInputBuffer(timeoutUs);
+        if (inputIndex < 0) return false;
 
         if (targetDurationUs > 0 && startPtsUs >= targetDurationUs) {
             encoder.queueInputBuffer(inputIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
@@ -450,7 +453,9 @@ class MixAudioComposer implements IAudioComposer {
 
         int size = outBuffer.position() * 2;
         if (size == 0) {
-            return false;
+            // 避免 input buffer 被占住不归还：即便本轮没有采样，也要 queue 回编解码器。
+            encoder.queueInputBuffer(inputIndex, 0, 0, startPtsUs, 0);
+            return true;
         }
         encoder.queueInputBuffer(inputIndex, 0, size, startPtsUs, 0);
         return true;

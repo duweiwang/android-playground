@@ -176,7 +176,7 @@ class MediaEditFragment: BaseSupportFragment() {
                 return@setOnClickListener
             }
 
-            val composeFilter = GlFilterGroup(
+            val filterGroup = GlFilterGroup(
                 GlWatermarkFilter(watermarkBitmap,
                     24f,
                     0.8f,
@@ -189,9 +189,13 @@ class MediaEditFragment: BaseSupportFragment() {
             filterEffectOutput.isEnabled = false
             filterEffectOutput.text = "处理中 0%"
             val outFile = File(requireContext().filesDir, "watermark_soulout_audio_mix_${System.currentTimeMillis()}.mp4")
+
+            val glFilterList = GlFilterList()
+            glFilterList.putGlFilter(GlFilterPeriod(0L,7 * 1000L, filterGroup))
             Mp4Composer(videoPath, outFile.absolutePath)
-                .filter(composeFilter)
+                .filterList(glFilterList)
                 .audioPath(audioPath)
+                .clip(0, 7_000)
                 .audioMode(Mp4Composer.AudioMode.MIX)
                 .listener(object : Mp4Composer.Listener {
                     override fun onProgress(progress: Double) {
