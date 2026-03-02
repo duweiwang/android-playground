@@ -74,7 +74,8 @@ class Mp4ComposerEngine {
             MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
             mediaMetadataRetriever.setDataSource(inputFileDescriptor);
             if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
-                durationUs = endTimeMs - startTimeMs;
+                // clip 参数单位是 ms，这里统一换算成 us 供后续音视频进度与时长比较使用。
+                durationUs = (endTimeMs - startTimeMs) * 1000L;
             } else {
                 try {
                     durationUs = Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000;
