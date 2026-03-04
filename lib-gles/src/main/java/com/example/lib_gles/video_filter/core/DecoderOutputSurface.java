@@ -13,6 +13,8 @@ import android.opengl.Matrix;
 import android.util.Log;
 import android.view.Surface;
 
+import androidx.annotation.Nullable;
+
 import com.example.lib_gles.video_filter.core.bean.FillMode;
 import com.example.lib_gles.video_filter.core.bean.FillModeCustomItem;
 import com.example.lib_gles.video_filter.core.bean.Resolution;
@@ -52,11 +54,13 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
 
     private GlFilter glFilter;
     private GlFilterList filterList;
-    private EFramebufferObject glFilterFBO;
+    private EFramebufferObject glFilterFrameBuffer;
 
     private GlPreviewFilter previewFilter;
 
     private boolean isNewFilter;
+    @Nullable
+    private Runnable frameAvailableCallback;
 
     /**
      * Creates an DecoderSurface using the current EGL context (rather than establishing a
@@ -69,6 +73,18 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
             isNewFilter = true;
         }
 
+    }
+
+    public void setFrameAvailableCallback(@Nullable Runnable frameAvailableCallback) {
+        this.frameAvailableCallback = frameAvailableCallback;
+    }
+
+    @Override
+    public void onFrameAvailable(SurfaceTexture st) {
+        super.onFrameAvailable(st);
+        if (frameAvailableCallback != null) {
+            frameAvailableCallback.run();
+        }
     }
 
     @Override
@@ -101,8 +117,8 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         GLES20.glBindTexture(GL_TEXTURE_2D, 0);
 
 
-        glFilterFBO = new EFramebufferObject();
-        glFilterFBO.setup(outputResolution.width(), outputResolution.height());
+        glFilterFrameBuffer = new EFramebufferObject();
+        glFilterFrameBuffer.setup(outputResolution.width(), outputResolution.height());
 
         previewFilter = new GlPreviewFilter(GL_TEXTURE_EXTERNAL_OES);
         previewFilter.setup();
@@ -154,6 +170,11 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
      */
     public Surface getSurface() {
         return surface;
+    }
+
+    @Nullable
+    public SurfaceTexture getSurfaceTexture() {
+        return surfaceTexture;
     }
 
 
@@ -243,19 +264,19 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
         }
         GLogger.d(TAG, "onDrawFrame: ...filterList:"+filterList);
         if (filterList != null) {
-            glFilterFBO.enable();
-            glViewport(0, 0, glFilterFBO.getWidth(), glFilterFBO.getHeight());
+            glFilterFrameBuffer.enable();
+            glViewport(0, 0, glFilterFrameBuffer.getWidth(), glFilterFrameBuffer.getHeight());
             GLES20.glClear(GL_COLOR_BUFFER_BIT);
         }
         surfaceTexture.getTransformMatrix(STMatrix);
 
-        // 这句绘制的目的地是哪?  --如果glFilterFBO没有启用, 那就是父类的framebufferObject, 否则就是glFilterFBO
+        // 这句绘制的目的地是哪?  --如果glFilterFrameBuffer没有启用, 那就fbo, 否则就是glFilterFrameBuffer
         previewFilter.draw(textureID, MVPMatrix, STMatrix, 1.0f);
 
         if (filterList != null) {
             fbo.enable();  // 重新启用了最外层的fbo , 那么glFilter的输出就到了这个fbo .
             GLES20.glClear(GL_COLOR_BUFFER_BIT);
-            filterList.draw(glFilterFBO.getTexName(), fbo, presentationTimeUs, extraTextureIds);
+            filterList.draw(glFilterFrameBuffer.getTexName(), fbo, presentationTimeUs, extraTextureIds);
         }
     }
 
@@ -273,6 +294,33 @@ public class DecoderOutputSurface extends FrameBufferObjectOutputSurface {
 
     public void setOutputResolution(Resolution resolution) {
         this.outputResolution = resolution;
+    }
+
+    public void resizeOutput(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+        if (outputResolution != null
+                && outputResolution.width() == width
+                && outputResolution.height() == height) {
+            return;
+        }
+        Resolution oldOutput = outputResolution;
+        boolean updateInput = inputResolution != null
+                && oldOutput != null
+                && inputResolution.width() == oldOutput.width()
+                && inputResolution.height() == oldOutput.height();
+        outputResolution = new Resolution(width, height);
+        if (updateInput) {
+            inputResolution = new Resolution(width, height);
+        }
+        resizeAll(width, height);
+        if (glFilterFrameBuffer != null) {
+            glFilterFrameBuffer.setup(width, height);
+        }
+        if (filterList != null) {
+            filterList.setFrameSize(width, height);
+        }
     }
 
     public void setFillMode(FillMode fillMode) {
