@@ -19,9 +19,11 @@ class MixAudioComposer implements IAudioComposer {
     private static final int DRAIN_STATE_NONE = 0;
     private static final int DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY = 1;
     private static final int DRAIN_STATE_CONSUMED = 2;
+    private static final int DEFAULT_SAMPLE_RATE = 44100;
+    private static final int DEFAULT_CHANNEL_COUNT = 2;
 
     private final MediaExtractor mainExtractor;
-    private final int mainTrackIndex;
+    private int mainTrackIndex;
     private final MediaExtractor extExtractor = new MediaExtractor();
     private final int extTrackIndex;
     private MediaFormat encoderFormat;
@@ -93,12 +95,16 @@ class MixAudioComposer implements IAudioComposer {
 
     @Override
     public void setup() {
+        mainTrackIndex = resolveMainAudioTrackIndex(mainExtractor, mainTrackIndex);
+        if (mainTrackIndex < 0) {
+            throw new IllegalArgumentException("No audio track found in source media.");
+        }
         mainExtractor.selectTrack(mainTrackIndex);
         extExtractor.selectTrack(extTrackIndex);
 
         final MediaFormat mainInputFormat = mainExtractor.getTrackFormat(mainTrackIndex);
-        sampleRate = mainInputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-        channelCount = mainInputFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+        sampleRate = getFormatInt(mainInputFormat, MediaFormat.KEY_SAMPLE_RATE, DEFAULT_SAMPLE_RATE);
+        channelCount = getFormatInt(mainInputFormat, MediaFormat.KEY_CHANNEL_COUNT, DEFAULT_CHANNEL_COUNT);
 
         encoderFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", sampleRate, channelCount);
         encoderFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
@@ -115,12 +121,12 @@ class MixAudioComposer implements IAudioComposer {
         encoderStarted = true;
         encoderBuffers = new MediaCodecBufferCompatWrapper(encoder);
 
-        if (mainInputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE) != sampleRate ||
-                mainInputFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT) != channelCount) {
-            throw new UnsupportedOperationException("Main audio format does not match output format.");
+        String mainMime = mainInputFormat.getString(MediaFormat.KEY_MIME);
+        if (mainMime == null || !mainMime.startsWith("audio/")) {
+            throw new IllegalArgumentException("Invalid main audio mime type.");
         }
         try {
-            mainDecoder = MediaCodec.createDecoderByType(mainInputFormat.getString(MediaFormat.KEY_MIME));
+            mainDecoder = MediaCodec.createDecoderByType(mainMime);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -130,10 +136,14 @@ class MixAudioComposer implements IAudioComposer {
         mainDecoderBuffers = new MediaCodecBufferCompatWrapper(mainDecoder);
 
         final MediaFormat extInputFormat = extExtractor.getTrackFormat(extTrackIndex);
-        extSampleRate = extInputFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-        extChannelCount = extInputFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+        extSampleRate = getFormatInt(extInputFormat, MediaFormat.KEY_SAMPLE_RATE, sampleRate);
+        extChannelCount = getFormatInt(extInputFormat, MediaFormat.KEY_CHANNEL_COUNT, channelCount);
+        String extMime = extInputFormat.getString(MediaFormat.KEY_MIME);
+        if (extMime == null || !extMime.startsWith("audio/")) {
+            throw new IllegalArgumentException("Invalid external audio mime type.");
+        }
         try {
-            extDecoder = MediaCodec.createDecoderByType(extInputFormat.getString(MediaFormat.KEY_MIME));
+            extDecoder = MediaCodec.createDecoderByType(extMime);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
@@ -545,6 +555,28 @@ class MixAudioComposer implements IAudioComposer {
             }
         }
         return -1;
+    }
+
+    private static int resolveMainAudioTrackIndex(MediaExtractor extractor, int preferredTrackIndex) {
+        if (preferredTrackIndex >= 0 && preferredTrackIndex < extractor.getTrackCount()) {
+            MediaFormat format = extractor.getTrackFormat(preferredTrackIndex);
+            String mime = format.getString(MediaFormat.KEY_MIME);
+            if (mime != null && mime.startsWith("audio/")) {
+                return preferredTrackIndex;
+            }
+        }
+        return selectAudioTrack(extractor);
+    }
+
+    private static int getFormatInt(MediaFormat format, String key, int fallback) {
+        if (format != null && format.containsKey(key)) {
+            try {
+                return format.getInteger(key);
+            } catch (RuntimeException ignore) {
+                // Fallback below.
+            }
+        }
+        return fallback;
     }
 
     private static class PcmBuffer {
