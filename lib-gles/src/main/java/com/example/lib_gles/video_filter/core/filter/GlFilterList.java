@@ -21,12 +21,22 @@ public class GlFilterList {
     private boolean needLastFrame = false;
 
     public GlFilterList() {
-        glFilerPeriod.add(0, new GlFilterPeriod(0, 600 * 1000, new GlFilter()));
+        glFilerPeriod.add(0, new GlFilterPeriod(0, Long.MAX_VALUE, new GlFilter()));
     }
 
     public void putGlFilter(GlFilterPeriod period) {
 //        period.filter.setup();
         glFilerPeriod.add(0, period);
+    }
+
+    /**
+     * Keep the built-in default filter and remove all user-added filters.
+     */
+    public void clearAddedFilters() {
+        while (glFilerPeriod.size() > 1) {
+            GlFilterPeriod period = glFilerPeriod.removeFirst();
+            period.filter.release();
+        }
     }
 
     public GlFilter getGlFilter(long time) {

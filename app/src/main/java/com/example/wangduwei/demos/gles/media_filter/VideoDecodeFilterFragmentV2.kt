@@ -22,7 +22,7 @@ import com.example.lib_gles.video_filter.core.filter.GlFilter
 import com.example.lib_gles.video_filter.core.filter.GlFilterGroup
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
 import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
-import com.example.lib_gles.video_filter.filter_impl.GlSoulOutFilter
+import com.example.lib_gles.video_filter.filter_impl.GlNeonBorderFilter
 import com.example.lib_gles.video_filter.filter_impl.GlWatermarkFilter
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
@@ -69,6 +69,26 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
             initAndAddTexture(view)
             addFilterBtn(view)
             addScaleBtn(view)
+
+            addClearBtn(view)
+        }
+    }
+
+    private fun addClearBtn(frameLayout: FrameLayout) {
+        val btn = Button(frameLayout.context)
+        btn.text = "clear filter"
+        frameLayout.addView(
+            btn,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.BOTTOM
+            }
+        )
+
+        btn.setOnClickListener {
+            glFilterList.clearAddedFilters()
         }
     }
 
@@ -94,7 +114,7 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
                 GlWatermarkFilter.Position.RIGHT_BOTTOM
             )
             val group = GlFilterGroup(
-                GlSoulOutFilter(frameLayout.context),
+                GlNeonBorderFilter(),
                 watermarkFilter
             )
             glFilterList.putGlFilter(GlFilterPeriod(0L, Long.MAX_VALUE, group))
