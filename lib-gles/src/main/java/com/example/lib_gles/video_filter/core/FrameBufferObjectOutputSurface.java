@@ -6,6 +6,7 @@ import static android.opengl.GLES20.GL_FRAMEBUFFER;
 
 import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.util.Log;
 
 
@@ -47,6 +48,27 @@ public abstract class FrameBufferObjectOutputSurface implements SurfaceTexture.O
         pboIds = EglUtil.genPbo(PBO_SIZE, mWidth, mHeight);
 
         setup();
+    }
+
+    protected final void resizeAll(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+        if (width == mWidth && height == mHeight) {
+            return;
+        }
+        if (framebufferObject == null || lastFrameFBO == null || normalShader == null) {
+            return;
+        }
+        mWidth = width;
+        mHeight = height;
+        framebufferObject.setup(mWidth, mHeight);
+        lastFrameFBO.setup(mWidth, mHeight);
+        normalShader.setFrameSize(mWidth, mHeight);
+        if (pboIds != null && pboIds.length > 0) {
+            GLES30.glDeleteBuffers(pboIds.length, pboIds, 0);
+        }
+        pboIds = EglUtil.genPbo(PBO_SIZE, mWidth, mHeight);
     }
 
     protected abstract int getOutputHeight();
@@ -105,6 +127,24 @@ public abstract class FrameBufferObjectOutputSurface implements SurfaceTexture.O
         // Latch the data.
         GlUtils.checkGlError("before updateTexImage");
         surfaceTexture.updateTexImage();
+    }
+
+    public boolean updateTexImageIfAvailable() {
+        if (stopRun) {
+            return false;
+        }
+        boolean updated = false;
+        synchronized (frameSyncObject) {
+            if (frameAvailable) {
+                frameAvailable = false;
+                updated = true;
+            }
+        }
+        if (updated) {
+            GlUtils.checkGlError("before updateTexImage");
+            surfaceTexture.updateTexImage();
+        }
+        return updated;
     }
 
 
