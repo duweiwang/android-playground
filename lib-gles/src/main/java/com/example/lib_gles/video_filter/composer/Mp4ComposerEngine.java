@@ -96,19 +96,26 @@ class Mp4ComposerEngine {
 
             MuxRender muxRender = new MuxRender(mediaMuxer);
 
-            // identify track indices
-            MediaFormat format = mediaExtractor.getTrackFormat(0);
-            String mime = format.getString(MediaFormat.KEY_MIME);
-
-            final int videoTrackIndex;
-            final int audioTrackIndex;
-
-            if (mime.startsWith("video/")) {
-                videoTrackIndex = 0;
-                audioTrackIndex = 1;
-            } else {
-                videoTrackIndex = 1;
-                audioTrackIndex = 0;
+            // identify track indices by MIME type instead of assuming 0/1 order
+            int detectedVideoTrackIndex = -1;
+            int detectedAudioTrackIndex = -1;
+            int trackCount = mediaExtractor.getTrackCount();
+            for (int i = 0; i < trackCount; i++) {
+                MediaFormat trackFormat = mediaExtractor.getTrackFormat(i);
+                String mime = trackFormat.getString(MediaFormat.KEY_MIME);
+                if (mime == null) {
+                    continue;
+                }
+                if (detectedVideoTrackIndex < 0 && mime.startsWith("video/")) {
+                    detectedVideoTrackIndex = i;
+                } else if (detectedAudioTrackIndex < 0 && mime.startsWith("audio/")) {
+                    detectedAudioTrackIndex = i;
+                }
+            }
+            final int videoTrackIndex = detectedVideoTrackIndex;
+            final int audioTrackIndex = detectedAudioTrackIndex;
+            if (videoTrackIndex < 0) {
+                throw new IllegalArgumentException("No video track found in input source.");
             }
 
             // setup video composer
@@ -122,7 +129,8 @@ class Mp4ComposerEngine {
 
 
             // setup audio if present and not muted
-            boolean hasAudio = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null;
+            boolean hasAudio = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null
+                    && audioTrackIndex >= 0;
             boolean useExternalAudio = audioPath != null && audioPath.length() > 0
                     && audioMode != null
                     && audioMode != Mp4Composer.AudioMode.ORIGINAL;

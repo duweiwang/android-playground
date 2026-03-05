@@ -225,7 +225,8 @@ class VideoComposer {
         // added by shaopx begin
         Log.d(TAG+".drainDecoder", "drainDecoder: bufferInfo.presentationTimeUs:"+bufferInfo.presentationTimeUs +", endTimeMs:"+endTimeMs);
         // 裁剪模式下，解码时间戳越界时，也要触发 encoder 输入 EOS，避免多写尾帧。
-        if (enableClip() && bufferInfo.presentationTimeUs > endTimeMs*1000) {
+        boolean outOfClipEnd = enableClip() && bufferInfo.presentationTimeUs > endTimeMs * 1000;
+        if (outOfClipEnd) {
             Log.w(TAG+".drainDecoder", "drainDecoder: reach the clip end ms! bufferInfo.offset:"+bufferInfo.offset+", size:"+bufferInfo.size+",presentationTimeUs:"+bufferInfo.presentationTimeUs);
             encoder.signalEndOfInputStream();
             isDecoderEOS = true;
@@ -233,7 +234,8 @@ class VideoComposer {
         }
         // added by shaopx end
 
-        boolean doRender = (bufferInfo.size > 0);
+        boolean codecConfigBuffer = (bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0;
+        boolean doRender = bufferInfo.size > 0 && !codecConfigBuffer && !outOfClipEnd;
 
 
 
@@ -307,6 +309,6 @@ class VideoComposer {
     public void setClipRange(long startTimeMs, long endTimeMs) {
         this.startTimeMs = startTimeMs;
         this.endTimeMs = endTimeMs;
-        mediaExtractor.seekTo(startTimeMs, SEEK_TO_PREVIOUS_SYNC);
+        mediaExtractor.seekTo(startTimeMs * 1000L, SEEK_TO_PREVIOUS_SYNC);
     }
 }
