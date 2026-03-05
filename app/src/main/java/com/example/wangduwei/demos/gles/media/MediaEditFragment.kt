@@ -80,6 +80,7 @@ class MediaEditFragment: BaseSupportFragment() {
             filterOutput.text = "处理中 0%"
             val outFile = File(requireContext().filesDir, "clip_filter_${System.currentTimeMillis()}.mp4")
             Mp4Composer(videoPath, outFile.absolutePath)
+                .size(720, 1280)
                 .clip(0, 3_000)
                 .filterList(filterList)
                 .listener(object : Mp4Composer.Listener {
@@ -128,6 +129,7 @@ class MediaEditFragment: BaseSupportFragment() {
             audioOutput.text = "处理中 0%"
             val outFile = File(requireContext().filesDir, "mix_audio_${System.currentTimeMillis()}.mp4")
             Mp4Composer(videoPath2, outFile.absolutePath)
+                .size(720, 1280)
                 .audioPath(audioPath)
                 .audioMode(Mp4Composer.AudioMode.MIX)
                 .listener(object : Mp4Composer.Listener {
@@ -193,6 +195,7 @@ class MediaEditFragment: BaseSupportFragment() {
             val glFilterList = GlFilterList()
             glFilterList.putGlFilter(GlFilterPeriod(0L,7 * 1000L, filterGroup))
             Mp4Composer(videoPath, outFile.absolutePath)
+                .size(720, 1280)
                 .filterList(glFilterList)
                 .audioPath(audioPath)
                 .clip(0, 7_000)
