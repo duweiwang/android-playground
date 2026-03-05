@@ -172,6 +172,16 @@ class MediaEditFragment: BaseSupportFragment() {
                 return@setOnClickListener
             }
 
+            if (!File(videoPath).exists()) {
+                Toast.makeText(requireContext(), "视频不存在", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (!File(audioPath).exists()) {
+                Toast.makeText(requireContext(), "音频不存在", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val watermarkBitmap = BitmapFactory.decodeResource(resources, R.drawable.guide_enjoy_haha)
             if (watermarkBitmap == null) {
                 Toast.makeText(requireContext(), "水印资源加载失败", Toast.LENGTH_SHORT).show()
