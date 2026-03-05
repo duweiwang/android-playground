@@ -193,7 +193,13 @@ class VideoComposer {
             return DRAIN_STATE_NONE;
         }
 
-        decoder.queueInputBuffer(result, 0, sampleSize, sampleTime / timeScale, isKeyFrame ? MediaCodec.BUFFER_FLAG_SYNC_FRAME : 0);
+        long queuedPtsUs = sampleTime;
+        if (enableClip()) {
+            long clipStartUs = startTimeMs * 1000L;
+            queuedPtsUs = Math.max(0L, sampleTime - clipStartUs);
+        }
+        queuedPtsUs = queuedPtsUs / timeScale;
+        decoder.queueInputBuffer(result, 0, sampleSize, queuedPtsUs, isKeyFrame ? MediaCodec.BUFFER_FLAG_SYNC_FRAME : 0);
         mediaExtractor.advance();
         return DRAIN_STATE_CONSUMED;
     }
@@ -292,6 +298,14 @@ class VideoComposer {
             // SPS or PPS, which should be passed by MediaFormat.
             encoder.releaseOutputBuffer(result, false);
             return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
+        }
+        if (enableClip()) {
+            long clipDurationUs = (endTimeMs - startTimeMs) * 1000L / timeScale;
+            if (bufferInfo.presentationTimeUs >= clipDurationUs) {
+                isEncoderEOS = true;
+                encoder.releaseOutputBuffer(result, false);
+                return DRAIN_STATE_CONSUMED;
+            }
         }
         Log.d(TAG+".drainEncoder", "drainEncoder: writeSampleData time:"+bufferInfo.presentationTimeUs);
         muxRender.writeSampleData(MuxRender.SampleType.VIDEO, encoderOutputBuffers[result], bufferInfo);

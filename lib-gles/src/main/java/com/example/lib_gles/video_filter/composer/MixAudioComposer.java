@@ -494,6 +494,12 @@ class MixAudioComposer implements IAudioComposer {
             encoder.releaseOutputBuffer(result, false);
             return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
         }
+        if (targetDurationUs > 0 && encoderBufferInfo.presentationTimeUs >= targetDurationUs) {
+            encoderEOS = true;
+            unselectMainTrackIfNeeded();
+            encoder.releaseOutputBuffer(result, false);
+            return DRAIN_STATE_CONSUMED;
+        }
 
         muxer.writeSampleData(SAMPLE_TYPE, encoderBuffers.getOutputBuffer(result), encoderBufferInfo);
         writtenPresentationTimeUs = encoderBufferInfo.presentationTimeUs;
