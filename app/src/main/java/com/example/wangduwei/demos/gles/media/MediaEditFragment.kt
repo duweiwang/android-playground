@@ -32,8 +32,8 @@ import java.io.File
 class MediaEditFragment: BaseSupportFragment() {
 
     private val videoPath = File(
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-        "test.mp4"
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+        "/Camera/PXL_20260302_053006835.mp4"
     ).absolutePath
 
     private val videoPath2 = File(
