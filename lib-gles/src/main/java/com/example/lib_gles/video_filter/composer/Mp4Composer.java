@@ -194,7 +194,16 @@ public class Mp4Composer {
                 }
 
                 final int videoRotate = getVideoRotation(srcPath);
-                final Resolution srcVideoResolution = getVideoResolution(srcPath, videoRotate);
+                final Resolution srcVideoResolution;
+                try {
+                    srcVideoResolution = getVideoResolution(srcPath, videoRotate);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if (listener != null) {
+                        listener.onFailed(e);
+                    }
+                    return;
+                }
 
                 if (filter == null) {
                     filter = new GlFilter();
@@ -326,7 +335,7 @@ public class Mp4Composer {
         return bitrate;
     }
 
-    private Resolution getVideoResolution(final String path, final int rotation) {
+    private Resolution getVideoResolution(final String path, final int rotation) throws IOException {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
         int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));

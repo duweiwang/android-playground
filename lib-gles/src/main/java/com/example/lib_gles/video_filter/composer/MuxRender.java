@@ -6,7 +6,6 @@ import android.media.MediaMuxer;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +13,19 @@ import java.util.List;
 
 class MuxRender {
     private static final String TAG = "MuxRender";
-    private static final int BUFFER_SIZE = 64 * 1024; // I have no idea whether this value is appropriate or not...
+    private static final int MAX_PENDING_BYTES = 32 * 1024 * 1024;
     private final MediaMuxer muxer;
     private MediaFormat videoFormat;
     private MediaFormat audioFormat;
     private int videoTrackIndex;
     private int audioTrackIndex;
-    private ByteBuffer byteBuffer;
-    private final List<SampleInfo> sampleInfoList;
+    private final List<PendingSample> pendingSamples;
+    private int pendingBytes;
     private boolean started;
 
     MuxRender(MediaMuxer muxer) {
         this.muxer = muxer;
-        sampleInfoList = new ArrayList<>();
+        pendingSamples = new ArrayList<>();
     }
 
     void setOutputFormat(SampleType sampleType, MediaFormat format) {
@@ -61,23 +60,13 @@ class MuxRender {
         muxer.start();
         started = true;
 
-        if (byteBuffer == null) {
-            byteBuffer = ByteBuffer.allocate(0);
+        Log.v(TAG, "Output format determined, writing " + pendingSamples.size()
+                + " pending samples / " + pendingBytes + " bytes to muxer.");
+        for (PendingSample sample : pendingSamples) {
+            muxer.writeSampleData(getTrackIndexForSampleType(sample.sampleType), sample.data, sample.bufferInfo);
         }
-        byteBuffer.flip();
-        Log.v(TAG, "Output format determined, writing " + sampleInfoList.size() +
-                " samples / " + byteBuffer.limit() + " bytes to muxer.");
-        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-        int offset = 0;
-        for (SampleInfo sampleInfo : sampleInfoList) {
-            sampleInfo.writeToBufferInfo(bufferInfo, offset);
-            muxer.writeSampleData(getTrackIndexForSampleType(sampleInfo.sampleType), byteBuffer, bufferInfo);
-            offset += sampleInfo.size;
-        }
-        sampleInfoList.clear();
-        byteBuffer = null;
-
-
+        pendingSamples.clear();
+        pendingBytes = 0;
     }
 
     void writeSampleData(SampleType sampleType, ByteBuffer byteBuf, MediaCodec.BufferInfo bufferInfo) {
@@ -85,13 +74,31 @@ class MuxRender {
             muxer.writeSampleData(getTrackIndexForSampleType(sampleType), byteBuf, bufferInfo);
             return;
         }
-        byteBuf.limit(bufferInfo.offset + bufferInfo.size);
-        byteBuf.position(bufferInfo.offset);
-        if (byteBuffer == null) {
-            byteBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE).order(ByteOrder.nativeOrder());
+        if (bufferInfo.size <= 0) {
+            return;
         }
-        byteBuffer.put(byteBuf);
-        sampleInfoList.add(new SampleInfo(sampleType, bufferInfo.size, bufferInfo));
+        int nextPendingBytes = pendingBytes + bufferInfo.size;
+        if (nextPendingBytes > MAX_PENDING_BYTES) {
+            String msg = "MuxRender pending sample bytes exceed limit before muxer start. "
+                    + "sampleType=" + sampleType
+                    + ", sampleSize=" + bufferInfo.size
+                    + ", samplePtsUs=" + bufferInfo.presentationTimeUs
+                    + ", pendingSamples=" + pendingSamples.size()
+                    + ", pendingBytes=" + pendingBytes
+                    + ", limit=" + MAX_PENDING_BYTES;
+            throw new IllegalStateException(msg);
+        }
+        ByteBuffer duplicated = byteBuf.duplicate();
+        duplicated.position(bufferInfo.offset);
+        duplicated.limit(bufferInfo.offset + bufferInfo.size);
+        ByteBuffer sampleData = ByteBuffer.allocateDirect(bufferInfo.size);
+        sampleData.put(duplicated);
+        sampleData.flip();
+
+        MediaCodec.BufferInfo copiedBufferInfo = new MediaCodec.BufferInfo();
+        copiedBufferInfo.set(0, bufferInfo.size, bufferInfo.presentationTimeUs, bufferInfo.flags);
+        pendingSamples.add(new PendingSample(sampleType, sampleData, copiedBufferInfo));
+        pendingBytes = nextPendingBytes;
     }
 
     private int getTrackIndexForSampleType(SampleType sampleType) {
@@ -107,21 +114,15 @@ class MuxRender {
 
     public enum SampleType {VIDEO, AUDIO}
 
-    private static class SampleInfo {
+    private static class PendingSample {
         private final SampleType sampleType;
-        private final int size;
-        private final long presentationTimeUs;
-        private final int flags;
+        private final ByteBuffer data;
+        private final MediaCodec.BufferInfo bufferInfo;
 
-        private SampleInfo(SampleType sampleType, int size, MediaCodec.BufferInfo bufferInfo) {
+        private PendingSample(SampleType sampleType, ByteBuffer data, MediaCodec.BufferInfo bufferInfo) {
             this.sampleType = sampleType;
-            this.size = size;
-            presentationTimeUs = bufferInfo.presentationTimeUs;
-            flags = bufferInfo.flags;
-        }
-
-        private void writeToBufferInfo(MediaCodec.BufferInfo bufferInfo, int offset) {
-            bufferInfo.set(offset, size, presentationTimeUs, flags);
+            this.data = data;
+            this.bufferInfo = bufferInfo;
         }
     }
 
