@@ -57,7 +57,7 @@ class Mp4ComposerEngine {
             final Resolution inputResolution,
             final FillMode fillMode,
             final FillModeCustomItem fillModeCustomItem,
-            final int timeScale,
+            final double timeScale,
             final boolean flipVertical,
             final boolean flipHorizontal,
             final long startTimeMs,
@@ -134,6 +134,8 @@ class Mp4ComposerEngine {
             boolean useExternalAudio = audioPath != null && audioPath.length() > 0
                     && audioMode != null
                     && audioMode != Mp4Composer.AudioMode.ORIGINAL;
+
+            //TODO：timeScale != 1 时，audioComposer最好也有对应处理
 
             if (!mute && (hasAudio || useExternalAudio)) {
                 if (useExternalAudio && audioMode == Mp4Composer.AudioMode.REPLACE) {

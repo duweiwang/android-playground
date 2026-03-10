@@ -43,7 +43,7 @@ public class Mp4Composer {
     private Listener listener;
     private FillMode fillMode = FillMode.PRESERVE_ASPECT_FIT;
     private FillModeCustomItem fillModeCustomItem;
-    private int timeScale = 1;
+    private double timeScale = 1;
     private float resolutionScale = 1f;
     private long clipStartMs, clipEndMs;
     private boolean flipVertical = false;
@@ -128,7 +128,7 @@ public class Mp4Composer {
         return this;
     }
 
-    public Mp4Composer timeScale(final int timeScale) {
+    public Mp4Composer timeScale(final double timeScale) {
         this.timeScale = timeScale;
         return this;
     }
@@ -224,9 +224,10 @@ public class Mp4Composer {
                     ((IResolutionFilter) filter).setResolution(outputResolution);
                 }
 
-                if (timeScale < 2) {
-                    timeScale = 1;
-                }
+                // 允许慢速播放
+//                if (timeScale < 2) {
+//                    timeScale = 1;
+//                }
 
                 Log.d(TAG, "filterList = " + filterList);
                 Log.d(TAG, "rotation = " + (rotation.getRotation() + videoRotate));

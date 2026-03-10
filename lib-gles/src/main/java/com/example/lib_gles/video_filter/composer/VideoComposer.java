@@ -47,10 +47,10 @@ class VideoComposer {
     private boolean decoderStarted;
     private boolean encoderStarted;
     private long writtenPresentationTimeUs;
-    private final int timeScale;
+    private final double timeScale;
 
     VideoComposer(MediaExtractor mediaExtractor, int trackIndex,
-                  MediaFormat outputFormat, MuxRender muxRender, int timeScale) {
+                  MediaFormat outputFormat, MuxRender muxRender, double timeScale) {
         this.mediaExtractor = mediaExtractor;
         this.trackIndex = trackIndex;
         this.outputFormat = outputFormat;
@@ -198,7 +198,7 @@ class VideoComposer {
             long clipStartUs = startTimeMs * 1000L;
             queuedPtsUs = Math.max(0L, sampleTime - clipStartUs);
         }
-        queuedPtsUs = queuedPtsUs / timeScale;
+        queuedPtsUs = (long)(queuedPtsUs / timeScale);
         decoder.queueInputBuffer(result, 0, sampleSize, queuedPtsUs, isKeyFrame ? MediaCodec.BUFFER_FLAG_SYNC_FRAME : 0);
         mediaExtractor.advance();
         return DRAIN_STATE_CONSUMED;
@@ -228,10 +228,12 @@ class VideoComposer {
             bufferInfo.size = 0;
         }
 
-        // added by shaopx begin
-        Log.d(TAG+".drainDecoder", "drainDecoder: bufferInfo.presentationTimeUs:"+bufferInfo.presentationTimeUs +", endTimeMs:"+endTimeMs);
-        // 裁剪模式下，解码时间戳越界时，也要触发 encoder 输入 EOS，避免多写尾帧。
-        boolean outOfClipEnd = enableClip() && bufferInfo.presentationTimeUs > endTimeMs * 1000;
+        // Compare decoder PTS with timeScale-adjusted clip end timestamp.
+        // bufferInfo.presentationTimeUs is already in scaled timeline.
+        long scaledEndPtsUs = enableClip()
+                ? (long) (((endTimeMs - startTimeMs) * 1000L) / timeScale)
+                : Long.MAX_VALUE;
+        boolean outOfClipEnd = enableClip() && bufferInfo.presentationTimeUs > scaledEndPtsUs;
         if (outOfClipEnd) {
             Log.w(TAG+".drainDecoder", "drainDecoder: reach the clip end ms! bufferInfo.offset:"+bufferInfo.offset+", size:"+bufferInfo.size+",presentationTimeUs:"+bufferInfo.presentationTimeUs);
             encoder.signalEndOfInputStream();
@@ -300,7 +302,7 @@ class VideoComposer {
             return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
         }
         if (enableClip()) {
-            long clipDurationUs = (endTimeMs - startTimeMs) * 1000L / timeScale;
+            long clipDurationUs = (long)((endTimeMs - startTimeMs) * 1000L / timeScale);
             if (bufferInfo.presentationTimeUs >= clipDurationUs) {
                 isEncoderEOS = true;
                 encoder.releaseOutputBuffer(result, false);
