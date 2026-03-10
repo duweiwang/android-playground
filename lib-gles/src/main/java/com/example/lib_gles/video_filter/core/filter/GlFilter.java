@@ -244,6 +244,18 @@ public class GlFilter {
   protected void onDraw(long presentationTimeUs, Map<String, Integer> extraTextureIds) {
   }
 
+  /**
+   * Returns playback timescale at the given timeline ms.
+   * 1.0 means normal speed, <1.0 slow motion, >1.0 fast motion.
+   */
+  public double resolveTimeScaleAtMs(long presentationTimeMs) {
+    return 1.0d;
+  }
+
+  public boolean hasTimeScaleControl() {
+    return false;
+  }
+
   protected final void useProgram() {
 //        Log.d(TAG, "useProgram: mProgramHandle:"+mProgramHandle);
     glUseProgram(mProgramHandle);

@@ -51,6 +51,10 @@ public class GlFilterList {
     public void draw(int texName, EFramebufferObject fbo, long presentationTimeUs, Map<String, Integer> extraTextureIds) {
         GLogger.d(TAG, "draw: presentationTimeUs:"+presentationTimeUs+", glFilerPeriod:"+glFilerPeriod);
         for (GlFilterPeriod glFilterPeriod : glFilerPeriod) {
+            if (glFilterPeriod.filter instanceof TimeScaleFilter) {
+                // TimeScaleFilter controls timeline speed only; it should not block visual filters.
+                continue;
+            }
             if (glFilterPeriod.contains(presentationTimeUs / (1000*1000))) {
                 needLastFrame = glFilterPeriod.filter.needLastFrame();
                 Log.d(TAG, "draw: filter:"+glFilterPeriod.filter.getName());
@@ -58,6 +62,27 @@ public class GlFilterList {
                 return;
             }
         }
+    }
+
+    public double resolveTimeScaleAtMs(long presentationTimeMs) {
+        for (GlFilterPeriod glFilterPeriod : glFilerPeriod) {
+            if (glFilterPeriod.contains(presentationTimeMs)) {
+                double scale = glFilterPeriod.filter.resolveTimeScaleAtMs(presentationTimeMs);
+                if (Math.abs(scale - 1.0d) > 1e-9) {
+                    return scale;
+                }
+            }
+        }
+        return 1.0d;
+    }
+
+    public boolean hasTimeScaleControl() {
+        for (GlFilterPeriod glFilterPeriod : glFilerPeriod) {
+            if (glFilterPeriod.filter.hasTimeScaleControl()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void release() {

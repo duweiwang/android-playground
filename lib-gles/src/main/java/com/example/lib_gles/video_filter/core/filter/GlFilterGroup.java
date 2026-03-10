@@ -106,6 +106,9 @@ public class GlFilterGroup extends GlFilter {
         List<GlFilterEntry> activeEntries = new ArrayList<>();
         long tMs = presentationTimeUs / (1000 * 1000);
         for (final GlFilterEntry entry : list) {
+            if (entry.filterPeriod.filter instanceof TimeScaleFilter) {
+                continue;
+            }
             if (entry.filterPeriod != null && entry.filterPeriod.contains(tMs)) {
                 activeEntries.add(entry);
             }
@@ -137,6 +140,29 @@ public class GlFilterGroup extends GlFilter {
         }
 
         return textName;
+    }
+
+    @Override
+    public double resolveTimeScaleAtMs(long presentationTimeMs) {
+        for (final GlFilterEntry entry : list) {
+            if (entry.filterPeriod != null && entry.filterPeriod.contains(presentationTimeMs)) {
+                double scale = entry.filterPeriod.filter.resolveTimeScaleAtMs(presentationTimeMs);
+                if (Math.abs(scale - 1.0d) > 1e-9) {
+                    return scale;
+                }
+            }
+        }
+        return 1.0d;
+    }
+
+    @Override
+    public boolean hasTimeScaleControl() {
+        for (final GlFilterEntry entry : list) {
+            if (entry.filterPeriod != null && entry.filterPeriod.filter.hasTimeScaleControl()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void add(GlFilter filter) {
