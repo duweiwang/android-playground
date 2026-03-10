@@ -33,7 +33,7 @@ public class GlSoulOutFilter extends GlFilter {
     }
 
     @Override
-    public void onDraw() {
+    public void onDraw(long presentationTimeUs) {
         mScale = 1.0f + 0.5f * getInterpolation(mOffset);
         mOffset += 0.04f;
         if (mOffset > 1.0f) {

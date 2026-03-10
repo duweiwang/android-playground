@@ -99,7 +99,7 @@ public class GlFilterGroup extends GlFilter {
     private int prevTexName;
 
     @Override
-    public int draw(final int texName, final EFramebufferObject fbo, Map<String,Integer> extraTextureIds) {
+    public int draw(final int texName, final EFramebufferObject fbo, long presentationTimeUs, Map<String,Integer> extraTextureIds) {
         checkSetUp();
         if ((mWidth <= 0 || mHeight <= 0) && fbo != null) {
             setFrameSize(fbo.getWidth(), fbo.getHeight());
@@ -113,7 +113,7 @@ public class GlFilterGroup extends GlFilter {
                     entry.fbo.enable();
                     GLES20.glClear(GL_COLOR_BUFFER_BIT);
 
-                    textName = entry.filter.draw(prevTexName, entry.fbo, extraTexIds);
+                    textName = entry.filter.draw(prevTexName, entry.fbo, presentationTimeUs, extraTexIds);
                     extraTexIds.put(entry.name, textName);
                 }
                 prevTexName = entry.fbo.getTexName();
@@ -126,7 +126,7 @@ public class GlFilterGroup extends GlFilter {
                 }
 
                 if (entry.filter != null) {
-                    textName = entry.filter.draw(prevTexName, fbo, extraTexIds);
+                    textName = entry.filter.draw(prevTexName, fbo, presentationTimeUs, extraTexIds);
                 }
             }
         }

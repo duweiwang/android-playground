@@ -54,7 +54,7 @@ public class GlFilterList {
             if (glFilterPeriod.contains(presentationTimeUs / (1000*1000))) {
                 needLastFrame = glFilterPeriod.filter.needLastFrame();
                 Log.d(TAG, "draw: filter:"+glFilterPeriod.filter.getName());
-                glFilterPeriod.filter.draw(texName, fbo, extraTextureIds);
+                glFilterPeriod.filter.draw(texName, fbo, presentationTimeUs, extraTextureIds);
                 return;
             }
         }
