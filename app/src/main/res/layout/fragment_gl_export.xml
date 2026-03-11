@@ -35,4 +35,35 @@
         app:layout_constraintTop_toBottomOf="@id/video_plus_audio" />
 
 
+    <TextView
+        android:id="@+id/video_effect1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="特效一"
+        android:textSize="20dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@id/video_plus_filter_effect"/>
+
+    <TextView
+        android:id="@+id/video_effect3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="特效三"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/video_effect1"/>
+
+    <TextView
+        android:id="@+id/video_effect4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="特效四"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/video_effect3"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
