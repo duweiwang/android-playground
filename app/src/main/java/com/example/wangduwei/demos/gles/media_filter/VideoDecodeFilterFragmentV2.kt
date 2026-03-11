@@ -1,6 +1,7 @@
 package com.example.wangduwei.demos.gles.media_filter
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.SurfaceTexture
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -23,6 +24,9 @@ import com.example.lib_gles.video_filter.core.filter.GlFilterGroup
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
 import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
 import com.example.lib_gles.video_filter.filter_impl.GlNeonBorderFilter
+import com.example.lib_gles.video_filter.filter_impl.GlPulseVerticalScaleFilter
+import com.example.lib_gles.video_filter.filter_impl.GlPulseZoomFilter
+import com.example.lib_gles.video_filter.filter_impl.GlRadialSpreadColorFilter
 import com.example.lib_gles.video_filter.filter_impl.GlWatermarkFilter
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
@@ -113,11 +117,36 @@ class VideoDecodeFilterFragmentV2 : BaseSupportFragment(), OnPreparedListener {
                 1.0f,
                 GlWatermarkFilter.Position.RIGHT_BOTTOM
             )
-            val group = GlFilterGroup(
-                GlNeonBorderFilter(),
-                watermarkFilter
+            val radialColorFilter = GlRadialSpreadColorFilter()
+                .setCycleDurationSec(1.6f)
+                .setMaxIntensity(0.55f)
+                .setSpreadSoftness(0.10f)
+                .setColorList(arrayListOf<Int>(
+                    Color.RED,
+                    Color.YELLOW,
+                    Color.DKGRAY,
+                    Color.LTGRAY,
+                ))
+
+            val zoomFilter = GlPulseZoomFilter(2f)
+                .setZoomInDurationMs(500f)
+                .setZoomOutDurationMs(500f)
+
+            val verticalScalefilter1 = GlPulseVerticalScaleFilter()
+                .setTargetScaleY(0.7f)
+                .setShrinkDurationMs(200f)
+                .setExpandDurationMs(200f)
+                .setIntervalMs(3000f)
+
+            val filterGroup = GlFilterGroup(
+                GlFilterPeriod(0,Long.MAX_VALUE, radialColorFilter),
+                GlFilterPeriod(0,Long.MAX_VALUE, zoomFilter),
+                GlFilterPeriod(0,Long.MAX_VALUE, verticalScalefilter1),
+                GlFilterPeriod(0,Long.MAX_VALUE, watermarkFilter),
             )
-            glFilterList.putGlFilter(GlFilterPeriod(0L, Long.MAX_VALUE, group))
+
+
+            glFilterList.putGlFilter(GlFilterPeriod(0L, Long.MAX_VALUE, filterGroup))
         }
     }
 
