@@ -64,7 +64,7 @@ public class GlWatermarkFilter extends GlFilter {
     }
 
     @Override
-    public void onDraw() {
+    public void onDraw(long presentationTimeUs) {
         if (mWidth <= 0 || mHeight <= 0 || watermarkBitmap == null || watermarkBitmap.isRecycled()) {
             return;
         }

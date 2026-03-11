@@ -159,7 +159,7 @@ public class GlFilter {
     hasSetUp = true;
   }
 
-  public void onDrawFrameBegin() {
+  public void onDrawFrameBegin(long presentationTimeUs) {
     // 绑定总变换矩阵
     Matrix.setIdentityM(mMVPMatrix, 0);
     mMVPMatrixHandle = GLES30.glGetUniformLocation(mProgramHandle, "uMVPMatrix");
@@ -205,6 +205,7 @@ public class GlFilter {
 
   public int draw(final int sourceTextId,
                   final EFramebufferObject fbo,
+                  long presentationTimeUs,
                   Map<String, Integer> extraTextureIds) {
     checkSetUp();
     useProgram();
@@ -216,9 +217,9 @@ public class GlFilter {
     GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
     GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, sourceTextId);
     GLES20.glUniform1i(getHandle("sTexture"), 0);
-    onDrawFrameBegin();
-    onDraw();
-    onDraw(extraTextureIds);
+    onDrawFrameBegin(presentationTimeUs);
+    onDraw(presentationTimeUs);
+    onDraw(presentationTimeUs, extraTextureIds);
 
     GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     GLES20.glDisableVertexAttribArray(getHandle("aPosition"));
@@ -237,10 +238,22 @@ public class GlFilter {
     }
   }
 
-  protected void onDraw() {
+  protected void onDraw(long presentationTimeUs) {
   }
 
-  protected void onDraw(Map<String, Integer> extraTextureIds) {
+  protected void onDraw(long presentationTimeUs, Map<String, Integer> extraTextureIds) {
+  }
+
+  /**
+   * Returns playback timescale at the given timeline ms.
+   * 1.0 means normal speed, <1.0 slow motion, >1.0 fast motion.
+   */
+  public double resolveTimeScaleAtMs(long presentationTimeMs) {
+    return 1.0d;
+  }
+
+  public boolean hasTimeScaleControl() {
+    return false;
   }
 
   protected final void useProgram() {
@@ -273,8 +286,8 @@ public class GlFilter {
     return location;
   }
 
-  public int drawFrameBuffer(int textureId, FloatBuffer vertexBuffer, FloatBuffer textureBuffer) {
-    return draw(textureId, null, null);
+  public int drawFrameBuffer(int textureId, FloatBuffer vertexBuffer, FloatBuffer textureBuffer, long presentationTimeUs) {
+    return draw(textureId, null, presentationTimeUs, null);
   }
 
   public void initFrameBuffer(final int width, final int height) {

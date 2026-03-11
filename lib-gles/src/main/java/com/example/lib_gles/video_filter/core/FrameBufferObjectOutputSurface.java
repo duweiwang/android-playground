@@ -161,14 +161,14 @@ public abstract class FrameBufferObjectOutputSurface implements SurfaceTexture.O
         GLES20.glBindFramebuffer(GL_FRAMEBUFFER, 0);
         GLES20.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
         GLES20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        normalShader.draw(framebufferObject.getTexName(), null, null);
+        normalShader.draw(framebufferObject.getTexName(), null, presentationTimeUs, null);
 
         if (needLastFrame()) {
             // 先绘制到上一帧fbo中.
             lastFrameFBO.enable();
             GLES20.glViewport(0, 0, framebufferObject.getWidth(), framebufferObject.getHeight());
             GLES20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            normalShader.draw(framebufferObject.getTexName(), null, null);
+            normalShader.draw(framebufferObject.getTexName(), null, presentationTimeUs, null);
             int lastTexName = lastFrameFBO.getTexName();
             extraTextureIds.put("last_frame_texture", lastTexName);
         }

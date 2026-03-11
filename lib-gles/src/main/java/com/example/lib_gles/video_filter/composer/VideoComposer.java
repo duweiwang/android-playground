@@ -47,10 +47,15 @@ class VideoComposer {
     private boolean decoderStarted;
     private boolean encoderStarted;
     private long writtenPresentationTimeUs;
-    private final int timeScale;
+    private final double timeScale;
+    private GlFilter filter;
+    private GlFilterList filterList;
+    private long lastSourcePtsUs = Long.MIN_VALUE;
+    private long lastQueuedPtsUs = 0L;
+    private long expectedOutputDurationUs = -1L;
 
     VideoComposer(MediaExtractor mediaExtractor, int trackIndex,
-                  MediaFormat outputFormat, MuxRender muxRender, int timeScale) {
+                  MediaFormat outputFormat, MuxRender muxRender, double timeScale) {
         this.mediaExtractor = mediaExtractor;
         this.trackIndex = trackIndex;
         this.outputFormat = outputFormat;
@@ -90,6 +95,8 @@ class VideoComposer {
         }
 
         decoderSurface = new DecoderOutputSurface(filter, filterList);
+        this.filter = filter;
+        this.filterList = filterList;
 //        decoderSurface = new DecoderSurface2(new GlComposeFilter());
         decoderSurface.setRotation(rotation);
         decoderSurface.setOutputResolution(outputResolution);
@@ -177,6 +184,7 @@ class VideoComposer {
         if (result < 0) return DRAIN_STATE_NONE;
         if (trackIndex < 0) {
             isExtractorEOS = true;
+            expectedOutputDurationUs = Math.max(expectedOutputDurationUs, lastQueuedPtsUs);
             decoder.queueInputBuffer(result, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
             return DRAIN_STATE_NONE;
         }
@@ -188,17 +196,30 @@ class VideoComposer {
         if (sampleTime > endTimeMs * 1000 && enableClip()) {
             Log.e(TAG, "drainExtractor(): sampleTime:"+sampleTime+", reach the end time");
             isExtractorEOS = true;
+            expectedOutputDurationUs = Math.max(expectedOutputDurationUs, lastQueuedPtsUs);
             mediaExtractor.unselectTrack(this.trackIndex);
             decoder.queueInputBuffer(result, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
             return DRAIN_STATE_NONE;
         }
 
-        long queuedPtsUs = sampleTime;
+        long sourcePtsUs = sampleTime;
         if (enableClip()) {
             long clipStartUs = startTimeMs * 1000L;
-            queuedPtsUs = Math.max(0L, sampleTime - clipStartUs);
+            sourcePtsUs = Math.max(0L, sampleTime - clipStartUs);
         }
-        queuedPtsUs = queuedPtsUs / timeScale;
+        long queuedPtsUs;
+        if (lastSourcePtsUs == Long.MIN_VALUE) {
+            queuedPtsUs = 0L;
+        } else {
+            long deltaSourceUs = Math.max(0L, sourcePtsUs - lastSourcePtsUs);
+            // Use clip input timeline (sourcePtsUs) so runtime mapping matches expectedOutputDuration integration.
+            double dynamicScale = resolveTimeScaleAtMs(sourcePtsUs / 1000L);
+            dynamicScale = sanitizeTimeScale(dynamicScale);
+            long deltaOutUs = (long) (deltaSourceUs / dynamicScale);
+            queuedPtsUs = lastQueuedPtsUs + Math.max(0L, deltaOutUs);
+        }
+        lastSourcePtsUs = sourcePtsUs;
+        lastQueuedPtsUs = queuedPtsUs;
         decoder.queueInputBuffer(result, 0, sampleSize, queuedPtsUs, isKeyFrame ? MediaCodec.BUFFER_FLAG_SYNC_FRAME : 0);
         mediaExtractor.advance();
         return DRAIN_STATE_CONSUMED;
@@ -228,15 +249,20 @@ class VideoComposer {
             bufferInfo.size = 0;
         }
 
-        // added by shaopx begin
-        Log.d(TAG+".drainDecoder", "drainDecoder: bufferInfo.presentationTimeUs:"+bufferInfo.presentationTimeUs +", endTimeMs:"+endTimeMs);
-        // 裁剪模式下，解码时间戳越界时，也要触发 encoder 输入 EOS，避免多写尾帧。
-        boolean outOfClipEnd = enableClip() && bufferInfo.presentationTimeUs > endTimeMs * 1000;
+        boolean outOfClipEnd = enableClip()
+                && expectedOutputDurationUs > 0
+                && isExtractorEOS
+                && bufferInfo.presentationTimeUs > expectedOutputDurationUs;
         if (outOfClipEnd) {
-            Log.w(TAG+".drainDecoder", "drainDecoder: reach the clip end ms! bufferInfo.offset:"+bufferInfo.offset+", size:"+bufferInfo.size+",presentationTimeUs:"+bufferInfo.presentationTimeUs);
-            encoder.signalEndOfInputStream();
-            isDecoderEOS = true;
-            bufferInfo.flags = bufferInfo.flags | MediaCodec.BUFFER_FLAG_END_OF_STREAM;
+            Log.w(TAG + ".drainDecoder", "drop frame over expected duration, ptsUs=" + bufferInfo.presentationTimeUs
+                    + ", expectedOutputDurationUs=" + expectedOutputDurationUs);
+
+            // ai说这几行在动态变速的情况下，容易导致两个问题
+            // 1.容易提前结束： presentationTimeUs 可能因为变速映射抖动略过阈值，直接全链路终止，后续本该保留的帧也没了。
+            // 2.可能再次引入管线卡死： 提前把 decoder 标记 EOS，会打乱 extractor/decoder/encoder 的正常收尾节奏（你前面遇到的卡住就是这类现象）。
+//            encoder.signalEndOfInputStream();
+//            isDecoderEOS = true;
+//            bufferInfo.flags = bufferInfo.flags | MediaCodec.BUFFER_FLAG_END_OF_STREAM;
         }
         // added by shaopx end
 
@@ -299,9 +325,9 @@ class VideoComposer {
             encoder.releaseOutputBuffer(result, false);
             return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
         }
-        if (enableClip()) {
-            long clipDurationUs = (endTimeMs - startTimeMs) * 1000L / timeScale;
-            if (bufferInfo.presentationTimeUs >= clipDurationUs) {
+        if (enableClip() && expectedOutputDurationUs > 0 && isExtractorEOS) {
+            // bufferInfo.presentationTimeUs >= expectedOutputDurationUs 是为了控制输出文件的时长不超过clip的指定
+            if (bufferInfo.presentationTimeUs >= expectedOutputDurationUs) {
                 isEncoderEOS = true;
                 encoder.releaseOutputBuffer(result, false);
                 return DRAIN_STATE_CONSUMED;
@@ -324,5 +350,59 @@ class VideoComposer {
         this.startTimeMs = startTimeMs;
         this.endTimeMs = endTimeMs;
         mediaExtractor.seekTo(startTimeMs * 1000L, SEEK_TO_PREVIOUS_SYNC);
+        lastSourcePtsUs = Long.MIN_VALUE;
+        lastQueuedPtsUs = 0L;
+        expectedOutputDurationUs = computeExpectedOutputDurationUs();
+        Log.d(TAG, "setClipRange: expectedOutputDurationUs=" + expectedOutputDurationUs);
+    }
+
+    private boolean hasDynamicTimeScale() {
+        if (filterList != null && filterList.hasTimeScaleControl()) {
+            return true;
+        }
+        return filter != null && filter.hasTimeScaleControl();
+    }
+
+    private double resolveTimeScaleAtMs(long presentationTimeMs) {
+        if (filterList != null) {
+            double scale = filterList.resolveTimeScaleAtMs(presentationTimeMs);
+            if (Math.abs(scale - 1.0d) > 1e-9) {
+                return scale;
+            }
+        }
+        if (filter != null) {
+            double scale = filter.resolveTimeScaleAtMs(presentationTimeMs);
+            if (Math.abs(scale - 1.0d) > 1e-9) {
+                return scale;
+            }
+        }
+        return timeScale;
+    }
+
+    private static double sanitizeTimeScale(double scale) {
+        if (Double.isNaN(scale) || Double.isInfinite(scale) || scale <= 0d) {
+            return 1.0d;
+        }
+        return scale;
+    }
+
+    private long computeExpectedOutputDurationUs() {
+        if (!enableClip()) {
+            return -1L;
+        }
+        long clipDurationMs = Math.max(0L, endTimeMs - startTimeMs);
+        if (clipDurationMs <= 0L) {
+            return 0L;
+        }
+        if (!hasDynamicTimeScale()) {
+            return (long) ((clipDurationMs * 1000d) / sanitizeTimeScale(timeScale));
+        }
+        double totalUs = 0d;
+        // Integrate with 1ms step in clip-relative timeline.
+        for (long tMs = 0L; tMs < clipDurationMs; tMs++) {
+            double scale = sanitizeTimeScale(resolveTimeScaleAtMs(tMs));
+            totalUs += 1000d / scale;
+        }
+        return (long) Math.ceil(totalUs);
     }
 }

@@ -39,10 +39,10 @@ class RemixAudioComposer implements IAudioComposer {
     private boolean encoderStarted;
 
     private AudioChannel audioChannel;
-    private final int timeScale;
+    private final double timeScale;
 
     public RemixAudioComposer(MediaExtractor extractor, int trackIndex,
-                              MediaFormat outputFormat, MuxRender muxer, int timeScale) {
+                              MediaFormat outputFormat, MuxRender muxer, double timeScale) {
         this.extractor = extractor;
         this.trackIndex = trackIndex;
         this.outputFormat = outputFormat;
@@ -134,7 +134,7 @@ class RemixAudioComposer implements IAudioComposer {
             isDecoderEOS = true;
             audioChannel.drainDecoderBufferAndQueue(AudioChannel.BUFFER_INDEX_END_OF_STREAM, 0);
         } else if (bufferInfo.size > 0) {
-            audioChannel.drainDecoderBufferAndQueue(result, bufferInfo.presentationTimeUs / timeScale);
+            audioChannel.drainDecoderBufferAndQueue(result, (long)(bufferInfo.presentationTimeUs / timeScale));
         }
 
         return DRAIN_STATE_CONSUMED;
