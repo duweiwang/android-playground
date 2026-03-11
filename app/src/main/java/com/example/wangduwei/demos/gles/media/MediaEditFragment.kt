@@ -1,20 +1,28 @@
 package com.example.wangduwei.demos.gles.media
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import android.net.Uri
-import android.provider.Settings
-import android.util.Log
 import com.example.lib_gles.video_filter.composer.Mp4Composer
+import com.example.lib_gles.video_filter.core.filter.GlFilter
 import com.example.lib_gles.video_filter.core.filter.GlFilterGroup
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
 import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
+import com.example.lib_gles.video_filter.core.filter.TimeScaleFilter
+import com.example.lib_gles.video_filter.filter_impl.GlDynamicMosaicFilter
+import com.example.lib_gles.video_filter.filter_impl.GlMosaicShiftCascadeFilter
+import com.example.lib_gles.video_filter.filter_impl.GlPulseVerticalScaleFilter
+import com.example.lib_gles.video_filter.filter_impl.GlPulseZoomFilter
+import com.example.lib_gles.video_filter.filter_impl.GlRadialSpreadColorFilter
 import com.example.lib_gles.video_filter.filter_impl.GlSoulOutFilter
 import com.example.lib_gles.video_filter.filter_impl.GlWatermarkFilter
 import com.example.lib_processor.PageInfo
@@ -42,7 +50,7 @@ class MediaEditFragment: BaseSupportFragment() {
     ).absolutePath
 
 
-
+    private val duration: Long = 10000;
 
     private val audioPath = File(
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
@@ -64,6 +72,10 @@ class MediaEditFragment: BaseSupportFragment() {
         val filterOutput = view.findViewById<TextView>(R.id.video_plus_filter)
         val audioOutput = view.findViewById<TextView>(R.id.video_plus_audio)
         val filterEffectOutput = view.findViewById<TextView>(R.id.video_plus_filter_effect)
+
+        val videoEffect1 = view.findViewById<TextView>(R.id.video_effect1)
+        val videoEffect3 = view.findViewById<TextView>(R.id.video_effect3)
+        val videoEffect4 = view.findViewById<TextView>(R.id.video_effect4)
 
 
         filterOutput.setOnClickListener {
@@ -247,6 +259,130 @@ class MediaEditFragment: BaseSupportFragment() {
                 .start()
         }
 
+
+        videoEffect1.setOnClickListener { onClickEffect1(videoEffect1) }
+        videoEffect3.setOnClickListener { onClickEffect3(videoEffect3) }
+        videoEffect4.setOnClickListener { onClickEffect4(videoEffect4) }
+
+    }
+
+    private fun onClickEffect1(textView: TextView) {
+        val dynamicMosaicFilter = GlDynamicMosaicFilter()
+            .setRange(2f, 40f) // 最小/最大马赛克块大小(px)
+            .setDurationMs(1000f) // 一个变化周期
+            .setLoop(true) // 循环
+            .setPingPong(true)
+
+        val shiftMosaicFilter = GlMosaicShiftCascadeFilter()
+            .setHoldMs(1000f)
+            .setStepMs(200f)
+            .setShiftX(0.30f)
+            .setMosaicLevels(40f, 20f, 10f, 0f)
+
+        val filterGroup = GlFilterGroup(
+            GlFilterPeriod(1000L,Long.MAX_VALUE, dynamicMosaicFilter),
+            GlFilterPeriod(1000L,Long.MAX_VALUE, shiftMosaicFilter),
+            GlFilterPeriod(4000L,8000L, TimeScaleFilter(0.5)),
+        )
+
+        val outFile = File(requireContext().externalCacheDir, "特效一_${System.currentTimeMillis()}.mp4")
+        compose(filterGroup, textView, outFile)
+    }
+
+    private fun onClickEffect3(textView: TextView) {
+
+        val radialColorFilter = GlRadialSpreadColorFilter()
+            .setCycleDurationSec(1.6f)
+            .setMaxIntensity(0.55f)
+            .setSpreadSoftness(0.10f)
+            .setColorList(arrayListOf<Int>(
+                Color.RED,
+                Color.YELLOW,
+                Color.DKGRAY,
+                Color.LTGRAY,
+            ))
+
+
+        val zoomFilter = GlPulseZoomFilter(2f)
+            .setZoomInDurationMs(500f)
+            .setZoomOutDurationMs(500f)
+
+        val verticalScalefilter1 = GlPulseVerticalScaleFilter()
+            .setTargetScaleY(0.7f)
+            .setShrinkDurationMs(200f)
+            .setExpandDurationMs(200f)
+            .setIntervalMs(3000f)
+
+        val filterGroup = GlFilterGroup(
+            GlFilterPeriod(0,Long.MAX_VALUE, radialColorFilter),
+            GlFilterPeriod(0,Long.MAX_VALUE, zoomFilter),
+            GlFilterPeriod(0,Long.MAX_VALUE, verticalScalefilter1),
+        )
+
+        val outFile = File(requireContext().externalCacheDir, "特效三_${System.currentTimeMillis()}.mp4")
+        compose(filterGroup, textView, outFile)
+    }
+
+    private fun onClickEffect4(textView: TextView) {
+        val shiftMosaicFilter = GlMosaicShiftCascadeFilter()
+            .setHoldMs(1000f)
+            .setStepMs(200f)
+            .setShiftX(0.30f)
+            .setMosaicLevels(40f, 20f, 10f, 0f)
+
+        val filterGroup = GlFilterGroup(
+            GlFilterPeriod(1000L,Long.MAX_VALUE, shiftMosaicFilter),
+            GlFilterPeriod(4000L,8000L, TimeScaleFilter(0.5)),
+        )
+
+        val outFile = File(requireContext().externalCacheDir, "特效四_${System.currentTimeMillis()}.mp4")
+        compose(filterGroup, textView, outFile)
+    }
+
+
+    private fun compose(filter: GlFilter, textView: TextView, outFile: File) {
+        val glFilterList = GlFilterList()
+        glFilterList.putGlFilter(GlFilterPeriod(0, Long.MAX_VALUE, filter))
+        val defaultText = textView.text;
+        Mp4Composer(videoPath, outFile.absolutePath)
+            .size(720, 1280)
+            .clip(0, duration)
+            .filterList(glFilterList)
+            .listener(object : Mp4Composer.Listener {
+                override fun onProgress(progress: Double) {
+                    val percent = (progress * 100).toInt().coerceIn(0, 100)
+                    activity?.runOnUiThread {
+                        textView.text = "处理中 ${percent}%"
+                    }
+                }
+
+                override fun onCompleted() {
+                    activity?.runOnUiThread {
+                        textView.isEnabled = true
+                        textView.text = defaultText
+                        Toast.makeText(requireContext(), "输出完成: ${outFile.absolutePath}", Toast.LENGTH_SHORT).show()
+
+                        Log.d("wdw-gl","path = ${outFile.absolutePath}")
+                    }
+                }
+
+                override fun onCanceled() {
+                    activity?.runOnUiThread {
+                        textView.isEnabled = true
+                        textView.text = defaultText
+                        Toast.makeText(requireContext(), "已取消", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailed(exception: Exception) {
+                    activity?.runOnUiThread {
+                        textView.isEnabled = true
+                        textView.text = defaultText
+                        Toast.makeText(requireContext(), "输出失败: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+            .start()
     }
 
 
