@@ -119,7 +119,7 @@ class MediaEditFragment: BaseSupportFragment() {
                         }
                     }
 
-                    override fun onFailed(exception: Exception) {
+                    override fun onFailed(exception: java.lang.Exception, errorCode: Int) {
                         activity?.runOnUiThread {
                             filterOutput.isEnabled = true
                             filterOutput.text = defaultText
@@ -168,7 +168,7 @@ class MediaEditFragment: BaseSupportFragment() {
                         }
                     }
 
-                    override fun onFailed(exception: Exception) {
+                    override fun onFailed(exception: java.lang.Exception, errorCode: Int) {
                         activity?.runOnUiThread {
                             audioOutput.isEnabled = true
                             audioOutput.text = defaultText
@@ -248,7 +248,7 @@ class MediaEditFragment: BaseSupportFragment() {
                         }
                     }
 
-                    override fun onFailed(exception: Exception) {
+                    override fun onFailed(exception: java.lang.Exception, errorCode: Int) {
                         activity?.runOnUiThread {
                             filterEffectOutput.isEnabled = true
                             filterEffectOutput.text = defaultText
@@ -374,7 +374,7 @@ class MediaEditFragment: BaseSupportFragment() {
                     }
                 }
 
-                override fun onFailed(exception: Exception) {
+                override fun onFailed(exception: java.lang.Exception, errorCode: Int) {
                     activity?.runOnUiThread {
                         textView.isEnabled = true
                         textView.text = defaultText

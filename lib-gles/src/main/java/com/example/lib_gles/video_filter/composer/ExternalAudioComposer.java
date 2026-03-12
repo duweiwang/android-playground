@@ -33,7 +33,7 @@ class ExternalAudioComposer implements IAudioComposer {
         extractor.setDataSource(audioPath);
         trackIndex = selectAudioTrack(extractor);
         if (trackIndex < 0) {
-            throw new IllegalArgumentException("No audio track found in external audio.");
+            throw new ComposerException(ErrorCode.NO_AUDIO_TRACK, "No audio track found in external audio.");
         }
         MediaFormat outputFormat = extractor.getTrackFormat(trackIndex);
         muxRender.setOutputFormat(sampleType, outputFormat);

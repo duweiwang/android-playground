@@ -77,7 +77,7 @@ class VideoComposer {
         try {
             encoder = MediaCodec.createEncoderByType(outputFormat.getString(MediaFormat.KEY_MIME));
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new ComposerException(ErrorCode.CODEC_INIT, e);
         }
         encoder.configure(outputFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
         encoderSurface = new EncoderSurface(encoder.createInputSurface());
@@ -109,7 +109,7 @@ class VideoComposer {
         try {
             decoder = MediaCodec.createDecoderByType(inputFormat.getString(MediaFormat.KEY_MIME));
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new ComposerException(ErrorCode.CODEC_INIT, e);
         }
         decoder.configure(inputFormat, decoderSurface.getSurface(), null, 0);
         decoder.start();
@@ -300,7 +300,7 @@ class VideoComposer {
             case MediaCodec.INFO_OUTPUT_FORMAT_CHANGED:
                 // 第一次格式变更时拿到真实输出格式（含 csd），并通知 muxer 建轨。
                 if (actualOutputFormat != null) {
-                    throw new RuntimeException("Video output format changed twice.");
+                    throw new ComposerException(ErrorCode.OUTPUT_FORMAT, "Video output format changed twice.");
                 }
                 actualOutputFormat = encoder.getOutputFormat();
                 muxRender.setOutputFormat(MuxRender.SampleType.VIDEO, actualOutputFormat);
@@ -312,7 +312,7 @@ class VideoComposer {
                 return DRAIN_STATE_SHOULD_RETRY_IMMEDIATELY;
         }
         if (actualOutputFormat == null) {
-            throw new RuntimeException("Could not determine actual output format.");
+            throw new ComposerException(ErrorCode.OUTPUT_FORMAT, "Could not determine actual output format.");
         }
 
         if ((bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
@@ -355,6 +355,7 @@ class VideoComposer {
         expectedOutputDurationUs = computeExpectedOutputDurationUs();
         Log.d(TAG, "setClipRange: expectedOutputDurationUs=" + expectedOutputDurationUs);
     }
+
 
     private boolean hasDynamicTimeScale() {
         if (filterList != null && filterList.hasTimeScaleControl()) {

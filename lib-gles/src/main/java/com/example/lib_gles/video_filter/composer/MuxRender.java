@@ -15,6 +15,7 @@ class MuxRender {
     private static final String TAG = "MuxRender";
     private static final int MAX_PENDING_BYTES = 32 * 1024 * 1024;
     private final MediaMuxer muxer;
+    private final boolean audioTrackRequired;
     private MediaFormat videoFormat;
     private MediaFormat audioFormat;
     private int videoTrackIndex;
@@ -23,8 +24,9 @@ class MuxRender {
     private int pendingBytes;
     private boolean started;
 
-    MuxRender(MediaMuxer muxer) {
+    MuxRender(MediaMuxer muxer, boolean audioTrackRequired) {
         this.muxer = muxer;
+        this.audioTrackRequired = audioTrackRequired;
         pendingSamples = new ArrayList<>();
     }
 
@@ -39,34 +41,11 @@ class MuxRender {
             default:
                 throw new AssertionError();
         }
+        maybeStartMuxer();
     }
 
     void onSetOutputFormat() {
-
-        if (videoFormat != null && audioFormat != null) {
-
-            videoTrackIndex = muxer.addTrack(videoFormat);
-            Log.v(TAG, "Added track #" + videoTrackIndex + " with " + videoFormat.getString(MediaFormat.KEY_MIME) + " to muxer");
-            audioTrackIndex = muxer.addTrack(audioFormat);
-            Log.v(TAG, "Added track #" + audioTrackIndex + " with " + audioFormat.getString(MediaFormat.KEY_MIME) + " to muxer");
-
-        } else if (videoFormat != null) {
-
-            videoTrackIndex = muxer.addTrack(videoFormat);
-            Log.v(TAG, "Added track #" + videoTrackIndex + " with " + videoFormat.getString(MediaFormat.KEY_MIME) + " to muxer");
-
-        }
-
-        muxer.start();
-        started = true;
-
-        Log.v(TAG, "Output format determined, writing " + pendingSamples.size()
-                + " pending samples / " + pendingBytes + " bytes to muxer.");
-        for (PendingSample sample : pendingSamples) {
-            muxer.writeSampleData(getTrackIndexForSampleType(sample.sampleType), sample.data, sample.bufferInfo);
-        }
-        pendingSamples.clear();
-        pendingBytes = 0;
+        maybeStartMuxer();
     }
 
     void writeSampleData(SampleType sampleType, ByteBuffer byteBuf, MediaCodec.BufferInfo bufferInfo) {
@@ -86,7 +65,7 @@ class MuxRender {
                     + ", pendingSamples=" + pendingSamples.size()
                     + ", pendingBytes=" + pendingBytes
                     + ", limit=" + MAX_PENDING_BYTES;
-            throw new IllegalStateException(msg);
+            throw new ComposerException(ErrorCode.MUXER, msg);
         }
         ByteBuffer duplicated = byteBuf.duplicate();
         duplicated.position(bufferInfo.offset);
@@ -110,6 +89,34 @@ class MuxRender {
             default:
                 throw new AssertionError();
         }
+    }
+
+    private void maybeStartMuxer() {
+        if (started || videoFormat == null) {
+            return;
+        }
+        if (audioTrackRequired && audioFormat == null) {
+            return;
+        }
+
+        videoTrackIndex = muxer.addTrack(videoFormat);
+        Log.v(TAG, "Added track #" + videoTrackIndex + " with " + videoFormat.getString(MediaFormat.KEY_MIME) + " to muxer");
+
+        if (audioTrackRequired) {
+            audioTrackIndex = muxer.addTrack(audioFormat);
+            Log.v(TAG, "Added track #" + audioTrackIndex + " with " + audioFormat.getString(MediaFormat.KEY_MIME) + " to muxer");
+        }
+
+        muxer.start();
+        started = true;
+
+        Log.v(TAG, "Output format determined, writing " + pendingSamples.size()
+                + " pending samples / " + pendingBytes + " bytes to muxer.");
+        for (PendingSample sample : pendingSamples) {
+            muxer.writeSampleData(getTrackIndexForSampleType(sample.sampleType), sample.data, sample.bufferInfo);
+        }
+        pendingSamples.clear();
+        pendingBytes = 0;
     }
 
     public enum SampleType {VIDEO, AUDIO}

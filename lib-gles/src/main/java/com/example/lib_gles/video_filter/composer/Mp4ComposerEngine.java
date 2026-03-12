@@ -34,6 +34,7 @@ class Mp4ComposerEngine {
     private MediaMuxer mediaMuxer;
     private ProgressCallback progressCallback;
     private long durationUs;
+    private Control control;
 
 
     void setDataSource(FileDescriptor fileDescriptor) {
@@ -42,6 +43,10 @@ class Mp4ComposerEngine {
 
     void setProgressCallback(ProgressCallback progressCallback) {
         this.progressCallback = progressCallback;
+    }
+
+    void setControl(Control control) {
+        this.control = control;
     }
 
 
@@ -63,8 +68,9 @@ class Mp4ComposerEngine {
             final long startTimeMs,
             final long endTimeMs,
             final String audioPath,
-            final Mp4Composer.AudioMode audioMode
-    ) throws IOException {
+            final Mp4Composer.AudioMode audioMode,
+            final int audioBitrate
+    ) throws IOException, InterruptedException {
 
 
         try {
@@ -73,19 +79,6 @@ class Mp4ComposerEngine {
             mediaMuxer = new MediaMuxer(destPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
             MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
             mediaMetadataRetriever.setDataSource(inputFileDescriptor);
-            if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
-                // clip 参数单位是 ms，这里统一换算成 us 供后续音视频进度与时长比较使用。
-                durationUs = (endTimeMs - startTimeMs) * 1000L;
-            } else {
-                try {
-                    durationUs = Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000;
-                } catch (NumberFormatException e) {
-                    durationUs = -1;
-                }
-            }
-
-            Log.d(TAG, "Duration (us): " + durationUs);
-
             MediaFormat videoOutputFormat = MediaFormat.createVideoFormat("video/avc", outputResolution.width(), outputResolution.height());
 
             videoOutputFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitrate);
@@ -93,8 +86,6 @@ class Mp4ComposerEngine {
             videoOutputFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
             videoOutputFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
 
-
-            MuxRender muxRender = new MuxRender(mediaMuxer);
 
             // identify track indices by MIME type instead of assuming 0/1 order
             int detectedVideoTrackIndex = -1;
@@ -115,8 +106,32 @@ class Mp4ComposerEngine {
             final int videoTrackIndex = detectedVideoTrackIndex;
             final int audioTrackIndex = detectedAudioTrackIndex;
             if (videoTrackIndex < 0) {
-                throw new IllegalArgumentException("No video track found in input source.");
+                throw new ComposerException(ErrorCode.NO_VIDEO_TRACK, "No video track found in input source.");
             }
+
+            long sourceVideoDurationUs = getTrackDurationUs(mediaExtractor.getTrackFormat(videoTrackIndex));
+            if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
+                durationUs = (endTimeMs - startTimeMs) * 1000L;
+            } else if (sourceVideoDurationUs > 0) {
+                durationUs = sourceVideoDurationUs;
+            } else {
+                try {
+                    durationUs = Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000L;
+                } catch (NumberFormatException e) {
+                    durationUs = -1;
+                }
+            }
+
+            Log.d(TAG, "Duration (us): " + durationUs);
+
+            boolean hasAudio = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null
+                    && audioTrackIndex >= 0;
+            boolean useExternalAudio = audioPath != null && audioPath.length() > 0
+                    && audioMode != null
+                    && audioMode != Mp4Composer.AudioMode.ORIGINAL;
+            boolean audioTrackRequired = !mute && (hasAudio || useExternalAudio);
+
+            MuxRender muxRender = new MuxRender(mediaMuxer, audioTrackRequired);
 
             // setup video composer
             videoComposer = new VideoComposer(mediaExtractor, videoTrackIndex, videoOutputFormat, muxRender, timeScale);
@@ -129,30 +144,23 @@ class Mp4ComposerEngine {
 
 
             // setup audio if present and not muted
-            boolean hasAudio = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO) != null
-                    && audioTrackIndex >= 0;
-            boolean useExternalAudio = audioPath != null && audioPath.length() > 0
-                    && audioMode != null
-                    && audioMode != Mp4Composer.AudioMode.ORIGINAL;
-
-            //TODO：timeScale != 1 时，audioComposer最好也有对应处理
 
             if (!mute && (hasAudio || useExternalAudio)) {
                 if (useExternalAudio && audioMode == Mp4Composer.AudioMode.REPLACE) {
-                    audioComposer = new ExternalAudioComposer(audioPath, muxRender, durationUs);
+                    audioComposer = new ExternalRemixAudioComposer(audioPath, muxRender, durationUs, audioBitrate);
                 } else if (useExternalAudio && audioMode == Mp4Composer.AudioMode.MIX) {
                     if (!hasAudio) {
-                        audioComposer = new ExternalAudioComposer(audioPath, muxRender, durationUs);
+                        audioComposer = new ExternalRemixAudioComposer(audioPath, muxRender, durationUs, audioBitrate);
                     } else {
                         if (timeScale >= 2) {
-                            throw new IllegalArgumentException("Mix audio does not support timeScale >= 2.");
+                            throw new ComposerException(ErrorCode.UNSUPPORTED_MIX_AUDIO_TIME_SCALE, "Mix audio does not support timeScale >= 2.");
                         }
-                        audioComposer = new MixAudioComposer(mediaExtractor, audioTrackIndex, audioPath, muxRender, durationUs, startTimeMs, endTimeMs);
+                        audioComposer = new MixAudioComposer(mediaExtractor, audioTrackIndex, audioPath, muxRender, durationUs, startTimeMs, endTimeMs, audioBitrate);
                     }
                 } else if (hasAudio) {
                     // original audio
                     if (timeScale < 2) {
-                        audioComposer = new AudioComposer(mediaExtractor, audioTrackIndex, muxRender);
+                        audioComposer = new AudioComposer(mediaExtractor, audioTrackIndex, muxRender, durationUs);
                         if (startTimeMs >= 0 && endTimeMs > startTimeMs) {
                             ((AudioComposer) audioComposer).setClipRange(startTimeMs, endTimeMs);
                         }
@@ -174,8 +182,6 @@ class Mp4ComposerEngine {
                 // no audio video
                 runPipelinesNoAudio();
             }
-
-
             mediaMuxer.stop();
         } finally {
             try {
@@ -210,7 +216,7 @@ class Mp4ComposerEngine {
     }
 
 
-    private void runPipelines() {
+    private void runPipelines() throws InterruptedException {
         long loopCount = 0;
         if (durationUs <= 0) {
             if (progressCallback != null) {
@@ -218,6 +224,7 @@ class Mp4ComposerEngine {
             }// unknown
         }
         while (!(videoComposer.isFinished() && audioComposer.isFinished())) {
+            checkPausedOrCanceled();
             boolean stepped = videoComposer.stepPipeline()
                     || audioComposer.stepPipeline();
             loopCount++;
@@ -233,13 +240,13 @@ class Mp4ComposerEngine {
                 try {
                     Thread.sleep(SLEEP_TO_WAIT_TRACK_TRANSCODERS);
                 } catch (InterruptedException e) {
-                    // nothing to do
+                    throw e;
                 }
             }
         }
     }
 
-    private void runPipelinesNoAudio() {
+    private void runPipelinesNoAudio() throws InterruptedException {
         long loopCount = 0;
         if (durationUs <= 0) {
             if (progressCallback != null) {
@@ -247,6 +254,7 @@ class Mp4ComposerEngine {
             } // unknown
         }
         while (!videoComposer.isFinished()) {
+            checkPausedOrCanceled();
             boolean stepped = videoComposer.stepPipeline();
             loopCount++;
             if (durationUs > 0 && loopCount % PROGRESS_INTERVAL_STEPS == 0) {
@@ -259,12 +267,36 @@ class Mp4ComposerEngine {
                 try {
                     Thread.sleep(SLEEP_TO_WAIT_TRACK_TRANSCODERS);
                 } catch (InterruptedException e) {
-                    // nothing to do
+                    throw e;
                 }
             }
         }
 
 
+    }
+
+    private void checkPausedOrCanceled() throws InterruptedException {
+        if (control == null) {
+            return;
+        }
+        if (control.isCancelRequested()) {
+            throw new InterruptedException("compose canceled");
+        }
+        control.awaitIfPaused();
+        if (control.isCancelRequested()) {
+            throw new InterruptedException("compose canceled");
+        }
+    }
+
+    private static long getTrackDurationUs(MediaFormat format) {
+        if (format != null && format.containsKey(MediaFormat.KEY_DURATION)) {
+            try {
+                return format.getLong(MediaFormat.KEY_DURATION);
+            } catch (RuntimeException ignore) {
+                // fall through
+            }
+        }
+        return -1L;
     }
 
 
@@ -275,5 +307,11 @@ class Mp4ComposerEngine {
          * @param progress Progress in [0.0, 1.0] range, or negative value if progress is unknown.
          */
         void onProgress(double progress);
+    }
+
+    interface Control {
+        void awaitIfPaused() throws InterruptedException;
+
+        boolean isCancelRequested();
     }
 }

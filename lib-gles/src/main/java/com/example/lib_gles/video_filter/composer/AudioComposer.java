@@ -18,6 +18,7 @@ class AudioComposer implements IAudioComposer {
     private final MuxRender muxRender;
     private final MuxRender.SampleType sampleType = MuxRender.SampleType.AUDIO;
     private final MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+    private final long targetDurationUs;
     private int bufferSize;
     private ByteBuffer buffer;
     private boolean isEOS;
@@ -25,14 +26,18 @@ class AudioComposer implements IAudioComposer {
     private long writtenPresentationTimeUs;
 
     AudioComposer(MediaExtractor mediaExtractor, int trackIndex,
-                  MuxRender muxRender) {
+                  MuxRender muxRender,
+                  long targetDurationUs) {
         this.mediaExtractor = mediaExtractor;
         this.trackIndex = trackIndex;
         this.muxRender = muxRender;
+        this.targetDurationUs = targetDurationUs;
 
         actualOutputFormat = this.mediaExtractor.getTrackFormat(this.trackIndex);
         this.muxRender.setOutputFormat(this.sampleType, actualOutputFormat);
-        bufferSize = actualOutputFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
+        bufferSize = actualOutputFormat.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)
+                ? actualOutputFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE)
+                : 1024 * 256;
         buffer = ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder());
     }
 
@@ -65,8 +70,21 @@ class AudioComposer implements IAudioComposer {
             return true;
         }
 
+        long ptsUs = sampleTime;
+        if (enableClip()) {
+            long clipStartUs = startTimeMs * 1000L;
+            ptsUs = Math.max(0L, sampleTime - clipStartUs);
+        }
+        if (targetDurationUs > 0 && ptsUs >= targetDurationUs) {
+            buffer.clear();
+            mediaExtractor.unselectTrack(this.trackIndex);
+            bufferInfo.set(0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
+            muxRender.writeSampleData(sampleType, buffer, bufferInfo);
+            isEOS = true;
+            return true;
+        }
 
-        bufferInfo.set(0, sampleSize, sampleTime, flags);
+        bufferInfo.set(0, sampleSize, ptsUs, flags);
         muxRender.writeSampleData(sampleType, buffer, bufferInfo);
         writtenPresentationTimeUs = bufferInfo.presentationTimeUs;
 
@@ -103,6 +121,6 @@ class AudioComposer implements IAudioComposer {
     public void setClipRange(long startTimeMs, long endTimeMs) {
         this.startTimeMs = startTimeMs;
         this.endTimeMs = endTimeMs;
-        mediaExtractor.seekTo(startTimeMs, SEEK_TO_PREVIOUS_SYNC);
+        mediaExtractor.seekTo(startTimeMs * 1000L, SEEK_TO_PREVIOUS_SYNC);
     }
 }

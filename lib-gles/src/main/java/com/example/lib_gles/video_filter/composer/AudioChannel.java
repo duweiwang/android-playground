@@ -58,18 +58,18 @@ class AudioChannel {
 
         inputSampleRate = actualDecodedFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         if (inputSampleRate != encodeFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE)) {
-            throw new UnsupportedOperationException("Audio sample rate conversion not supported yet.");
+            throw new ComposerException(ErrorCode.UNSUPPORTED_AUDIO_FORMAT, "Audio sample rate conversion not supported yet.");
         }
 
         inputChannelCount = actualDecodedFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
         outputChannelCount = encodeFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
 
         if (inputChannelCount != 1 && inputChannelCount != 2) {
-            throw new UnsupportedOperationException("Input channel count (" + inputChannelCount + ") not supported.");
+            throw new ComposerException(ErrorCode.UNSUPPORTED_AUDIO_FORMAT, "Input channel count (" + inputChannelCount + ") not supported.");
         }
 
         if (outputChannelCount != 1 && outputChannelCount != 2) {
-            throw new UnsupportedOperationException("Output channel count (" + outputChannelCount + ") not supported.");
+            throw new ComposerException(ErrorCode.UNSUPPORTED_AUDIO_FORMAT, "Output channel count (" + outputChannelCount + ") not supported.");
         }
 
         overflowBuffer.presentationTimeUs = 0;
@@ -77,7 +77,7 @@ class AudioChannel {
 
     void drainDecoderBufferAndQueue(final int bufferIndex, final long presentationTimeUs) {
         if (actualDecodedFormat == null) {
-            throw new RuntimeException("Buffer received before format!");
+            throw new ComposerException(ErrorCode.UNSUPPORTED_AUDIO_FORMAT, "Buffer received before format!");
         }
 
         final ByteBuffer data =
@@ -148,7 +148,7 @@ class AudioChannel {
     private static long sampleCountToDurationUs(final int sampleCount,
                                                 final int sampleRate,
                                                 final int channelCount) {
-        return (sampleCount / (sampleRate * MICROSECS_PER_SEC)) / channelCount;
+        return (long) sampleCount * MICROSECS_PER_SEC / sampleRate / channelCount;
     }
 
     private long drainOverflow(final ShortBuffer outBuff) {
@@ -212,4 +212,3 @@ class AudioChannel {
         return input.presentationTimeUs;
     }
 }
-

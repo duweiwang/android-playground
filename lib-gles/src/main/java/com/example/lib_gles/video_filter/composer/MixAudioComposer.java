@@ -26,6 +26,7 @@ class MixAudioComposer implements IAudioComposer {
     private int mainTrackIndex;
     private final MediaExtractor extExtractor = new MediaExtractor();
     private final int extTrackIndex;
+    private final int audioBitrate;
     private MediaFormat encoderFormat;
     private final MuxRender muxer;
     private final long targetDurationUs;
@@ -77,18 +78,20 @@ class MixAudioComposer implements IAudioComposer {
                      MuxRender muxer,
                      long targetDurationUs,
                      long startTimeMs,
-                     long endTimeMs) throws IOException {
+                     long endTimeMs,
+                     int audioBitrate) throws IOException {
         this.mainExtractor = mainExtractor;
         this.mainTrackIndex = mainTrackIndex;
         this.muxer = muxer;
         this.targetDurationUs = targetDurationUs;
         this.startTimeMs = startTimeMs;
         this.endTimeMs = endTimeMs;
+        this.audioBitrate = audioBitrate;
 
         extExtractor.setDataSource(externalAudioPath);
         this.extTrackIndex = selectAudioTrack(extExtractor);
         if (this.extTrackIndex < 0) {
-            throw new IllegalArgumentException("No audio track found in external audio.");
+            throw new ComposerException(ErrorCode.NO_AUDIO_TRACK, "No audio track found in external audio.");
         }
         // encoder format will be built in setup based on main audio format
     }
@@ -97,7 +100,7 @@ class MixAudioComposer implements IAudioComposer {
     public void setup() {
         mainTrackIndex = resolveMainAudioTrackIndex(mainExtractor, mainTrackIndex);
         if (mainTrackIndex < 0) {
-            throw new IllegalArgumentException("No audio track found in source media.");
+            throw new ComposerException(ErrorCode.NO_AUDIO_TRACK, "No audio track found in source media.");
         }
         mainExtractor.selectTrack(mainTrackIndex);
         extExtractor.selectTrack(extTrackIndex);
@@ -108,13 +111,13 @@ class MixAudioComposer implements IAudioComposer {
 
         encoderFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", sampleRate, channelCount);
         encoderFormat.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
-        encoderFormat.setInteger(MediaFormat.KEY_BIT_RATE, 128_000);
+        encoderFormat.setInteger(MediaFormat.KEY_BIT_RATE, audioBitrate);
         encoderFormat.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 16 * 1024);
 
         try {
             encoder = MediaCodec.createEncoderByType(encoderFormat.getString(MediaFormat.KEY_MIME));
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new ComposerException(ErrorCode.CODEC_INIT, e);
         }
         encoder.configure(encoderFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
         encoder.start();
@@ -123,12 +126,12 @@ class MixAudioComposer implements IAudioComposer {
 
         String mainMime = mainInputFormat.getString(MediaFormat.KEY_MIME);
         if (mainMime == null || !mainMime.startsWith("audio/")) {
-            throw new IllegalArgumentException("Invalid main audio mime type.");
+            throw new ComposerException(ErrorCode.INVALID_AUDIO_MIME, "Invalid main audio mime type.");
         }
         try {
             mainDecoder = MediaCodec.createDecoderByType(mainMime);
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new ComposerException(ErrorCode.CODEC_INIT, e);
         }
         mainDecoder.configure(mainInputFormat, null, null, 0);
         mainDecoder.start();
@@ -140,12 +143,12 @@ class MixAudioComposer implements IAudioComposer {
         extChannelCount = getFormatInt(extInputFormat, MediaFormat.KEY_CHANNEL_COUNT, channelCount);
         String extMime = extInputFormat.getString(MediaFormat.KEY_MIME);
         if (extMime == null || !extMime.startsWith("audio/")) {
-            throw new IllegalArgumentException("Invalid external audio mime type.");
+            throw new ComposerException(ErrorCode.INVALID_AUDIO_MIME, "Invalid external audio mime type.");
         }
         try {
             extDecoder = MediaCodec.createDecoderByType(extMime);
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new ComposerException(ErrorCode.CODEC_INIT, e);
         }
         extDecoder.configure(extInputFormat, null, null, 0);
         extDecoder.start();
