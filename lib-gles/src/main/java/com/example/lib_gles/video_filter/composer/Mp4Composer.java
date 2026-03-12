@@ -26,6 +26,9 @@ public class Mp4Composer {
 
     private final static String TAG = Mp4Composer.class.getSimpleName();
     private static final int DEFAULT_AUDIO_BITRATE = 64_000;
+    private static final int MIN_VIDEO_BITRATE = 750_000;
+    private static final int MAX_VIDEO_BITRATE = 3_500_000;
+    private static final double DEFAULT_BITS_PER_PIXEL = 0.10;
 
     public enum AudioMode {
         ORIGINAL,
@@ -244,17 +247,25 @@ public class Mp4Composer {
                         fillMode = FillMode.CUSTOM;
                     }
 
+                    Rotation outputRotation = Rotation.fromInt(rotation.getRotation() + videoRotate);
+                    Resolution effectiveSourceResolution;
+                    if (outputRotation == Rotation.ROTATION_90 || outputRotation == Rotation.ROTATION_270) {
+                        effectiveSourceResolution = new Resolution(srcVideoResolution.height(), srcVideoResolution.width());
+                    } else {
+                        effectiveSourceResolution = srcVideoResolution;
+                    }
+
                     if (outputResolution == null) {
                         if (fillMode == FillMode.CUSTOM) {
-                            outputResolution = srcVideoResolution;
+                            outputResolution = effectiveSourceResolution;
                         } else {
-                            Rotation rotate = Rotation.fromInt(rotation.getRotation() + videoRotate);
-                            if (rotate == Rotation.ROTATION_90 || rotate == Rotation.ROTATION_270) {
-                                outputResolution = new Resolution(srcVideoResolution.height(), srcVideoResolution.width());
-                            } else {
-                                outputResolution = srcVideoResolution;
-                            }
+                            outputResolution = effectiveSourceResolution;
                         }
+                    } else {
+                        outputResolution = new Resolution(
+                                Math.min(outputResolution.width(), effectiveSourceResolution.width()),
+                                Math.min(outputResolution.height(), effectiveSourceResolution.height())
+                        );
                     }
                     if (filter instanceof IResolutionFilter) {
                         ((IResolutionFilter) filter).setResolution(outputResolution);
@@ -272,7 +283,15 @@ public class Mp4Composer {
                     Log.d(TAG, "fillMode = " + fillMode);
 
                     if (bitrate < 0) {
-                        bitrate = calcBitRate(outputResolution.width(), outputResolution.height());
+                        int sourceBitrate = getSourceBitrate(srcPath);
+                        bitrate = calcBitRate(
+                                outputResolution.width(),
+                                outputResolution.height(),
+                                srcVideoResolution.width(),
+                                srcVideoResolution.height(),
+                                sourceBitrate,
+                                frameRate
+                        );
                     }
                     engine.compose(
                             destPath,
@@ -282,7 +301,7 @@ public class Mp4Composer {
                             bitrate,
                             frameRate,
                             mute,
-                            Rotation.fromInt(rotation.getRotation() + videoRotate),
+                            outputRotation,
                             srcVideoResolution,
                             fillMode,
                             fillModeCustomItem,
@@ -398,10 +417,41 @@ public class Mp4Composer {
         return Integer.valueOf(orientation);
     }
 
-    private int calcBitRate(int width, int height) {
-        final int bitrate = (int) (0.25 * 30 * width * height);
+    private int calcBitRate(int width, int height, int srcWidth, int srcHeight, int sourceBitrate, int frameRate) {
+        int safeFrameRate = frameRate > 0 ? frameRate : 30;
+        int heuristicBitrate = (int) (DEFAULT_BITS_PER_PIXEL * safeFrameRate * width * height);
+        int bitrate = heuristicBitrate;
+
+        if (sourceBitrate > 0 && srcWidth > 0 && srcHeight > 0) {
+            double pixelRatio = (double) width * height / ((double) srcWidth * srcHeight);
+            double normalizedPixelRatio = Math.max(0.5d, Math.min(pixelRatio, 1.0d));
+            int sourceAdjustedBitrate = (int) (sourceBitrate * normalizedPixelRatio);
+            bitrate = Math.min(heuristicBitrate, sourceAdjustedBitrate);
+        }
+
+        bitrate = Math.max(MIN_VIDEO_BITRATE, Math.min(bitrate, MAX_VIDEO_BITRATE));
         Log.i(TAG, "bitrate=" + bitrate);
         return bitrate;
+    }
+
+    private int getSourceBitrate(String videoFilePath) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(videoFilePath);
+            String bitrateValue = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+            if (bitrateValue == null) {
+                return -1;
+            }
+            return Integer.parseInt(bitrateValue);
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to read source bitrate.", e);
+            return -1;
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ignore) {
+            }
+        }
     }
 
     private Resolution getVideoResolution(final String path, final int rotation) throws IOException {
