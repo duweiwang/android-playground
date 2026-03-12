@@ -155,7 +155,7 @@ class Mp4ComposerEngine {
                         if (timeScale >= 2) {
                             throw new ComposerException(ErrorCode.UNSUPPORTED_MIX_AUDIO_TIME_SCALE, "Mix audio does not support timeScale >= 2.");
                         }
-                        audioComposer = new MixAudioComposer(mediaExtractor, audioTrackIndex, audioPath, muxRender, durationUs, startTimeMs, endTimeMs, audioBitrate);
+                        audioComposer = new MixAudioComposer(inputFileDescriptor, audioTrackIndex, audioPath, muxRender, durationUs, startTimeMs, endTimeMs, audioBitrate);
                     }
                 } else if (hasAudio) {
                     // original audio

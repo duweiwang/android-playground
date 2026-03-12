@@ -1,12 +1,14 @@
 package com.example.lib_gles.video_filter.composer;
 
 import static android.media.MediaExtractor.SEEK_TO_PREVIOUS_SYNC;
+import static android.media.MediaExtractor.SEEK_TO_CLOSEST_SYNC;
 
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -22,7 +24,7 @@ class MixAudioComposer implements IAudioComposer {
     private static final int DEFAULT_SAMPLE_RATE = 44100;
     private static final int DEFAULT_CHANNEL_COUNT = 2;
 
-    private final MediaExtractor mainExtractor;
+    private final MediaExtractor mainExtractor = new MediaExtractor();
     private int mainTrackIndex;
     private final MediaExtractor extExtractor = new MediaExtractor();
     private final int extTrackIndex;
@@ -75,7 +77,7 @@ class MixAudioComposer implements IAudioComposer {
     private final float mainVolume = 0.5f;
     private final float extVolume = 0.5f;
 
-    MixAudioComposer(MediaExtractor mainExtractor,
+    MixAudioComposer(FileDescriptor sourceFileDescriptor,
                      int mainTrackIndex,
                      String externalAudioPath,
                      MuxRender muxer,
@@ -83,7 +85,6 @@ class MixAudioComposer implements IAudioComposer {
                      long startTimeMs,
                      long endTimeMs,
                      int audioBitrate) throws IOException {
-        this.mainExtractor = mainExtractor;
         this.mainTrackIndex = mainTrackIndex;
         this.muxer = muxer;
         this.targetDurationUs = targetDurationUs;
@@ -91,6 +92,7 @@ class MixAudioComposer implements IAudioComposer {
         this.endTimeMs = endTimeMs;
         this.audioBitrate = audioBitrate;
 
+        this.mainExtractor.setDataSource(sourceFileDescriptor);
         extExtractor.setDataSource(externalAudioPath);
         this.extTrackIndex = selectAudioTrack(extExtractor);
         if (this.extTrackIndex < 0) {
@@ -108,6 +110,9 @@ class MixAudioComposer implements IAudioComposer {
             throw new ComposerException(ErrorCode.NO_AUDIO_TRACK, "No audio track found in source media.");
         }
         mainExtractor.selectTrack(mainTrackIndex);
+        if (enableClip()) {
+            mainExtractor.seekTo(clipStartUs, SEEK_TO_CLOSEST_SYNC);
+        }
         extExtractor.selectTrack(extTrackIndex);
 
         final MediaFormat mainInputFormat = mainExtractor.getTrackFormat(mainTrackIndex);
@@ -214,6 +219,7 @@ class MixAudioComposer implements IAudioComposer {
                 encoder.release();
                 encoder = null;
             }
+            mainExtractor.release();
             extExtractor.release();
         } catch (RuntimeException e) {
             // ignore
