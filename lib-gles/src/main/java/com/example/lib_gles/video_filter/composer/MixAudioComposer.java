@@ -62,6 +62,9 @@ class MixAudioComposer implements IAudioComposer {
     private long extLastSampleTimeUs;
     private long extPrevSampleTimeUs;
     private long cachedExtDurationUs = -1;
+    private long clipStartUs = -1L;
+    private long clipEndUs = -1L;
+    private long mainFirstQueuedPtsUs = Long.MIN_VALUE;
 
     private final Queue<PcmBuffer> mainQueue = new ArrayDeque<>();
     private final Queue<PcmBuffer> extQueue = new ArrayDeque<>();
@@ -98,6 +101,8 @@ class MixAudioComposer implements IAudioComposer {
 
     @Override
     public void setup() {
+        clipStartUs = startTimeMs * 1000L;
+        clipEndUs = endTimeMs * 1000L;
         mainTrackIndex = resolveMainAudioTrackIndex(mainExtractor, mainTrackIndex);
         if (mainTrackIndex < 0) {
             throw new ComposerException(ErrorCode.NO_AUDIO_TRACK, "No audio track found in source media.");
@@ -232,7 +237,7 @@ class MixAudioComposer implements IAudioComposer {
         ByteBuffer inputBuffer = mainDecoderBuffers.getInputBuffer(result);
         int sampleSize = mainExtractor.readSampleData(inputBuffer, 0);
         long sampleTime = mainExtractor.getSampleTime();
-        if (sampleTime > endTimeMs * 1000 && enableClip()) {
+        if (sampleTime > clipEndUs && enableClip()) {
             mainExtractor.unselectTrack(mainTrackIndex);
             mainExtractorEOS = true;
             mainDecoder.queueInputBuffer(result, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
@@ -295,6 +300,16 @@ class MixAudioComposer implements IAudioComposer {
             enqueuePcmBuffer(mainQueue, mainDecoderBuffers, result, mainDecoderBufferInfo, true, false);
             return DRAIN_STATE_CONSUMED;
         } else if (mainDecoderBufferInfo.size > 0) {
+            if (enableClip() && mainDecoderBufferInfo.presentationTimeUs < clipStartUs) {
+                mainDecoder.releaseOutputBuffer(result, false);
+                return DRAIN_STATE_CONSUMED;
+            }
+            if (enableClip()) {
+                if (mainFirstQueuedPtsUs == Long.MIN_VALUE) {
+                    mainFirstQueuedPtsUs = mainDecoderBufferInfo.presentationTimeUs;
+                }
+                mainDecoderBufferInfo.presentationTimeUs = Math.max(0L, mainDecoderBufferInfo.presentationTimeUs - mainFirstQueuedPtsUs);
+            }
             enqueuePcmBuffer(mainQueue, mainDecoderBuffers, result, mainDecoderBufferInfo, false, false);
         }
         return DRAIN_STATE_CONSUMED;
