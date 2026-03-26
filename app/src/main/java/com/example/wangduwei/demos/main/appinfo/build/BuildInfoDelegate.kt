@@ -35,7 +35,10 @@ class BuildInfoDelegate : AbsBusinessDelegate() {
         sb.append("\n\n Build.MANUFACTURER = " + Build.MANUFACTURER + "\n")//Xiaomi
         sb.append("Build.BOARD = " + Build.BOARD + "\n")//感觉没啥用
         sb.append("Build.HARDWARE = " + Build.HARDWARE + "\n")//感觉没啥用
-        sb.append("Build.PRODUCT = " + Build.PRODUCT + "\n")//感觉没啥用
+        sb.append("Build.PRODUCT = " + Build.PRODUCT + "\n")
+        sb.append("Build.MODEL = " + Build.MODEL + "\n")
+        sb.append("Build.BRAND = " + Build.BRAND + "\n")
+        sb.append("Build.DEVICE = " + Build.DEVICE + "\n")
 
         sb.append("root文件夹下包含的文件 = \n")
         val files = Environment.getRootDirectory().listFiles()

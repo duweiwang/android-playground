@@ -24,6 +24,7 @@ class MainInformationFragment : BaseSupportFragment() {
     private lateinit var buildInfoDelegate: BuildInfoDelegate
     private lateinit var osInfoDelegate: OsInfoDelegate
     private lateinit var networkDelegate: NetWorkInfoDelegate
+    private lateinit var windowInforDelegate: WindowInfoDelegate
 
     companion object {
         fun newInstance(): MainInformationFragment = MainInformationFragment().apply {
@@ -54,6 +55,8 @@ class MainInformationFragment : BaseSupportFragment() {
         networkDelegate = NetWorkInfoDelegate()
         networkDelegate.onViewCreated(view.findViewById(R.id.app_network_info))
 
+        windowInforDelegate = WindowInfoDelegate()
+        windowInforDelegate.onViewCreated(view.findViewById(R.id.window_info))
     }
 
 
