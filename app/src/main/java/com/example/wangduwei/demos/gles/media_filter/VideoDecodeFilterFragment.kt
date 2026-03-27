@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.TextureView
@@ -16,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.lib_gles.video_filter.core.DecoderOutputSurface
 import com.example.lib_gles.video_filter.core.EncoderSurface
@@ -23,7 +25,41 @@ import com.example.lib_gles.video_filter.core.bean.Resolution
 import com.example.lib_gles.video_filter.core.filter.GlFilter
 import com.example.lib_gles.video_filter.core.filter.GlFilterList
 import com.example.lib_gles.video_filter.core.filter.GlFilterPeriod
-import com.example.lib_gles.video_filter.filter_impl.GlSoulOutFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlBilateralFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlBoxBlurFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlBrightnessFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlBulgeDistortionFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlCGAColorspaceFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlContrastFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlCrosshatchFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlExposureFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlGammaFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlGaussianBlurFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlGrayScaleFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlHalftoneFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlHazeFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlHighlightShadowFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlHueFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlInvertFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlLuminanceFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlLuminanceThresholdFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlMonochromeFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlOpacityFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlPixelationFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlPosterizeFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlRGBFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSaturationFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSepiaFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSharpenFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSolarizeFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSphereRefractionFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlSwirlFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlToneFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlVibranceFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlVignetteFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlWeakPixelInclusionFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlWhiteBalanceFilter
+import com.example.lib_gles.video_filter.filter_impl.filter.GlZoomBlurFilter
 import com.example.lib_processor.PageInfo
 import com.example.wangduwei.demos.R
 import com.example.wangduwei.demos.main.BaseSupportFragment
@@ -41,6 +77,11 @@ import java.io.IOException
 )
 class VideoDecodeFilterFragment : BaseSupportFragment(), SurfaceTextureListener,
     OnPreparedListener {
+
+    private data class FilterOption(
+        val name: String,
+        val create: () -> GlFilter
+    )
 
     companion object{
         private const val TAG = "wdw-gl"
@@ -61,6 +102,45 @@ class VideoDecodeFilterFragment : BaseSupportFragment(), SurfaceTextureListener,
 
 
     private val glFilterList = GlFilterList()
+    private lateinit var currentFilterTv: TextView
+    private var currentEffectIndex = -1
+    private val switchableEffects = listOf(
+        FilterOption("Brightness") { GlBrightnessFilter() },
+        FilterOption("Contrast") { GlContrastFilter() },
+        FilterOption("Exposure") { GlExposureFilter() },
+        FilterOption("Gamma") { GlGammaFilter() },
+        FilterOption("GrayScale") { GlGrayScaleFilter() },
+        FilterOption("CGAColorspace") { GlCGAColorspaceFilter() },
+        FilterOption("HighlightShadow") { GlHighlightShadowFilter() },
+        FilterOption("Haze") { GlHazeFilter() },
+        FilterOption("Hue") { GlHueFilter() },
+        FilterOption("Invert") { GlInvertFilter() },
+        FilterOption("Luminance") { GlLuminanceFilter() },
+        FilterOption("LuminanceThreshold") { GlLuminanceThresholdFilter() },
+        FilterOption("Opacity") { GlOpacityFilter() },
+        FilterOption("Sepia") { GlSepiaFilter() },
+        FilterOption("Solarize") { GlSolarizeFilter() },
+        FilterOption("Vignette") { GlVignetteFilter() },
+        FilterOption("Vibrance") { GlVibranceFilter() },
+        FilterOption("Saturation") { GlSaturationFilter() },
+        FilterOption("Posterize") { GlPosterizeFilter() },
+        FilterOption("Monochrome") { GlMonochromeFilter() },
+        FilterOption("RGB") { GlRGBFilter() },
+        FilterOption("Pixelation") { GlPixelationFilter() },
+        FilterOption("Sharpen") { GlSharpenFilter() },
+        FilterOption("BulgeDistortion") { GlBulgeDistortionFilter() },
+        FilterOption("Crosshatch") { GlCrosshatchFilter() },
+        FilterOption("Halftone") { GlHalftoneFilter() },
+        FilterOption("GaussianBlur") { GlGaussianBlurFilter() },
+        FilterOption("BoxBlur") { GlBoxBlurFilter() },
+        FilterOption("Bilateral") { GlBilateralFilter() },
+        FilterOption("SphereRefraction") { GlSphereRefractionFilter() },
+        FilterOption("Swirl") { GlSwirlFilter() },
+        FilterOption("Tone") { GlToneFilter() },
+        FilterOption("WeakPixelInclusion") { GlWeakPixelInclusionFilter() },
+        FilterOption("WhiteBalance") { GlWhiteBalanceFilter() },
+        FilterOption("ZoomBlur") { GlZoomBlurFilter() }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,9 +169,40 @@ class VideoDecodeFilterFragment : BaseSupportFragment(), SurfaceTextureListener,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         )
-        btn.setOnClickListener {
-            glFilterList.putGlFilter(GlFilterPeriod(0L,10 * 1000L, GlSoulOutFilter(frameLayout.context)))
+
+        currentFilterTv = TextView(frameLayout.context).apply {
+            text = "当前特效：无"
+            setTextColor(0xFFFFFFFF.toInt())
+            textSize = 16f
         }
+        frameLayout.addView(
+            currentFilterTv,
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.END or Gravity.TOP
+                topMargin = 16.dp()
+                marginEnd = 16.dp()
+            }
+        )
+
+        btn.setOnClickListener {
+            switchEffect()
+        }
+    }
+
+    private fun switchEffect() {
+        currentEffectIndex = (currentEffectIndex + 1) % switchableEffects.size
+        val current = switchableEffects[currentEffectIndex]
+        glFilterList.clearAddedFilters()
+        glFilterList.putGlFilter(GlFilterPeriod(0L, Long.MAX_VALUE, current.create()))
+        currentFilterTv.text = "当前特效：${current.name}"
+        Log.d(TAG, "switchEffect -> ${current.name}")
+    }
+
+    private fun Int.dp(): Int {
+        return (this * resources.displayMetrics.density).toInt()
     }
 
 
